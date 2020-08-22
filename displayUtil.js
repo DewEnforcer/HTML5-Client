@@ -17,21 +17,41 @@ const drawName = (username, x, y) => {
   ctx.fillText(username, x + 100, y + 120); //add proper offset
   ctx.fillStyle = "black";
 };
-const writeToLog = (log, msg, isTranslate = false) => {
-  if (isTranslate) {
-    msg = TEXT_TRANSLATIONS[msg];
+const manageLogoutWindow = () => {
+  if (HERO.loggingOut) {
+    document.querySelector(".logout_window").remove();
+    MAIN.writeToLog("logout_cancel", true);
+  } else {
+    MAIN.writeToLog("logout_init", true);
+    let window = document.createElement("div");
+    window.classList.add("logout_window", true);
+    window.innerHTML = `<span>Logging out in:</span><span id="logout_countdown">${
+      LOGOUT_TIME / 1000
+    }</span>`;
+    MAIN.INTERFACE.appendChild(window);
+    initLogoutCountdown();
   }
-  log.append(`<span>${msg}</span>`);
+};
+const initLogoutCountdown = () => {
+  let time = document.querySelector("#logout_countdown");
+  let TIME_LEFT = LOGOUT_TIME;
+  setInterval(() => {
+    if (!HERO.loggingOut || TIME_LEFT <= 0) return;
+    TIME_LEFT -= 1000;
+    time.innerText = TIME_LEFT / 1000;
+  }, 1000);
 };
 const manageFpsWindow = () => {
   if (SHOW_FPS) {
     document.querySelector(".fps_display").remove();
     SHOW_FPS = false;
   } else {
+    console.log("appending");
     let fpsBox = document.createElement("div");
     fpsBox.classList.add("fps_display");
-    INTERFACE.appendChild(fpsBox);
+    MAIN.INTERFACE.appendChild(fpsBox);
     SHOW_FPS = true;
+    console.log("done");
   }
 };
 const displayFPS = () => {

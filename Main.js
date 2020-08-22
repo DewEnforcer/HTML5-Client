@@ -5,7 +5,13 @@ const TEXT_TRANSLATIONS = {
   end_attack: "Weapons offline",
   disconnected: "You are currently disconnected from our servers!",
   port_away: "Jump failed, there are no portals nearby!",
+  logout_cancel: "Logout has been canceled",
+  logout_init: "Logging out, please standby!",
 };
+const BTN_FPS = "f";
+const BTN_ATTACK = " ";
+const BTN_LOGOUT = "l";
+const BTN_PORT = "j";
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;
@@ -18,9 +24,12 @@ const mapNames = {
 const mapWidth = 10000;
 const mapHeight = 7000;
 //
+const LOGOUT_TIME = 5000;
+let END = false;
 let SHOW_FPS = false;
 let DELTA_TIME = new Date() * 1;
 let LAST_UPDATE = 0;
+let gameInit = false;
 const ships = ["starhawk", "sr100"];
 let MAP_OBJECTS_LIST = null;
 const MAP_PLANETS = [];
@@ -49,10 +58,11 @@ const initiatePostHero = () => {
   MAP_OBJECTS_LIST[HERO.mapID].portals.forEach((portal) => {
     MAP_PORTALS.push(new Portal(portal.x, portal.y));
   });
+  gameInit = true;
   drawGame();
 };
 const drawGame = (timestamp) => {
-  if (!SOCKET.connected) return;
+  if (END) return;
   DELTA_TIME = timestamp - LAST_UPDATE;
   LAST_UPDATE = timestamp;
   displayFPS();
@@ -63,6 +73,14 @@ const drawGame = (timestamp) => {
   MAP_PORTALS.forEach((portal) => portal.update());
   HERO.update();
   MINIMAP.minimapManager();
+};
+const terminateGame = () => {
+  END = true;
+  window.close();
+};
+const handleLogoutResult = (bool) => {
+  if (bool == 1) terminateGame();
+  else HERO.setLogout();
 };
 window.onload = () => {
   fetchMapObjects();

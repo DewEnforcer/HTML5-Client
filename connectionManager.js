@@ -23,7 +23,8 @@ class Socket {
       case HERO_INIT:
         MAIN.initHero(data);
         break;
-
+      case LOGOUT_RESULT:
+        handleLogoutResult(data[2]);
       default:
         break;
     }

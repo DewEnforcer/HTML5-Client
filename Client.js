@@ -79,6 +79,14 @@ class Client {
     HERO = new Hero(...data);
     initiatePostHero();
   }
+  writeToLog(msg, isTranslate = false) {
+    if (isTranslate) {
+      msg = TEXT_TRANSLATIONS[msg];
+    }
+    let msgBox = document.createElement("span");
+    msgBox.innerText = msg;
+    this.LOG.appendChild(msgBox);
+  }
   cleanup() {
     ctx.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
     ctx.fillRect(0, 0, this.CANVAS.width, this.CANVAS.height);

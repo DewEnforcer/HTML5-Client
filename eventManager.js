@@ -10,7 +10,17 @@ class EventManager {
       y: null,
     };
   }
-
+  handleLogoutRequest() {
+    if (HERO.loggingOut) {
+      manageLogoutWindow();
+      HERO.setLogout();
+      SOCKET.sendPacket([REQUEST_LOGOUT_STOP]);
+      return;
+    }
+    manageLogoutWindow();
+    HERO.setLogout();
+    SOCKET.sendPacket([REQUEST_LOGOUT]);
+  }
   handleKeyPress({ key }) {
     if (!gameInit) return;
     switch (key) {
@@ -21,7 +31,7 @@ class EventManager {
         if (HERO !== 0) HERO.startAttack();
         break;
       case BTN_LOGOUT:
-        handleLogoutRequest();
+        this.handleLogoutRequest();
         break;
       case BTN_PORT:
         requestPortalJump();
@@ -36,6 +46,7 @@ class EventManager {
   }
   handleMouseDown() {
     if (!this.isMouseDown && checkCollision()) return; //checks only on first click, checks whether user wanted to lock on
+    if (HERO.lockedControls) return;
     this.isMouseDown = true;
     HERO.isFly = true;
   }
@@ -45,7 +56,9 @@ class EventManager {
   }
   initListeners() {
     //game listeners
-    document.addEventListener("keypress", this.handleKeyPress);
+    document.addEventListener("keypress", (keyPress) => {
+      this.handleKeyPress(keyPress);
+    });
     window.addEventListener("mousemove", (evMouse) =>
       this.handleMouseMov(evMouse)
     );

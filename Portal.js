@@ -42,7 +42,7 @@ class Portal {
   idle() {
     if (this.active) return;
     this.frame++;
-    if (this.frame > this.maxIdleFrames) this.frame = 1;
+    if (this.frame >= this.maxIdleFrames) this.frame = 1;
   }
   draw() {
     this.sprite.src = this.sequence;

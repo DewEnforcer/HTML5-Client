@@ -40,6 +40,7 @@ class Hero {
     this.maxSHD = Number(maxSHD);
     this.loggingOut = false;
     this.isJumping = false;
+    this.lockedControls = false;
     this.render = {
       baseX: halfScreenWidth - this.offset.x,
       baseY: halfScreenHeight - this.offset.y,
@@ -53,6 +54,7 @@ class Hero {
   }
   setLogout() {
     this.loggingOut = !this.loggingOut;
+    this.lockedControls = this.loggingOut;
   }
   setTarget(target) {
     this.targetID = target;
