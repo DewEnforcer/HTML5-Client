@@ -59,6 +59,7 @@ class Client {
     }
     this.uiLoaded = true;
     this.resizeCanvas();
+    EVENT_MANAGER.initListeners();
   }
   resizeCanvas() {
     this.CANVAS.width = window.innerWidth;

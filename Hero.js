@@ -30,6 +30,7 @@ class Hero {
     this.offset = getOffset(shipID);
     this.sprite = new Image();
     this.travelAngle = 0;
+    this.pointingAngle = 0;
     this.sequence = this.setSequence(0);
     this.isAttacking = false;
     this.targetID = 0;
@@ -41,6 +42,7 @@ class Hero {
     this.loggingOut = false;
     this.isJumping = false;
     this.lockedControls = false;
+    this.timeTo = 0;
     this.render = {
       baseX: halfScreenWidth - this.offset.x,
       baseY: halfScreenHeight - this.offset.y,
@@ -63,11 +65,31 @@ class Hero {
     this.targetID = 0;
     this.stopAttack();
   }
+  setDestinationMinimap({ x, y }) {
+    this.destX = x;
+    this.destY = y;
+    this.processDestCalc();
+    this.isFly = true;
+  }
   setDestination() {
-    if (!this.isFly) return;
+    if (!EVENT_MANAGER.isMouseDown) return;
     let dest = convertToMapCoords(EVENT_MANAGER.mouse);
-    this.destX = dest.x;
-    this.destY = dest.y;
+    this.destX = Math.round(dest.x);
+    this.destY = Math.round(dest.y);
+    this.processDestCalc();
+  }
+  processDestCalc() {
+    let distanceX = this.destX - this.x;
+    let distanceY = this.destY - this.y;
+    this.timeTo =
+      (getDistance(this.x, this.y, this.destX, this.destY) / this.baseSpeed) *
+      1000;
+    this.speed.x = distanceX / this.timeTo;
+    this.speed.y = distanceY / this.timeTo;
+    SOCKET.sendPacket([MOV_DATA, this.destX, this.destY]);
+  }
+  stopFlying() {
+    this.isFly = false;
   }
   startAttack() {
     if (this.targetID == null) {
@@ -94,12 +116,13 @@ class Hero {
       rotateTo.x = enemyCoords.x;
       rotateTo.y = enemyCoords.y;
     }
-    this.travelAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
+    this.pointingAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
+    this.travelAngle = calcAngle(this.x, this.y, this.destX, this.destY);
     this.sequence = this.setSequence();
   }
   setSequence() {
     return `./spacemap/ships/${this.ship}/${Math.round(
-      toDegs(this.travelAngle) / 8
+      toDegs(this.pointingAngle) / 8
     )}.png`;
   }
   hover() {
@@ -115,9 +138,10 @@ class Hero {
     this.isHover = false;
   }
   changePos() {
-    this.speed = speedVelocity(this.baseSpeed, this.travelAngle);
-    this.x += this.speed.x / DELTA_TIME;
-    this.y += this.speed.y / DELTA_TIME;
+    this.x += this.speed.x * DELTA_TIME;
+    this.y += this.speed.y * DELTA_TIME;
+    this.timeTo -= DELTA_TIME;
+    if (Math.round(this.timeTo) <= 0) this.stopFlying();
   }
   draw() {
     drawName(this.name, this.render.baseX, this.render.baseY);
@@ -137,11 +161,10 @@ class Hero {
       if (this.isHover) {
         //ship state has changed from hover to flying one
         this.resetHover();
-      } else {
-        this.setDestination();
-        this.rotate();
-        this.changePos();
       }
+      this.setDestination();
+      this.rotate();
+      this.changePos();
     } else {
       this.hover();
     }

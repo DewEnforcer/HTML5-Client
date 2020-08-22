@@ -3,7 +3,6 @@ class EventManager {
     this.isMouseDown = false;
     document.querySelector(".btn_launch").addEventListener("click", () => {
       SOCKET.initiateConnection();
-      this.initListeners();
     });
     this.mouse = {
       x: null,
@@ -40,6 +39,12 @@ class EventManager {
         break;
     }
   }
+  getCursorPosition(canvas, event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    return { x, y };
+  }
   handleMouseMov(evMouse) {
     this.mouse.x = evMouse.x;
     this.mouse.y = evMouse.y;
@@ -52,7 +57,6 @@ class EventManager {
   }
   handleMouseUp() {
     this.isMouseDown = false;
-    HERO.isFly = false;
   }
   initListeners() {
     //game listeners
@@ -62,7 +66,8 @@ class EventManager {
     window.addEventListener("mousemove", (evMouse) =>
       this.handleMouseMov(evMouse)
     );
-    window.addEventListener("mousedown", this.handleMouseDown);
-    window.addEventListener("mouseup", this.handleMouseUp);
+    MAIN.CANVAS.addEventListener("mousedown", () => this.handleMouseDown());
+    MAIN.CANVAS.addEventListener("mouseup", () => this.handleMouseUp());
+    MAIN.MINIMAP_C.addEventListener("mousedown", (ev) => MINIMAP.leadHero(ev));
   }
 }

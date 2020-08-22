@@ -12,6 +12,7 @@ const BTN_FPS = "f";
 const BTN_ATTACK = " ";
 const BTN_LOGOUT = "l";
 const BTN_PORT = "j";
+const REFRESH_TIME = 100;
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;

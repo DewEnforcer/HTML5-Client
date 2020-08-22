@@ -18,8 +18,8 @@ function getDistance(x, y, targetx, targety) {
 }
 function speedVelocity(shipSpeed, vectorAngle) {
   let velocity = {
-    x: shipSpeed * Math.sin(vectorAngle),
-    y: shipSpeed * Math.cos(vectorAngle),
+    x: Math.round(shipSpeed * Math.sin(vectorAngle)),
+    y: Math.round(shipSpeed * Math.cos(vectorAngle)),
   };
   return velocity;
 }

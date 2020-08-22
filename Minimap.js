@@ -74,6 +74,13 @@ class Minimap {
     this.drawShips();
     this.drawPortals();
   }
+  leadHero(ev) {
+    let coords = EVENT_MANAGER.getCursorPosition(MAIN.MINIMAP_C, ev);
+    coords.x = Math.round((coords.x / MAIN.MINIMAP_C.width) * mapWidth);
+    coords.y = Math.round((coords.y / MAIN.MINIMAP_C.height) * mapHeight);
+    console.log(coords);
+    HERO.setDestinationMinimap(coords);
+  }
   drawShips() {
     MAP_SHIPS.forEach((ship) => {
       let minimapX = MAIN.MINIMAP_C.width * (ship.x / mapWidth);
