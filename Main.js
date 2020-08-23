@@ -8,10 +8,18 @@ const TEXT_TRANSLATIONS = {
   logout_cancel: "Logout has been canceled",
   logout_init: "Logging out, please standby!",
 };
+const elements = [
+  { name: "HP", isBar: true, color: "green" },
+  { name: "SHD", isBar: true, color: "lightblue" },
+  { name: "CFG", isBar: false, color: "white" },
+  { name: "CARGO", isBar: true, color: "yellow" },
+  { name: "SPEED", isBar: false, color: "white" },
+];
 const BTN_FPS = "f";
 const BTN_ATTACK = " ";
 const BTN_LOGOUT = "l";
 const BTN_PORT = "j";
+const BTN_SHIP = "q";
 const REFRESH_TIME = 100;
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
@@ -22,6 +30,7 @@ const mapNames = {
   1: "Alpha",
   2: "Beta",
 };
+const clickRange = 100;
 const mapWidth = 10000;
 const mapHeight = 7000;
 //
@@ -72,7 +81,9 @@ const drawGame = (timestamp) => {
   BG_LAYER.update();
   MAP_PLANETS.forEach((planet) => planet.update());
   MAP_PORTALS.forEach((portal) => portal.update());
+  MAP_SHIPS.forEach((ship) => ship.update());
   HERO.update();
+  lockTarget();
   MINIMAP.minimapManager();
 };
 const terminateGame = () => {

@@ -5,3 +5,4 @@ const GAME_DATA = "GUD";
 const PORTAL_REQUEST_RESULT = "PRR";
 const HERO_INIT = "HI";
 const LOGOUT_RESULT = "RLGS";
+const SHIP_SPAWN = "SS";

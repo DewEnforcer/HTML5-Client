@@ -76,10 +76,10 @@ class Minimap {
       offset * 2,
       offset * 2
     );
-    if (this.minimapNavigating) this.drawDestLine(minimapX, minimapY);
     this.setMinimapCoordinates();
-    this.drawShips();
+    this.drawShips(offset);
     this.drawPortals();
+    if (this.minimapNavigating) this.drawDestLine(minimapX, minimapY);
   }
   leadHero(ev) {
     let coords = EVENT_MANAGER.getCursorPosition(MAIN.MINIMAP_C, ev);
@@ -110,7 +110,7 @@ class Minimap {
     MAIN.MINIMAP_CTX.fillStyle = this.dotColor;
     MAIN.MINIMAP_CTX.fill();
   }
-  drawShips() {
+  drawShips(offset) {
     MAP_SHIPS.forEach((ship) => {
       let minimapX = MAIN.MINIMAP_C.width * (ship.x / mapWidth);
       let minimapY = MAIN.MINIMAP_C.height * (ship.y / mapHeight);

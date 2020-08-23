@@ -17,6 +17,11 @@ const drawName = (username, x, y) => {
   ctx.fillText(username, x + 100, y + 120); //add proper offset
   ctx.fillStyle = "black";
 };
+const drawRank = (rank, x, y) => {
+  let rankSprite = new Image();
+  rankSprite.src = `./spacemap/ui/rank/rank_${rank}.png`;
+  ctx.drawImage(rankSprite, x + 30, y + 105);
+};
 const manageLogoutWindow = () => {
   if (HERO.loggingOut) {
     document.querySelector(".logout_window").remove();
@@ -46,12 +51,10 @@ const manageFpsWindow = () => {
     document.querySelector(".fps_display").remove();
     SHOW_FPS = false;
   } else {
-    console.log("appending");
     let fpsBox = document.createElement("div");
     fpsBox.classList.add("fps_display");
-    MAIN.INTERFACE.appendChild(fpsBox);
+    document.body.appendChild(fpsBox);
     SHOW_FPS = true;
-    console.log("done");
   }
 };
 const displayFPS = () => {
@@ -68,17 +71,29 @@ const handlePortalJump = ({ portalID, newMap, isHeroJump = false }) => {
 const handlePortalRange = () => {
   writeToLog(TEXT_TRANSLATIONS.port_away, true);
 };
+const getShipById = (id) => {
+  let ship = null;
+  MAP_SHIPS.some((item) => {
+    if (item.ID == id) {
+      ship = item;
+      return true;
+    }
+  });
+  return ship;
+};
 const lockTarget = () => {
   if (HERO.targetID === 0) return;
-  const targetRndrX = MAP_SHIPS[HERO.targetID].renderX;
-  const targetRndrY = MAP_SHIPS[HERO.targetID].renderY;
-  const shipOffset = MAP_SHIPS[HERO.targetID].offset;
+  const ship = getShipById(HERO.targetID);
+  if (ship == null) return;
+  const targetRndrX = ship.renderX;
+  const targetRndrY = ship.renderY;
+  const shipOffset = ship.offset;
   ctx.beginPath();
   ctx.arc(
     //draw outter circle
-    targetRndrX + shipOffset,
-    targetRndrY + shipOffset,
-    this.offsetY * 1.1,
+    targetRndrX + shipOffset.x,
+    targetRndrY + shipOffset.y,
+    shipOffset.y * 1.1,
     0,
     2 * Math.PI
   );
@@ -88,9 +103,9 @@ const lockTarget = () => {
   ctx.beginPath();
   ctx.arc(
     //draw inner circle
-    targetRndrX + shipOffset,
-    targetRndrY + shipOffset,
-    this.offsetY,
+    targetRndrX + shipOffset.x,
+    targetRndrY + shipOffset.y,
+    shipOffset.y,
     0,
     2 * Math.PI
   );
@@ -100,9 +115,13 @@ const lockTarget = () => {
 };
 const checkCollision = () => {
   let dist = null;
-  const clickRange = 100; //change later
   return Object.values(MAP_SHIPS).some((ship) => {
-    dist = getDistance(ship.renderX, ship.renderY, mouse.x, mouse.y);
+    dist = getDistance(
+      ship.renderX + ship.offset.x,
+      ship.renderY + ship.offset.y,
+      EVENT_MANAGER.mouse.x,
+      EVENT_MANAGER.mouse.y
+    );
     if (dist <= clickRange) {
       HERO.setTarget(ship.ID);
       return true;

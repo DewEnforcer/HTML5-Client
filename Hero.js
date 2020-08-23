@@ -5,6 +5,7 @@ class Hero {
     speed,
     shipID,
     username,
+    rank,
     laserID,
     hp,
     shd,
@@ -12,8 +13,10 @@ class Hero {
     maxSHD,
     mapID
   ) {
+    this.config = 1;
     this.ship = ships[shipID];
     this.name = username;
+    this.rank = rank;
     this.x = Number(x);
     this.y = Number(y);
     this.destX = this.x;
@@ -147,6 +150,7 @@ class Hero {
   }
   draw() {
     drawName(this.name, this.render.baseX, this.render.baseY);
+    drawRank(this.rank, this.render.baseX, this.render.baseY);
     displayShipStructure(
       this.HP,
       this.SHD,

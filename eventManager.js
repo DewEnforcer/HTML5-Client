@@ -35,6 +35,9 @@ class EventManager {
       case BTN_PORT:
         requestPortalJump();
         break;
+      case BTN_SHIP:
+        SOCKET.sendPacket([TEST_SHIP]);
+        break;
       default:
         break;
     }
@@ -45,9 +48,27 @@ class EventManager {
     const y = event.clientY - rect.top;
     return { x, y };
   }
+  checkHover() {
+    let cursor = "default";
+    Object.values(MAP_SHIPS).some((ship) => {
+      let dist = getDistance(
+        ship.renderX + ship.offset.x,
+        ship.renderY + ship.offset.y,
+        EVENT_MANAGER.mouse.x,
+        EVENT_MANAGER.mouse.y
+      );
+      if (dist <= clickRange) {
+        cursor = "pointer";
+        return true;
+      }
+    });
+    console.log(cursor);
+    document.body.style.cursor = cursor;
+  }
   handleMouseMov(evMouse) {
     this.mouse.x = evMouse.x;
     this.mouse.y = evMouse.y;
+    this.checkHover();
   }
   handleMouseDown() {
     if (!this.isMouseDown && checkCollision()) return; //checks only on first click, checks whether user wanted to lock on
@@ -57,7 +78,21 @@ class EventManager {
   }
   handleInfoVisualChange(ev) {
     //handle changes between text and visual info
-    console.log(ev);
+    let section = ev.target.id.split("_")[0];
+    let visualWrapper = document.querySelector(
+      "#" + section + "_visual_wrapper"
+    );
+    let text = document.querySelector("#" + section + "_text");
+    if (MAIN.shipInfoStatus[section]) {
+      //is visual
+      visualWrapper.style.display = "none";
+      text.style.display = "block";
+    } else {
+      visualWrapper.style.display = "block";
+      text.style.display = "none";
+      //is text
+    }
+    MAIN.shipInfoStatus[section] = !MAIN.shipInfoStatus[section];
   }
   handleMouseUp() {
     this.isMouseDown = false;

@@ -7,6 +7,7 @@ class Client {
     this.MINIMAP_CTX = null;
     this.uiLoaded = false;
     this.maxSlots = 10;
+    this.shipInfoStatus = {};
   }
   generateElements() {
     if (this.uiLoaded) return;
@@ -67,33 +68,38 @@ class Client {
     this.MINIMAP_C.width = Number($(".spacemap_main").width()) - offsetX;
     this.MINIMAP_C.height = Number($(".spacemap_main").height()) - offsetY;
   }
+  createShip(data) {
+    data.splice(0, 2);
+    MAP_SHIPS.push(new Ship(...data));
+  }
   initHero(data) {
     this.generateElements();
     data.splice(0, 2);
     HERO = new Hero(...data);
     initiatePostHero();
+    //init values
+    this.handleShipInfoData("HP", HERO.HP, HERO.maxHP);
+    this.handleShipInfoData("SHD", HERO.SHD, HERO.maxSHD);
+    this.handleShipInfoData("SPEED", HERO.baseSpeed, 0);
+    this.handleShipInfoData("CFG", HERO.config, 0);
   }
   generateShipInfoElements() {
-    const elements = [
-      { name: "HP", isBar: true },
-      { name: "SHD", isBar: true },
-      { name: "CFG", isBar: false },
-      { name: "CARGO", isBar: true },
-      { name: "SPEED", isBar: false },
-    ];
     const target = document.querySelector(".shipinfo_main");
     elements.forEach((el) => {
       const wrapper = document.createElement("div");
-      wrapper.classList.add(`${el.name}_wrapper`);
+      wrapper.classList.add(`${el.name}_wrapper`, "wrapper_main_shipinfo");
       const textRepr = document.createElement("span");
       textRepr.innerText = 0;
       textRepr.id = `${el.name}_text`;
       wrapper.appendChild(textRepr);
       if (el.isBar) {
+        this.shipInfoStatus = { ...this.shipInfoStatus, [el.name]: false };
         const visualRepr = document.createElement("div");
         visualRepr.id = `${el.name}_visual_wrapper`;
+        visualRepr.classList.add("visual_wrapper");
         const visualReprBar = document.createElement("div");
         visualReprBar.id = `${el.name}_visual_bar`;
+        visualReprBar.style.backgroundColor = el.color;
         visualRepr.appendChild(visualReprBar);
         wrapper.appendChild(visualRepr);
         wrapper.addEventListener("click", (
@@ -102,6 +108,14 @@ class Client {
       }
       target.appendChild(wrapper);
     });
+  }
+  handleShipInfoData(section, value, maxValue = 0) {
+    let text = document.querySelector("#" + section + "_text");
+    text.innerText = value; //add formatting
+    let visualBar = document.querySelector("#" + section + "_visual_bar");
+    if (visualBar != null) {
+      visualBar.style.width = (value / maxValue) * 100 + "%";
+    }
   }
   generateUserInfoElements() {}
   writeToLog(msg, isTranslate = false) {

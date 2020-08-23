@@ -25,6 +25,10 @@ class Socket {
         break;
       case LOGOUT_RESULT:
         handleLogoutResult(data[2]);
+        break;
+      case SHIP_SPAWN:
+        MAIN.createShip(data);
+        break;
       default:
         break;
     }

@@ -6,12 +6,12 @@ class Ship {
     speed,
     shipID,
     username,
+    rank,
     laserID,
     hp,
     shd,
     maxHP,
-    maxSHD,
-    mapID
+    maxSHD
   ) {
     this.ship = ships[shipID];
     this.name = username;
@@ -19,14 +19,15 @@ class Ship {
     this.y = y;
     this.destX = x;
     this.destY = y;
-    this.mapID = mapID;
     this.ID = ID;
+    this.rank = rank;
     this.baseSpeed = speed;
     this.hoverVal = 0;
     this.speed = {
       x: 0,
       y: 0,
     };
+    this.timeTo = 0;
     this.isFly = false;
     this.isHover = true;
     this.offset = getOffset(shipID);
@@ -43,13 +44,19 @@ class Ship {
     this.isJumping = false;
     this.renderX = null;
     this.renderY = null;
+    this.changeRenderPos(); //initial display
   }
   setTarget(target) {
     this.targetID = target;
   }
-  setDestination(x, y) {
+  setDestination(x, y, time) {
     this.destX = x;
     this.destY = y;
+    this.timeTo = time;
+    let distanceX = this.destX - this.x;
+    let distanceY = this.destY - this.y;
+    this.speed.x = distanceX / this.timeTo;
+    this.speed.y = distanceY / this.timeTo;
   }
   startAttack() {
     this.isAttacking = true;
@@ -78,18 +85,20 @@ class Ship {
   }
   hover() {
     this.isHover = true;
-    const hoverSpeed = 0.01;
+    const hoverSpeed = 0.05;
     this.speed.x = 0;
     this.speed.y = 0;
     this.hoverVal += hoverSpeed;
-    this.renderY += Math.cos(this.hoverVal);
+    this.renderY += Math.cos(this.hoverVal) / 10;
   }
   resetHover() {
     this.isHover = false;
   }
   changePos() {
-    this.x += this.speed.x;
-    this.y += this.speed.y;
+    this.x += this.speed.x * DELTA_TIME;
+    this.y += this.speed.y * DELTA_TIME;
+    this.timeTo -= DELTA_TIME;
+    if (Math.round(this.timeTo) <= 0) this.stopFlying();
   }
   changeRenderPos() {
     this.renderX = this.x - HERO.x + halfScreenWidth; //count real distance to render one to the center
@@ -97,6 +106,7 @@ class Ship {
   }
   draw() {
     drawName(this.name, this.renderX, this.renderY);
+    drawRank(this.rank, this.renderX, this.renderY);
     displayShipStructure(
       this.HP,
       this.SHD,
