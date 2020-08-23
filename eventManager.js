@@ -66,6 +66,7 @@ class EventManager {
     window.addEventListener("mousemove", (evMouse) =>
       this.handleMouseMov(evMouse)
     );
+    //window.addEventListener("mousedown", () => this.handleMouseDown());
     MAIN.CANVAS.addEventListener("mousedown", () => this.handleMouseDown());
     MAIN.CANVAS.addEventListener("mouseup", () => this.handleMouseUp());
     MAIN.MINIMAP_C.addEventListener("mousedown", (ev) => MINIMAP.leadHero(ev));

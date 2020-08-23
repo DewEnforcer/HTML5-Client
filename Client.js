@@ -1,6 +1,5 @@
 class Client {
   constructor() {
-    this.INTERFACE = null;
     this.CANVAS = null;
     this.LOG = null;
     this.MINIMAP_C = null;
@@ -11,16 +10,12 @@ class Client {
   }
   generateElements() {
     if (this.uiLoaded) return;
-    this.INTERFACE = document.createElement("div");
-    this.INTERFACE.classList.add("interface");
     this.CANVAS = document.createElement("canvas");
     this.CANVAS.id = "gamemap";
     this.CANVAS.classList.add("canvas");
     ctx = this.CANVAS.getContext("2d");
-    document.body.innerHTML = "";
-    document.body.appendChild(this.INTERFACE);
+    document.body.innerHTML = `<div class="userinfo"></div><div class="shipinfo"></div><div class="actionbar"></div><div class="spacemap"></div><div class="logbox"></div>`; //<div class="btns_wrapper_right"></div>`;
     document.body.appendChild(this.CANVAS);
-    this.INTERFACE.innerHTML = `<div class="userinfo"></div><div class="shipinfo"></div><div class="actionbar"></div><div class="spacemap"></div><div class="logbox"></div><div class="btns_wrapper_right"></div>`;
     document.querySelector(
       ".userinfo"
     ).innerHTML = `<div class="userinfo_header header"></div><div class="userinfo_main main"></div>`;
@@ -36,9 +31,6 @@ class Client {
       ".logbox"
     ).innerHTML = `<div class="log_header header"></div>`;
     document.querySelector(".logbox").appendChild(this.LOG);
-    document.querySelector(
-      ".btns_wrapper_right"
-    ).innerHTML = `<button type="button" class="btn_game_action" value="logout">X</button>`;
     $(".userinfo_header").html(
       `<img src="./spacemap/ui/usericon.png"> <span>User</span>`
     );

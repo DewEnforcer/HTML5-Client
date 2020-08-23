@@ -77,6 +77,7 @@ const drawGame = (timestamp) => {
 };
 const terminateGame = () => {
   END = true;
+  SOCKET.socket.close();
   window.close();
 };
 const handleLogoutResult = (bool) => {
