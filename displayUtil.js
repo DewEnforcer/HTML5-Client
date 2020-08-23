@@ -22,6 +22,15 @@ const drawRank = (rank, x, y) => {
   rankSprite.src = `./spacemap/ui/rank/rank_${rank}.png`;
   ctx.drawImage(rankSprite, x + 30, y + 105);
 };
+const displayHit = (value, x, y, heal = false) => {
+  color = "red";
+  if (heal) color = "green";
+  ctx.font = "bold 20px sans-serif";
+  ctx.fillStyle = color;
+  ctx.textAlign = "center";
+  ctx.fillText(value, x, y);
+  ctx.fillStyle = "black";
+};
 const manageLogoutWindow = () => {
   if (HERO.loggingOut) {
     document.querySelector(".logout_window").remove();

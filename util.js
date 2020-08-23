@@ -37,6 +37,9 @@ function convertToMapCoords({ x, y }) {
   y = HERO.y + (y - halfScreenHeight);
   return { x, y };
 }
+function getLaserID() {
+  return Date.now();
+}
 function getNearestPortal() {
   let range = null;
   let portalID = null;

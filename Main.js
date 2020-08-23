@@ -21,6 +21,7 @@ const BTN_LOGOUT = "l";
 const BTN_PORT = "j";
 const BTN_SHIP = "q";
 const REFRESH_TIME = 100;
+const LASER_SPEED = 100;
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;
@@ -45,6 +46,7 @@ let MAP_OBJECTS_LIST = null;
 const MAP_PLANETS = [];
 const MAP_PORTALS = [];
 const MAP_SHIPS = [];
+const LASER_LAYER = [];
 let EVENT_MANAGER, MAIN, HERO, SOCKET, BG_LAYER, MINIMAP, PRELOADER;
 let halfScreenWidth;
 let halfScreenHeight;
