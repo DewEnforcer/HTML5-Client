@@ -55,6 +55,10 @@ class EventManager {
     this.isMouseDown = true;
     HERO.isFly = true;
   }
+  handleInfoVisualChange(ev) {
+    //handle changes between text and visual info
+    console.log(ev);
+  }
   handleMouseUp() {
     this.isMouseDown = false;
   }

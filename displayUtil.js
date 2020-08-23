@@ -28,7 +28,7 @@ const manageLogoutWindow = () => {
     window.innerHTML = `<span>Logging out in:</span><span id="logout_countdown">${
       LOGOUT_TIME / 1000
     }</span>`;
-    MAIN.INTERFACE.appendChild(window);
+    document.body.appendChild(window);
     initLogoutCountdown();
   }
 };

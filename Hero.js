@@ -73,6 +73,7 @@ class Hero {
   }
   setDestination() {
     if (!EVENT_MANAGER.isMouseDown) return;
+    MINIMAP.minimapNavigating = false;
     let dest = convertToMapCoords(EVENT_MANAGER.mouse);
     this.destX = Math.round(dest.x);
     this.destY = Math.round(dest.y);
@@ -90,6 +91,7 @@ class Hero {
   }
   stopFlying() {
     this.isFly = false;
+    MINIMAP.minimapNavigating = false;
   }
   startAttack() {
     if (this.targetID == null) {

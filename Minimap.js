@@ -2,6 +2,12 @@ class Minimap {
   constructor() {
     this.sprite = new Image();
     this.sprite.src = `${PATH_TO_BG}/background_${HERO.mapID}.jpg`;
+    this.minimapNavigating = false;
+    this.dotCoords = {
+      x: null,
+      y: null,
+    };
+    this.dotColor = "#2C87BF";
   }
   setMinimapCoordinates() {
     MAIN.MINIMAP_TEXT.innerHTML = `<span>Map: ${
@@ -70,16 +76,39 @@ class Minimap {
       offset * 2,
       offset * 2
     );
+    if (this.minimapNavigating) this.drawDestLine(minimapX, minimapY);
     this.setMinimapCoordinates();
     this.drawShips();
     this.drawPortals();
   }
   leadHero(ev) {
     let coords = EVENT_MANAGER.getCursorPosition(MAIN.MINIMAP_C, ev);
+    this.dotCoords = { ...coords };
     coords.x = Math.round((coords.x / MAIN.MINIMAP_C.width) * mapWidth);
     coords.y = Math.round((coords.y / MAIN.MINIMAP_C.height) * mapHeight);
-    console.log(coords);
     HERO.setDestinationMinimap(coords);
+    this.minimapNavigating = true;
+  }
+  drawDestLine(minimapX, minimapY) {
+    MAIN.MINIMAP_CTX.strokeStyle = this.dotColor;
+    MAIN.MINIMAP_CTX.beginPath();
+    MAIN.MINIMAP_CTX.moveTo(minimapX, minimapY); //move to hero ship
+    MAIN.MINIMAP_CTX.lineTo(this.dotCoords.x, this.dotCoords.y); //draw to mid of the dest dot
+    MAIN.MINIMAP_CTX.stroke();
+    this.drawDestDot();
+  }
+  drawDestDot() {
+    const MINIMAP_DOT_RAD = 7;
+    MAIN.MINIMAP_CTX.arc(
+      this.dotCoords.x,
+      this.dotCoords.y,
+      MINIMAP_DOT_RAD,
+      0,
+      2 * Math.PI,
+      false
+    );
+    MAIN.MINIMAP_CTX.fillStyle = this.dotColor;
+    MAIN.MINIMAP_CTX.fill();
   }
   drawShips() {
     MAP_SHIPS.forEach((ship) => {

@@ -52,6 +52,7 @@ class Client {
     this.uiLoaded = true;
     this.resizeCanvas();
     EVENT_MANAGER.initListeners();
+    this.generateShipInfoElements();
   }
   resizeCanvas() {
     this.CANVAS.width = window.innerWidth;
@@ -72,6 +73,37 @@ class Client {
     HERO = new Hero(...data);
     initiatePostHero();
   }
+  generateShipInfoElements() {
+    const elements = [
+      { name: "HP", isBar: true },
+      { name: "SHD", isBar: true },
+      { name: "CFG", isBar: false },
+      { name: "CARGO", isBar: true },
+      { name: "SPEED", isBar: false },
+    ];
+    const target = document.querySelector(".shipinfo_main");
+    elements.forEach((el) => {
+      const wrapper = document.createElement("div");
+      wrapper.classList.add(`${el.name}_wrapper`);
+      const textRepr = document.createElement("span");
+      textRepr.innerText = 0;
+      textRepr.id = `${el.name}_text`;
+      wrapper.appendChild(textRepr);
+      if (el.isBar) {
+        const visualRepr = document.createElement("div");
+        visualRepr.id = `${el.name}_visual_wrapper`;
+        const visualReprBar = document.createElement("div");
+        visualReprBar.id = `${el.name}_visual_bar`;
+        visualRepr.appendChild(visualReprBar);
+        wrapper.appendChild(visualRepr);
+        wrapper.addEventListener("click", (
+          ev //triggers only on isBar elements
+        ) => EVENT_MANAGER.handleInfoVisualChange(ev));
+      }
+      target.appendChild(wrapper);
+    });
+  }
+  generateUserInfoElements() {}
   writeToLog(msg, isTranslate = false) {
     if (isTranslate) {
       msg = TEXT_TRANSLATIONS[msg];
