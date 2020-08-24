@@ -26,9 +26,6 @@ class EventManager {
       case BTN_FPS:
         manageFpsWindow();
         break;
-      case BTN_ATTACK:
-        if (HERO !== 0) HERO.startAttack();
-        break;
       case BTN_LOGOUT:
         this.handleLogoutRequest();
         break;
@@ -38,7 +35,12 @@ class EventManager {
       case BTN_SHIP:
         SOCKET.sendPacket([TEST_SHIP]);
         break;
+      case BTN_ATTACK:
+        HERO.handleAttackState();
+        break;
       default:
+        if (BTN_SWITCH.includes(key))
+          HERO.switchAmmo(BTN_SWITCH.indexOf(key) + 1);
         break;
     }
   }
@@ -62,7 +64,6 @@ class EventManager {
         return true;
       }
     });
-    console.log(cursor);
     document.body.style.cursor = cursor;
   }
   handleMouseMov(evMouse) {

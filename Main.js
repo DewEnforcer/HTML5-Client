@@ -1,6 +1,6 @@
 const HOST = "ws://localhost:8080";
 const TEXT_TRANSLATIONS = {
-  attack: "Commecing attack!",
+  attack: "Commencing attack!",
   no_range: "Out of range",
   end_attack: "Weapons offline",
   disconnected: "You are currently disconnected from our servers!",
@@ -20,8 +20,10 @@ const BTN_ATTACK = " ";
 const BTN_LOGOUT = "l";
 const BTN_PORT = "j";
 const BTN_SHIP = "q";
+const BTN_SWITCH = ["+", "ě"];
+//
 const REFRESH_TIME = 100;
-const LASER_SPEED = 100;
+const LASER_SPEED = 3000;
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;
@@ -35,7 +37,7 @@ const clickRange = 100;
 const mapWidth = 10000;
 const mapHeight = 7000;
 //
-const LOGOUT_TIME = 5000;
+const LOGOUT_TIME = 1000;
 let END = false;
 let SHOW_FPS = false;
 let DELTA_TIME = new Date() * 1;
@@ -84,6 +86,7 @@ const drawGame = (timestamp) => {
   MAP_PLANETS.forEach((planet) => planet.update());
   MAP_PORTALS.forEach((portal) => portal.update());
   MAP_SHIPS.forEach((ship) => ship.update());
+  LASER_LAYER.forEach((laser) => laser.update());
   HERO.update();
   lockTarget();
   MINIMAP.minimapManager();

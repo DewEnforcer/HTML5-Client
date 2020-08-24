@@ -132,7 +132,7 @@ const checkCollision = () => {
       EVENT_MANAGER.mouse.y
     );
     if (dist <= clickRange) {
-      HERO.setTarget(ship.ID);
+      HERO.requestTarget(ship.ID);
       return true;
     }
   });

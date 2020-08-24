@@ -61,8 +61,11 @@ class Hero {
     this.loggingOut = !this.loggingOut;
     this.lockedControls = this.loggingOut;
   }
-  setTarget(target) {
-    this.targetID = target;
+  requestTarget(target) {
+    SOCKET.sendPacket([REQUEST_TARGET, target]);
+  }
+  setTarget(targetID) {
+    this.targetID = targetID;
   }
   resetTarget() {
     this.targetID = 0;
@@ -73,6 +76,10 @@ class Hero {
     this.destY = y;
     this.processDestCalc();
     this.isFly = true;
+  }
+  switchAmmo(laserID) {
+    SOCKET.sendPacket([CHANGE_LASER, laserID]);
+    this.laserID = laserID;
   }
   setDestination() {
     if (!EVENT_MANAGER.isMouseDown) return;
@@ -96,17 +103,25 @@ class Hero {
     this.isFly = false;
     MINIMAP.minimapNavigating = false;
   }
-  startAttack() {
-    if (this.targetID == null) {
-      return;
+  handleAttackState() {
+    if (this.isAttacking) {
+      this.stopAttack();
+    } else {
+      this.startAttack();
     }
+  }
+  startAttack() {
+    if (this.targetID == 0) return;
+    SOCKET.sendPacket([START_ATTACK]);
     this.isAttacking = true;
-    writeToLog("attack", true);
+    MAIN.writeToLog("attack", true);
+    this.rotate(); // if hero isnt flying, it wont turn him to the enemy, fixed by this
   }
   stopAttack() {
-    this.targetID = null;
+    if (this.targetID == 0) return;
+    SOCKET.sendPacket([STOP_ATTACK]);
     this.isAttacking = false;
-    writeToLog("end_attack", true);
+    MAIN.writeToLog("end_attack", true);
   }
   isFlying() {
     return this.isFly;
@@ -117,9 +132,9 @@ class Hero {
       y: this.destY,
     };
     if (this.isAttacking) {
-      let enemyCoords = getShipCoords(this.targetID);
-      rotateTo.x = enemyCoords.x;
-      rotateTo.y = enemyCoords.y;
+      let enemyCoords = getShipById(this.targetID);
+      rotateTo.x = enemyCoords.x + enemyCoords.offset.x;
+      rotateTo.y = enemyCoords.y + enemyCoords.offset.y;
     }
     this.pointingAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
     this.travelAngle = calcAngle(this.x, this.y, this.destX, this.destY);

@@ -15,10 +15,10 @@ class Ship {
   ) {
     this.ship = ships[shipID];
     this.name = username;
-    this.x = x;
-    this.y = y;
-    this.destX = x;
-    this.destY = y;
+    this.x = Number(x);
+    this.y = Number(y);
+    this.destX = this.x;
+    this.destY = this.y;
     this.ID = ID;
     this.rank = rank;
     this.baseSpeed = speed;

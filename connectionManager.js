@@ -18,7 +18,6 @@ class Socket {
   }
   DataHandler({ data }) {
     data = data.split("|");
-    console.log(data);
     switch (data[1]) {
       case HERO_INIT:
         MAIN.initHero(data);
@@ -29,6 +28,15 @@ class Socket {
       case SHIP_SPAWN:
         MAIN.createShip(data);
         break;
+      case TARGET_INFO:
+        //add update ship stats etc
+        HERO.setTarget(data[2]);
+        break;
+      case FIRE:
+        CombatLayer.handleFireRequest(data);
+        break;
+      case DAMAGE_INFO:
+        CombatLayer.handleDamageInfo(data);
       default:
         break;
     }
