@@ -11,3 +11,4 @@ const LASER = "L";
 const ROCKET = "R";
 const TARGET_INFO = "TI";
 const DAMAGE_INFO = "DI";
+const SHIP_DATA_CHANGE = "SDCH";

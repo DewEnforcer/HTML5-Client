@@ -36,4 +36,20 @@ class CombatLayer {
     );
     laserBlast.play();
   }
+  static generateHit(data) {
+    data.splice(0, 2);
+    let targetHit = data[0];
+    let value = numberFormated(data[1], ",");
+    let isHeal = data[2];
+    const ship = getShipById(targetHit);
+    isHeal = !!Number(isHeal);
+    HIT_LAYER.push(
+      new Hit(
+        ship.renderX + ship.offset.x,
+        ship.renderY + ship.offset.y,
+        value,
+        isHeal
+      )
+    );
+  }
 }

@@ -6,8 +6,10 @@ const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   ctx.strokeRect(50 + x, y - 15, 100, 10); //container
   ctx.fillStyle = "green";
   ctx.fillRect(50 + x, y - 30, hpPerc, 8); //hp
-  ctx.fillStyle = "blue";
-  ctx.fillRect(50 + x, y - 15, shdPerc, 8); //shd
+  if (shdPerc > 0) {
+    ctx.fillStyle = "blue";
+    ctx.fillRect(50 + x, y - 15, shdPerc, 8); //shd
+  }
   ctx.fillStyle = "black";
 };
 const drawName = (username, x, y) => {

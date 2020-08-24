@@ -26,7 +26,7 @@ class Socket {
         handleLogoutResult(data[2]);
         break;
       case SHIP_SPAWN:
-        MAIN.createShip(data);
+        ShipManager.createShip(data);
         break;
       case TARGET_INFO:
         //add update ship stats etc
@@ -36,7 +36,11 @@ class Socket {
         CombatLayer.handleFireRequest(data);
         break;
       case DAMAGE_INFO:
-        CombatLayer.handleDamageInfo(data);
+        CombatLayer.generateHit(data);
+        break;
+      case SHIP_DATA_CHANGE:
+        ShipManager.shipData(data);
+        break;
       default:
         break;
     }

@@ -4,6 +4,9 @@ function toDegs(rad) {
 function toRadians(angle) {
   return angle * (Math.PI / 180);
 }
+const numberFormated = (val, seperator = ".") => {
+  return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, seperator);
+};
 function calcAngle(x, y, destX, destY) {
   let angle = ((Math.atan2(destX - x, destY - y) * 180) / Math.PI + 360) % 360;
   return toRadians(angle);

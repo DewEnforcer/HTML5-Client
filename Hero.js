@@ -102,6 +102,7 @@ class Hero {
   stopFlying() {
     this.isFly = false;
     MINIMAP.minimapNavigating = false;
+    stopFlySound();
   }
   handleAttackState() {
     if (this.isAttacking) {
@@ -158,6 +159,7 @@ class Hero {
     this.isHover = false;
   }
   changePos() {
+    playFlySound();
     this.x += this.speed.x * DELTA_TIME;
     this.y += this.speed.y * DELTA_TIME;
     this.timeTo -= DELTA_TIME;

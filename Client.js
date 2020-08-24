@@ -68,10 +68,6 @@ class Client {
     this.MINIMAP_C.width = Number($(".spacemap_main").width()) - offsetX;
     this.MINIMAP_C.height = Number($(".spacemap_main").height()) - offsetY;
   }
-  createShip(data) {
-    data.splice(0, 2);
-    MAP_SHIPS.push(new Ship(...data));
-  }
   initHero(data) {
     this.generateElements();
     data.splice(0, 2);
@@ -111,7 +107,7 @@ class Client {
   }
   handleShipInfoData(section, value, maxValue = 0) {
     let text = document.querySelector("#" + section + "_text");
-    text.innerText = value; //add formatting
+    text.innerText = numberFormated(value); //add formatting
     let visualBar = document.querySelector("#" + section + "_visual_bar");
     if (visualBar != null) {
       visualBar.style.width = (value / maxValue) * 100 + "%";

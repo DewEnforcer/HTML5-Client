@@ -33,7 +33,6 @@ class Laser {
   }
   terminate() {
     this.end = true;
-    console.log("off");
     LASER_LAYER.some((laser, i) => {
       if (laser.ID == this.ID) {
         LASER_LAYER.splice(i, 1);
@@ -45,7 +44,6 @@ class Laser {
     this.x += this.speed.x * DELTA_TIME;
     this.y += this.speed.y * DELTA_TIME;
     this.timeTo -= DELTA_TIME;
-    console.log(this.timeTo);
     if (Math.round(this.timeTo) <= 0) this.terminate();
   }
   changeRenderPos() {

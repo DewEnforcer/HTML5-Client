@@ -24,6 +24,10 @@ const BTN_SWITCH = ["+", "ě"];
 //
 const REFRESH_TIME = 100;
 const LASER_SPEED = 3000;
+const HIT_OFFSET = {
+  x: 50,
+  y: -50,
+};
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;
@@ -45,10 +49,17 @@ let LAST_UPDATE = 0;
 let gameInit = false;
 const ships = ["starhawk", "sr100"];
 let MAP_OBJECTS_LIST = null;
+// fly sound - sort later, 2 sounds required to create proper sound - fix later too
+const flySound = new Sound(`./spacemap/audio/misc/flying.mp3`, true);
+const flySound2 = new Sound(`./spacemap/audio/misc/flying.mp3`, true);
+let isPlayingFly = false;
+//layers
 const MAP_PLANETS = [];
 const MAP_PORTALS = [];
 const MAP_SHIPS = [];
 const LASER_LAYER = [];
+const HIT_LAYER = [];
+//
 let EVENT_MANAGER, MAIN, HERO, SOCKET, BG_LAYER, MINIMAP, PRELOADER;
 let halfScreenWidth;
 let halfScreenHeight;
@@ -89,6 +100,7 @@ const drawGame = (timestamp) => {
   LASER_LAYER.forEach((laser) => laser.update());
   HERO.update();
   lockTarget();
+  HIT_LAYER.forEach((hit) => hit.update());
   MINIMAP.minimapManager();
 };
 const terminateGame = () => {
@@ -99,6 +111,19 @@ const terminateGame = () => {
 const handleLogoutResult = (bool) => {
   if (bool == 1) terminateGame();
   else HERO.setLogout();
+};
+const stopFlySound = () => {
+  isPlayingFly = false;
+  flySound.stop();
+  flySound2.stop();
+};
+const playFlySound = () => {
+  if (isPlayingFly) return; //prevent multiple fly sounds
+  isPlayingFly = true;
+  flySound.play();
+  setTimeout(() => {
+    flySound2.play();
+  }, 250);
 };
 window.onload = () => {
   fetchMapObjects();
