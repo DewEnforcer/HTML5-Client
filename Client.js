@@ -33,12 +33,14 @@ class Client {
     ).innerHTML = `<div class="log_header header"></div>`;
     document.querySelector(".logbox").appendChild(this.LOG);
     $(".userinfo_header").html(
-      `<img src="./spacemap/ui/usericon.png"> <span>User</span>`
+      `<div><img src="./spacemap/ui/iconuser.png"></div> <span>User</span>`
     );
     $(".shipinfo_header").html(
-      `<img src="./spacemap/ui/iconship.png"> <span>Ship</span>`
+      `<div><img src="./spacemap/ui/iconship.png"></div> <span>Ship</span>`
     );
-    $(".spacemap_header").html(`<span>Spacemap</span>`);
+    $(".spacemap_header").html(
+      `<div><img src="./spacemap/ui/iconminimap.png"></div><span>Spacemap</span>`
+    );
     this.MINIMAP_TEXT = document.createElement("div");
     this.MINIMAP_TEXT.classList.add("spacemap_coordinates_wrapper");
     document.querySelector(".spacemap_main").appendChild(this.MINIMAP_TEXT);
@@ -46,7 +48,9 @@ class Client {
     this.MINIMAP_C.id = "minimap";
     document.querySelector(".spacemap_main").appendChild(this.MINIMAP_C);
     this.MINIMAP_CTX = this.MINIMAP_C.getContext("2d");
-    $(".log_header").html(`<span>Log-Index</span>`);
+    $(".log_header").html(
+      `<div><img src="./spacemap/ui/iconlog.png"></div><span>Log-Index</span>`
+    );
     for (var i = 1; i <= this.maxSlots; i++) {
       $(".actionbar").append(`<div class="slot_actionbar" id="${i}"></div>`);
     }

@@ -21,18 +21,29 @@ const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   }
   ctx.fillStyle = "black";
 };
-const drawName = (offsetX, username, x, y, offsetY = 120) => {
+const drawName = (offsetX, username, faction, isHero, x, y, offsetY = 120) => {
+  let color = COLOR_ENEMY;
+  if (faction == HERO.faction) color = COLOR_ALLY;
+  if (isHero) color = COLOR_HERO;
   ctx.textAlign = "left";
   ctx.font = USERNAME_FONT;
-  ctx.fillStyle = "white";
+  ctx.fillStyle = color;
   ctx.fillText(username, x - offsetX, y + offsetY); //add proper offset
   ctx.fillStyle = "black";
 };
-const drawRank = (rank, x, y) => {
+const drawRank = (rank, x, y, offsetY) => {
   const xMargin = 18; //16 + 2
+  const marginTOP = 16; //accounts for rank height
   let rankSprite = new Image();
   rankSprite.src = `./spacemap/ui/rank/rank_${rank}.png`;
-  ctx.drawImage(rankSprite, x - xMargin, y + 105);
+  ctx.drawImage(rankSprite, x - xMargin, y + offsetY - marginTOP);
+};
+const drawFaction = (x, y, faction, offsetY) => {
+  const xMargin = 2;
+  const marginTOP = 12; //accounts for faction height
+  let factionSprite = new Image();
+  factionSprite.src = `./spacemap/ui/faction/${faction}.png`;
+  ctx.drawImage(factionSprite, x + xMargin, y + offsetY - marginTOP);
 };
 const manageLogoutWindow = () => {
   if (HERO.loggingOut) {

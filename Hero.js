@@ -5,6 +5,7 @@ class Hero {
     speed,
     shipID,
     username,
+    faction,
     rank,
     laserID,
     hp,
@@ -13,6 +14,7 @@ class Hero {
     maxSHD,
     mapID
   ) {
+    this.faction = faction;
     this.config = 1;
     this.shipID = shipID;
     this.ship = ships[shipID];
@@ -33,9 +35,11 @@ class Hero {
     this.isHover = true;
     this.offset = getOffset(shipID);
     this.nickOffset = getTextOffset(USERNAME_FONT, this.name);
+    this.nickOffsetY = SHIP_OFFSETS[shipID].nickY;
     this.sprite = new Image();
     this.travelAngle = 0;
     this.pointingAngle = 0;
+    this.rotationCalc = 360 / Models[shipID][1];
     this.sequence = this.setSequence(0);
     this.isAttacking = false;
     this.targetID = 0;
@@ -140,12 +144,12 @@ class Hero {
       rotateTo.y = enemyCoords.y + enemyCoords.offset.y;
     }
     this.pointingAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
-    this.travelAngle = calcAngle(this.x, this.y, this.destX, this.destY);
+    //this.travelAngle = calcAngle(this.x, this.y, this.destX, this.destY);
     this.sequence = this.setSequence();
   }
   setSequence() {
     return `./spacemap/ships/${this.ship}/${Math.round(
-      toDegs(this.pointingAngle) / 8
+      toDegs(this.pointingAngle) / this.rotationCalc
     )}.png`;
   }
   hover() {
@@ -168,8 +172,27 @@ class Hero {
     if (Math.round(this.timeTo) <= 0) this.stopFlying();
   }
   draw() {
-    drawName(this.nickOffset, this.name, halfScreenWidth, this.render.baseY); //always in the middle
-    drawRank(this.rank, halfScreenWidth - this.nickOffset, this.render.baseY);
+    drawName(
+      this.nickOffset,
+      this.name,
+      this.faction,
+      true,
+      halfScreenWidth,
+      this.render.baseY,
+      this.nickOffsetY
+    ); //always in the middle
+    drawRank(
+      this.rank,
+      halfScreenWidth - this.nickOffset,
+      this.render.baseY,
+      this.nickOffsetY
+    );
+    drawFaction(
+      halfScreenWidth + this.nickOffset,
+      this.render.baseY,
+      this.faction,
+      this.nickOffsetY
+    );
     displayShipStructure(
       this.HP,
       this.SHD,

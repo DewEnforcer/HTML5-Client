@@ -6,6 +6,7 @@ class Ship {
     speed,
     shipID,
     username,
+    faction,
     rank,
     laserID,
     hp,
@@ -22,6 +23,7 @@ class Ship {
     this.destY = this.y;
     this.ID = ID;
     this.rank = rank;
+    this.faction = faction;
     this.baseSpeed = speed;
     this.hoverVal = 0;
     this.speed = {
@@ -33,7 +35,10 @@ class Ship {
     this.isHover = true;
     this.offset = getOffset(shipID);
     this.nickOffset = getTextOffset(USERNAME_FONT, this.name);
+    this.nickOffsetY = SHIP_OFFSETS[shipID].nickY;
     this.sprite = new Image();
+    this.pointingAngle = 0;
+    this.rotationCalc = 360 / Models[shipID][1];
     this.sequence = this.setSequence(0);
     this.isAttacking = false;
     this.targetID = 0;
@@ -44,7 +49,7 @@ class Ship {
     this.maxSHD = maxSHD;
     this.loggingOut = false;
     this.isJumping = false;
-    this.renderX = null;
+    this.renderX = null; //change to render.render.x
     this.renderY = null;
     this.changeRenderPos(); //initial display
   }
@@ -79,11 +84,13 @@ class Ship {
       rotateTo.x = enemyCoords.x;
       rotateTo.y = enemyCoords.y;
     }
-    let angle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
-    this.setSequence(angle);
+    this.pointingAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
+    this.setSequence();
   }
-  setSequence(angle) {
-    return `./spacemap/ships/${this.ship}/${Math.round(angle / 8)}.png`;
+  setSequence() {
+    return `./spacemap/ships/${this.ship}/${Math.round(
+      this.pointingAngle / this.rotationCalc
+    )}.png`;
   }
   hover() {
     this.isHover = true;
@@ -110,13 +117,22 @@ class Ship {
     drawName(
       this.nickOffset,
       this.name,
+      this.faction,
+      false,
       this.renderX + this.offset.x,
       this.renderY
     );
     drawRank(
       this.rank,
       this.renderX + this.offset.x - this.nickOffset,
-      this.renderY
+      this.renderY,
+      this.nickOffsetY
+    );
+    drawFaction(
+      this.renderX + this.offset.x + this.nickOffset,
+      this.renderY,
+      this.faction,
+      this.nickOffsetY
     );
     if (this.ID == HERO.targetID) {
       displayShipStructure(
