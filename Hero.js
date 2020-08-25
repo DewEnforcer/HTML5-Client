@@ -14,6 +14,7 @@ class Hero {
     mapID
   ) {
     this.config = 1;
+    this.shipID = shipID;
     this.ship = ships[shipID];
     this.name = username;
     this.rank = rank;
@@ -31,6 +32,7 @@ class Hero {
     this.isFly = false;
     this.isHover = true;
     this.offset = getOffset(shipID);
+    this.nickOffset = getTextOffset(USERNAME_FONT, this.name);
     this.sprite = new Image();
     this.travelAngle = 0;
     this.pointingAngle = 0;
@@ -166,14 +168,14 @@ class Hero {
     if (Math.round(this.timeTo) <= 0) this.stopFlying();
   }
   draw() {
-    drawName(this.name, this.render.baseX, this.render.baseY);
-    drawRank(this.rank, this.render.baseX, this.render.baseY);
+    drawName(this.nickOffset, this.name, halfScreenWidth, this.render.baseY); //always in the middle
+    drawRank(this.rank, halfScreenWidth - this.nickOffset, this.render.baseY);
     displayShipStructure(
       this.HP,
       this.SHD,
       this.maxHP,
       this.maxSHD,
-      this.render.baseX,
+      this.render.baseX + this.offset.x,
       this.render.baseY
     );
     this.sprite.src = this.sequence;

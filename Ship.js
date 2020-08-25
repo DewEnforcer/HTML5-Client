@@ -13,6 +13,7 @@ class Ship {
     maxHP,
     maxSHD
   ) {
+    this.shipID = shipID;
     this.ship = ships[shipID];
     this.name = username;
     this.x = Number(x);
@@ -31,6 +32,7 @@ class Ship {
     this.isFly = false;
     this.isHover = true;
     this.offset = getOffset(shipID);
+    this.nickOffset = getTextOffset(USERNAME_FONT, this.name);
     this.sprite = new Image();
     this.sequence = this.setSequence(0);
     this.isAttacking = false;
@@ -105,16 +107,27 @@ class Ship {
     this.renderY = this.y - HERO.y + halfScreenHeight;
   }
   draw() {
-    drawName(this.name, this.renderX, this.renderY);
-    drawRank(this.rank, this.renderX, this.renderY);
-    displayShipStructure(
-      this.HP,
-      this.SHD,
-      this.maxHP,
-      this.maxSHD,
-      this.renderX,
+    drawName(
+      this.nickOffset,
+      this.name,
+      this.renderX + this.offset.x,
       this.renderY
     );
+    drawRank(
+      this.rank,
+      this.renderX + this.offset.x - this.nickOffset,
+      this.renderY
+    );
+    if (this.ID == HERO.targetID) {
+      displayShipStructure(
+        this.HP,
+        this.SHD,
+        this.maxHP,
+        this.maxSHD,
+        this.renderX + this.offset.x,
+        this.renderY
+      );
+    }
     this.sprite.src = this.sequence;
     ctx.drawImage(this.sprite, this.renderX, this.renderY);
   }

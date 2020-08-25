@@ -11,11 +11,6 @@ class CombatLayer {
         break;
     }
   }
-  static handleDamageInfo(data) {
-    data.splice(0, 2);
-    let ship = getShipById(data[0]);
-    //displayHit(data[1], ship.renderX + ship.offset.x, ship.renderX + ship.offset.x)
-  }
   static generateRocket() {}
   static generateLasers(target, isHero = true, id = 0) {
     let ship = HERO;

@@ -27,13 +27,7 @@ function speedVelocity(shipSpeed, vectorAngle) {
   return velocity;
 }
 function getOffset(shipID) {
-  return {
-    x: 100,
-    y: 61.5,
-  };
-}
-function getShipCoords(shipID) {
-  return { x: 100, y: 61.5 }; //todo
+  return SHIP_OFFSETS[shipID];
 }
 function convertToMapCoords({ x, y }) {
   x = HERO.x + (x - halfScreenWidth);

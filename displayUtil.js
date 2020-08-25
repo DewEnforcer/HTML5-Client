@@ -1,37 +1,38 @@
+const getTextOffset = (font, txt) => {
+  ctx.font = font;
+  return Math.ceil(ctx.measureText(txt).width / 2);
+};
 const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
-  let hpPerc = (hp / hpStart) * 100;
-  let shdPerc = (shd / shdStart) * 100;
+  const width = 70;
+  const height = 5;
+  const top = y - 30;
+  const margin = 7;
+  const start = x - width / 2;
+  let hpPerc = (hp / hpStart) * width;
+  let shdPerc = (shd / shdStart) * width;
   ctx.strokeStyle = "black";
-  ctx.strokeRect(50 + x, y - 30, 100, 10); //countainer
-  ctx.strokeRect(50 + x, y - 15, 100, 10); //container
-  ctx.fillStyle = "green";
-  ctx.fillRect(50 + x, y - 30, hpPerc, 8); //hp
+  ctx.strokeRect(start, top, width, height); //countainer
+  ctx.fillStyle = HP_COLOR;
+  ctx.fillRect(start, top, hpPerc, height); //hp
   if (shdPerc > 0) {
-    ctx.fillStyle = "blue";
-    ctx.fillRect(50 + x, y - 15, shdPerc, 8); //shd
+    ctx.strokeRect(start, top + margin, width, height); //container
+    ctx.fillStyle = SHD_COLOR;
+    ctx.fillRect(start, top + margin, shdPerc, height); //shd
   }
   ctx.fillStyle = "black";
 };
-const drawName = (username, x, y) => {
-  ctx.font = "bold 16px sans-serif";
+const drawName = (offsetX, username, x, y, offsetY = 120) => {
+  ctx.textAlign = "left";
+  ctx.font = USERNAME_FONT;
   ctx.fillStyle = "white";
-  ctx.textAlign = "center";
-  ctx.fillText(username, x + 100, y + 120); //add proper offset
+  ctx.fillText(username, x - offsetX, y + offsetY); //add proper offset
   ctx.fillStyle = "black";
 };
 const drawRank = (rank, x, y) => {
+  const xMargin = 18; //16 + 2
   let rankSprite = new Image();
   rankSprite.src = `./spacemap/ui/rank/rank_${rank}.png`;
-  ctx.drawImage(rankSprite, x + 30, y + 105);
-};
-const displayHit = (value, x, y, heal = false) => {
-  color = "red";
-  if (heal) color = "green";
-  ctx.font = "bold 20px sans-serif";
-  ctx.fillStyle = color;
-  ctx.textAlign = "center";
-  ctx.fillText(value, x, y);
-  ctx.fillStyle = "black";
+  ctx.drawImage(rankSprite, x - xMargin, y + 105);
 };
 const manageLogoutWindow = () => {
   if (HERO.loggingOut) {
@@ -92,37 +93,17 @@ const getShipById = (id) => {
   });
   return ship;
 };
+const getLockOffset = (id) => {
+  return LOCK_OFFSETS[id];
+};
 const lockTarget = () => {
   if (HERO.targetID === 0) return;
   const ship = getShipById(HERO.targetID);
   if (ship == null) return;
   const targetRndrX = ship.renderX;
   const targetRndrY = ship.renderY;
-  const shipOffset = ship.offset;
-  ctx.beginPath();
-  ctx.arc(
-    //draw outter circle
-    targetRndrX + shipOffset.x,
-    targetRndrY + shipOffset.y,
-    shipOffset.y * 1.1,
-    0,
-    2 * Math.PI
-  );
-  ctx.strokeStyle = "red";
-  ctx.lineWidth = 2;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(
-    //draw inner circle
-    targetRndrX + shipOffset.x,
-    targetRndrY + shipOffset.y,
-    shipOffset.y,
-    0,
-    2 * Math.PI
-  );
-  ctx.strokeStyle = "#C21807";
-  ctx.lineWidth = 2;
-  ctx.stroke();
+  const offset = getLockOffset(ship.shipID);
+  ctx.drawImage(lockOnSprite, targetRndrX + offset.x, targetRndrY + offset.y);
 };
 const checkCollision = () => {
   let dist = null;

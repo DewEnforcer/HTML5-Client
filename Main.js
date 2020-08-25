@@ -21,13 +21,26 @@ const BTN_LOGOUT = "l";
 const BTN_PORT = "j";
 const BTN_SHIP = "q";
 const BTN_SWITCH = ["+", "ě"];
+const SHIP_OFFSETS = {
+  0: { x: 100, y: 61.5 },
+  1: { x: 100, y: 61.5 },
+};
+const LOCKON_RING = 15;
+const LOCK_OFFSETS = {
+  0: { x: 40 - LOCKON_RING, y: 0 },
+  1: { x: 40 - LOCKON_RING, y: 0 },
+};
 //
+const USERNAME_FONT = "bold 16px sans-serif";
 const REFRESH_TIME = 100;
 const LASER_SPEED = 3000;
 const HIT_OFFSET = {
   x: 50,
   y: -50,
 };
+//
+const HP_COLOR = "green";
+const SHD_COLOR = "blue";
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;
@@ -37,11 +50,15 @@ const mapNames = {
   1: "Alpha",
   2: "Beta",
 };
+//
+const lockOnSprite = new Image();
+lockOnSprite.src = `./spacemap/ui/lockOn.png`;
+//
 const clickRange = 100;
 const mapWidth = 10000;
 const mapHeight = 7000;
 //
-const LOGOUT_TIME = 1000;
+const LOGOUT_TIME = 5000;
 let END = false;
 let SHOW_FPS = false;
 let DELTA_TIME = new Date() * 1;
@@ -105,7 +122,6 @@ const drawGame = (timestamp) => {
 };
 const terminateGame = () => {
   END = true;
-  SOCKET.socket.close();
   window.close();
 };
 const handleLogoutResult = (bool) => {
