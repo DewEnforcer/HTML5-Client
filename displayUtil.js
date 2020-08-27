@@ -11,7 +11,7 @@ const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   let hpPerc = (hp / hpStart) * width;
   let shdPerc = (shd / shdStart) * width;
   ctx.strokeStyle = "black";
-  ctx.strokeRect(start, top, width, height); //countainer
+  ctx.strokeRect(start, top, width, height); //container
   ctx.fillStyle = HP_COLOR;
   ctx.fillRect(start, top, hpPerc, height); //hp
   if (shdPerc > 0) {

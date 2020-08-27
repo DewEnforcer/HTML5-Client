@@ -8,9 +8,17 @@ const TEXT_TRANSLATIONS = {
   logout_cancel: "Logout has been canceled",
   logout_init: "Logging out, please standby!",
 };
+//
+const HP_COLOR = "#49BE40";
+const SHD_COLOR = "#338FCC";
+const STRUCTURE_BG = "#6D6D6D";
+const COLOR_ENEMY = "red";
+const COLOR_ALLY = "#7CFC00";
+const COLOR_HERO = "white";
+//
 const elements = [
-  { name: "HP", isBar: true, color: "green" },
-  { name: "SHD", isBar: true, color: "lightblue" },
+  { name: "HP", isBar: true, color: HP_COLOR },
+  { name: "SHD", isBar: true, color: SHD_COLOR },
   { name: "CFG", isBar: false, color: "white" },
   { name: "CARGO", isBar: true, color: "yellow" },
   { name: "SPEED", isBar: false, color: "white" },
@@ -41,12 +49,6 @@ const HIT_OFFSET = {
   x: 50,
   y: -50,
 };
-//
-const HP_COLOR = "green";
-const SHD_COLOR = "blue";
-const COLOR_ENEMY = "red";
-const COLOR_ALLY = "#7CFC00";
-const COLOR_HERO = "white";
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;
