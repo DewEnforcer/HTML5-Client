@@ -137,7 +137,6 @@ const checkCollision = () => {
       EVENT_MANAGER.mouse.x,
       EVENT_MANAGER.mouse.y
     );
-    console.log(dist);
     if (dist <= clickRange) {
       HERO.requestTarget(ship.ID);
       return true;

@@ -20,12 +20,12 @@ class CombatLayer {
     );
     const LaserToFire = LASER_DISTRIBUTION[ship.shipID][ship.salvoPhase - 1];
     LaserToFire.forEach((posKey) => {
-      let offset = LASER_POS[ship.shipID][posKey][ship.sequenceNum];
       LASER_LAYER.push(
         new Laser(
           ship.x, //start point
           ship.y,
-          offset,
+          LASER_POS[ship.shipID][posKey][ship.sequenceNum],
+          ship.offset,
           target.x,
           target.y,
           ship.laserID

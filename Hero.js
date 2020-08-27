@@ -220,7 +220,7 @@ class Hero {
     drawEngine(
       halfScreenWidth,
       halfScreenHeight,
-      Math.round(toDegs(this.pointingAngle) / this.rotationCalc),
+      this.sequenceNum,
       this.pointingAngle,
       this.engineClass,
       this.engineSeq

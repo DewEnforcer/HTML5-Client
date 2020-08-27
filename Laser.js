@@ -1,5 +1,5 @@
 class Laser {
-  constructor(x, y, pointOffsets, targetX, targetY, laserID) {
+  constructor(x, y, pointOffset, shipOffset, targetX, targetY, laserID) {
     this.ID = getLaserID();
     this.dest = {
       //random offset makes it look more "realistic"
@@ -14,13 +14,15 @@ class Laser {
     };
     this.offsetX = 15.5;
     this.offsetY = 40;
+    this.pointOffsets = { ...pointOffset }; //required else it will behave like static var
+    this.pointOffsets.x = this.pointOffsets.x - shipOffset.x;
+    this.pointOffsets.y = this.pointOffsets.y - shipOffset.y;
     this.angle = calcAngle(
-      this.x - this.offsetX,
-      this.y - this.offsetY,
+      this.x + this.pointOffsets.x,
+      this.y + this.pointOffsets.y,
       this.dest.x,
       this.dest.y
     );
-    this.pointOffsets = pointOffsets;
     this.timeTo = 0;
     this.setSpeed();
     this.end = false;
@@ -28,17 +30,20 @@ class Laser {
     this.sprite.src = `./spacemap/lasers/laser${laserID}.png`;
     this.renderX = 0;
     this.renderY = 0;
+    this.start = true;
     this.changeRenderPos();
-    this.startCoords = {
-      x: this.renderX,
-      y: this.renderY,
-    };
   }
   setSpeed() {
     let distanceX = this.dest.x - this.x;
     let distanceY = this.dest.y - this.y;
     this.timeTo =
-      (getDistance(this.x, this.y, this.dest.x, this.dest.y) / LASER_SPEED) *
+      (getDistance(
+        this.x + this.pointOffsets.x,
+        this.y + this.pointOffsets.y,
+        this.dest.x,
+        this.dest.y
+      ) /
+        LASER_SPEED) *
       1000;
     this.speed.x = distanceX / this.timeTo;
     this.speed.y = distanceY / this.timeTo;
@@ -52,10 +57,6 @@ class Laser {
       }
     });
   }
-  drawPoint() {
-    ctx.fillStyle = "red";
-    ctx.fillRect(this.startCoords.x, this.startCoords.y, 10, 10);
-  }
   changePos() {
     this.x += this.speed.x * DELTA_TIME;
     this.y += this.speed.y * DELTA_TIME;
@@ -63,8 +64,8 @@ class Laser {
     if (Math.round(this.timeTo) <= 0) this.terminate();
   }
   changeRenderPos() {
-    this.renderX = this.x + this.pointOffsets - HERO.x + halfScreenWidth; //count real distance to render one to the center
-    this.renderY = this.y + this.pointOffsets - HERO.y + halfScreenHeight;
+    this.renderX = this.x + this.pointOffsets.x - HERO.x + halfScreenWidth; //count real distance to render one to the center
+    this.renderY = this.y + this.pointOffsets.y - HERO.y + halfScreenHeight;
   }
   draw() {
     ctx.translate(this.renderX, this.renderY);
@@ -75,7 +76,6 @@ class Laser {
   }
   update() {
     if (this.end) return;
-    this.drawPoint();
     this.changeRenderPos();
     this.changePos();
     this.draw();

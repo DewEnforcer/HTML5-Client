@@ -82,7 +82,7 @@ let LASER_POS = null;
 const LASER_DISTRIBUTION = {
   0: [],
   1: [],
-  2: [["LeftRearIn"]],
+  2: [["CenterRear"]],
 };
 let MAP_OBJECTS_LIST = null;
 // fly sound - sort later, 2 sounds required to create proper sound - fix later too
@@ -156,8 +156,8 @@ const drawGame = (timestamp) => {
   MAP_PORTALS.forEach((portal) => portal.update());
   MAP_SHIPS.forEach((ship) => ship.update());
   DRONES_LAYER.forEach((drone) => drone.update());
-  LASER_LAYER.forEach((laser) => laser.update());
   HERO.update();
+  LASER_LAYER.forEach((laser) => laser.update());
   lockTarget();
   HIT_LAYER.forEach((hit) => hit.update());
   MINIMAP.minimapManager();
