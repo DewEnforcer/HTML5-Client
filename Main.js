@@ -36,12 +36,11 @@ const LOCK_OFFSETS = {
 //
 const USERNAME_FONT = "bold 16px sans-serif";
 const REFRESH_TIME = 100;
-const LASER_SPEED = 3000;
+const LASER_SPEED = 150;
 const HIT_OFFSET = {
   x: 50,
   y: -50,
 };
-const DRONE_OFFSET = {};
 //
 const HP_COLOR = "green";
 const SHD_COLOR = "blue";
@@ -60,6 +59,8 @@ const mapNames = {
 //
 const lockOnSprite = new Image();
 lockOnSprite.src = `./spacemap/ui/lockOn.png`;
+let DRONE_POSITIONS = null;
+const DRONE_DISTANCE = 100;
 //
 const clickRange = 100;
 const mapWidth = 10000;
@@ -72,6 +73,17 @@ let DELTA_TIME = new Date() * 1;
 let LAST_UPDATE = 0;
 let gameInit = false;
 const ships = ["starhawk", "sr100", "enforcer"];
+let SHIPS_ENGINES = null;
+const engineOFFSET = {
+  x: 30.5,
+  y: 30.5,
+};
+let LASER_POS = null;
+const LASER_DISTRIBUTION = {
+  0: [],
+  1: [],
+  2: [["LeftRearIn"]],
+};
 let MAP_OBJECTS_LIST = null;
 // fly sound - sort later, 2 sounds required to create proper sound - fix later too
 const flySound = new Sound(`./spacemap/audio/misc/flying.mp3`, true);
@@ -83,6 +95,7 @@ const MAP_PORTALS = [];
 const MAP_SHIPS = [];
 const LASER_LAYER = [];
 const HIT_LAYER = [];
+const DRONES_LAYER = [];
 //
 let EVENT_MANAGER, MAIN, HERO, SOCKET, BG_LAYER, MINIMAP, PRELOADER;
 let halfScreenWidth;
@@ -93,6 +106,27 @@ const fetchMapObjects = () => {
     .then((res) => res.json())
     .then((data) => {
       MAP_OBJECTS_LIST = data;
+    });
+};
+const fetchDroneObjects = () => {
+  fetch("./js/client/dronePos.json")
+    .then((res) => res.json())
+    .then((data) => {
+      DRONE_POSITIONS = data;
+    });
+};
+const fetchEngineData = () => {
+  fetch("./js/client/enginePos.json")
+    .then((res) => res.json())
+    .then((data) => {
+      SHIPS_ENGINES = data;
+    });
+};
+const fetchLaserData = () => {
+  fetch("./js/client/laserPos.json")
+    .then((res) => res.json())
+    .then((data) => {
+      LASER_POS = data;
     });
 };
 const initiatePostHero = () => {
@@ -121,6 +155,7 @@ const drawGame = (timestamp) => {
   MAP_PLANETS.forEach((planet) => planet.update());
   MAP_PORTALS.forEach((portal) => portal.update());
   MAP_SHIPS.forEach((ship) => ship.update());
+  DRONES_LAYER.forEach((drone) => drone.update());
   LASER_LAYER.forEach((laser) => laser.update());
   HERO.update();
   lockTarget();
@@ -150,6 +185,9 @@ const playFlySound = () => {
 };
 window.onload = () => {
   fetchMapObjects();
+  fetchDroneObjects();
+  fetchEngineData();
+  fetchLaserData();
   EVENT_MANAGER = new EventManager();
   MAIN = new Client();
   SOCKET = new Socket(HOST);

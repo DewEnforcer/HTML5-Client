@@ -54,8 +54,8 @@ class EventManager {
     let cursor = "default";
     Object.values(MAP_SHIPS).some((ship) => {
       let dist = getDistance(
-        ship.renderX + ship.offset.x,
-        ship.renderY + ship.offset.y,
+        ship.render.renderX + ship.offset.x,
+        ship.render.renderY + ship.offset.y,
         EVENT_MANAGER.mouse.x,
         EVENT_MANAGER.mouse.y
       );

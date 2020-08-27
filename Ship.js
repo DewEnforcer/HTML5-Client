@@ -39,18 +39,22 @@ class Ship {
     this.sprite = new Image();
     this.pointingAngle = 0;
     this.rotationCalc = 360 / Models[shipID][1];
+    this.sequenceNum = 0;
     this.sequence = this.setSequence(0);
     this.isAttacking = false;
     this.targetID = 0;
     this.laserID = laserID;
+    this.salvoPhase = 1;
     this.HP = hp;
     this.SHD = shd;
     this.maxHP = maxHP;
     this.maxSHD = maxSHD;
     this.loggingOut = false;
     this.isJumping = false;
-    this.renderX = null; //change to render.render.x
-    this.renderY = null;
+    this.render = {
+      renderX: null,
+      renderY: null,
+    };
     this.changeRenderPos(); //initial display
   }
   setTarget(target) {
@@ -88,9 +92,10 @@ class Ship {
     this.setSequence();
   }
   setSequence() {
-    return `./spacemap/ships/${this.ship}/${Math.round(
-      this.pointingAngle / this.rotationCalc
-    )}.png`;
+    this.sequenceNum = Math.round(
+      toDegs(this.pointingAngle) / this.rotationCalc
+    );
+    return `./spacemap/ships/${this.ship}/${this.sequenceNum}.png`;
   }
   hover() {
     this.isHover = true;
@@ -98,7 +103,7 @@ class Ship {
     this.speed.x = 0;
     this.speed.y = 0;
     this.hoverVal += hoverSpeed;
-    this.renderY += Math.cos(this.hoverVal) / 10;
+    this.render.renderY += Math.cos(this.hoverVal) / 10;
   }
   resetHover() {
     this.isHover = false;
@@ -110,8 +115,8 @@ class Ship {
     if (Math.round(this.timeTo) <= 0) this.stopFlying();
   }
   changeRenderPos() {
-    this.renderX = this.x - HERO.x + halfScreenWidth; //count real distance to render one to the center
-    this.renderY = this.y - HERO.y + halfScreenHeight;
+    this.render.renderX = this.x - this.offset.x - HERO.x + halfScreenWidth; //count real distance to render one to the center
+    this.render.renderY = this.y - this.offset.y - HERO.y + halfScreenHeight;
   }
   draw() {
     drawName(
@@ -119,18 +124,18 @@ class Ship {
       this.name,
       this.faction,
       false,
-      this.renderX + this.offset.x,
-      this.renderY
+      this.render.renderX + this.offset.x,
+      this.render.renderY
     );
     drawRank(
       this.rank,
-      this.renderX + this.offset.x - this.nickOffset,
-      this.renderY,
+      this.render.renderX + this.offset.x - this.nickOffset,
+      this.render.renderY,
       this.nickOffsetY
     );
     drawFaction(
-      this.renderX + this.offset.x + this.nickOffset,
-      this.renderY,
+      this.render.renderX + this.offset.x + this.nickOffset,
+      this.render.renderY,
       this.faction,
       this.nickOffsetY
     );
@@ -140,12 +145,12 @@ class Ship {
         this.SHD,
         this.maxHP,
         this.maxSHD,
-        this.renderX + this.offset.x,
-        this.renderY
+        this.render.renderX + this.offset.x,
+        this.render.renderY
       );
     }
     this.sprite.src = this.sequence;
-    ctx.drawImage(this.sprite, this.renderX, this.renderY);
+    ctx.drawImage(this.sprite, this.render.renderX, this.render.renderY);
   }
   update() {
     if (this.isFly) {

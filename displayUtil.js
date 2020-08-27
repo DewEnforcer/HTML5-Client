@@ -45,6 +45,18 @@ const drawFaction = (x, y, faction, offsetY) => {
   factionSprite.src = `./spacemap/ui/faction/${faction}.png`;
   ctx.drawImage(factionSprite, x + xMargin, y + offsetY - marginTOP);
 };
+const drawEngine = (x, y, shipSeq, angle, engineClass, seq) => {
+  const sprite = new Image();
+  sprite.src = `./spacemap/engines/standard/${seq}.png`;
+  const offset = SHIPS_ENGINES[engineClass][shipSeq];
+  let renderX = x + offset.x;
+  let renderY = y + offset.y;
+  ctx.translate(renderX, renderY);
+  ctx.rotate(-angle);
+  ctx.drawImage(sprite, -engineOFFSET.x, -engineOFFSET.y);
+  ctx.rotate(angle);
+  ctx.translate(-renderX, -renderY);
+};
 const manageLogoutWindow = () => {
   if (HERO.loggingOut) {
     document.querySelector(".logout_window").remove();
@@ -111,8 +123,8 @@ const lockTarget = () => {
   if (HERO.targetID === 0) return;
   const ship = getShipById(HERO.targetID);
   if (ship == null) return;
-  const targetRndrX = ship.renderX;
-  const targetRndrY = ship.renderY;
+  const targetRndrX = ship.render.renderX;
+  const targetRndrY = ship.render.renderY;
   const offset = getLockOffset(ship.shipID);
   ctx.drawImage(lockOnSprite, targetRndrX + offset.x, targetRndrY + offset.y);
 };
@@ -120,11 +132,12 @@ const checkCollision = () => {
   let dist = null;
   return Object.values(MAP_SHIPS).some((ship) => {
     dist = getDistance(
-      ship.renderX + ship.offset.x,
-      ship.renderY + ship.offset.y,
+      ship.render.renderX + ship.offset.x,
+      ship.render.renderY + ship.offset.y,
       EVENT_MANAGER.mouse.x,
       EVENT_MANAGER.mouse.y
     );
+    console.log(dist);
     if (dist <= clickRange) {
       HERO.requestTarget(ship.ID);
       return true;

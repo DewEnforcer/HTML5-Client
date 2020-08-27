@@ -49,3 +49,52 @@ function getNearestPortal() {
   });
   return portalID;
 }
+/* remove later on */
+function decompileData(data) {
+  let positions = {};
+  data = data.replace(/\s/g, "");
+  console.log(data);
+  data = data.split(",");
+  console.log(data);
+  data.forEach((item, i) => {
+    if (i % 2 == 0) {
+      positions = { ...positions, [i]: { x: Number(item), y: null } };
+      return;
+    }
+    positions[i - 1] = { x: positions[i - 1].x, y: Number(item) };
+  });
+  const element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(positions))
+  );
+  element.setAttribute("download", "Data");
+  element.style.display = "none";
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+}
+function fixData(pos) {
+  let data = LASER_POS[2][pos];
+  let newObject = {};
+  const order = [];
+  for (let i = 50; i > 0; i -= 2) {
+    order.push(i);
+  }
+  order.push(64, 62, 60, 58, 56, 54, 52);
+  order.forEach((item, i) => {
+    newObject = { ...newObject, [i]: data[item] };
+  });
+  const element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(newObject))
+  );
+  element.setAttribute("download", "Data");
+  element.style.display = "none";
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+}

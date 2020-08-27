@@ -1,19 +1,26 @@
 class Laser {
-  constructor(x, y, targetX, targetY, laserID) {
+  constructor(x, y, pointOffsets, targetX, targetY, laserID) {
     this.ID = getLaserID();
-    const randomoffset = Math.round(Math.random() * 25);
     this.dest = {
       //random offset makes it look more "realistic"
-      x: targetX + randomoffset,
-      y: targetY + randomoffset,
+      x: targetX,
+      y: targetY,
     };
     this.x = x;
     this.y = y;
-    this.angle = calcAngle(this.x, this.y, this.dest.x, this.dest.y);
     this.speed = {
       x: null,
       y: null,
     };
+    this.offsetX = 15.5;
+    this.offsetY = 40;
+    this.angle = calcAngle(
+      this.x - this.offsetX,
+      this.y - this.offsetY,
+      this.dest.x,
+      this.dest.y
+    );
+    this.pointOffsets = pointOffsets;
     this.timeTo = 0;
     this.setSpeed();
     this.end = false;
@@ -21,6 +28,11 @@ class Laser {
     this.sprite.src = `./spacemap/lasers/laser${laserID}.png`;
     this.renderX = 0;
     this.renderY = 0;
+    this.changeRenderPos();
+    this.startCoords = {
+      x: this.renderX,
+      y: this.renderY,
+    };
   }
   setSpeed() {
     let distanceX = this.dest.x - this.x;
@@ -40,6 +52,10 @@ class Laser {
       }
     });
   }
+  drawPoint() {
+    ctx.fillStyle = "red";
+    ctx.fillRect(this.startCoords.x, this.startCoords.y, 10, 10);
+  }
   changePos() {
     this.x += this.speed.x * DELTA_TIME;
     this.y += this.speed.y * DELTA_TIME;
@@ -47,8 +63,8 @@ class Laser {
     if (Math.round(this.timeTo) <= 0) this.terminate();
   }
   changeRenderPos() {
-    this.renderX = this.x - HERO.x + halfScreenWidth; //count real distance to render one to the center
-    this.renderY = this.y - HERO.y + halfScreenHeight;
+    this.renderX = this.x + this.pointOffsets - HERO.x + halfScreenWidth; //count real distance to render one to the center
+    this.renderY = this.y + this.pointOffsets - HERO.y + halfScreenHeight;
   }
   draw() {
     ctx.translate(this.renderX, this.renderY);
@@ -59,6 +75,7 @@ class Laser {
   }
   update() {
     if (this.end) return;
+    this.drawPoint();
     this.changeRenderPos();
     this.changePos();
     this.draw();

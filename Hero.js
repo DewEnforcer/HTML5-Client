@@ -14,6 +14,8 @@ class Hero {
     maxSHD,
     mapID
   ) {
+    this.engineClass = 10;
+    this.engineSeq = 11;
     this.faction = faction;
     this.config = 1;
     this.shipID = shipID;
@@ -41,9 +43,11 @@ class Hero {
     this.pointingAngle = 0;
     this.rotationCalc = 360 / Models[shipID][1];
     this.sequence = this.setSequence(0);
+    this.sequenceNum = 0;
     this.isAttacking = false;
     this.targetID = 0;
     this.laserID = laserID;
+    this.salvoPhase = 1;
     this.HP = Number(hp);
     this.SHD = Number(shd);
     this.maxHP = Number(maxHP);
@@ -140,17 +144,27 @@ class Hero {
     };
     if (this.isAttacking) {
       let enemyCoords = getShipById(this.targetID);
-      rotateTo.x = enemyCoords.x + enemyCoords.offset.x;
-      rotateTo.y = enemyCoords.y + enemyCoords.offset.y;
+      rotateTo.x = enemyCoords.x;
+      rotateTo.y = enemyCoords.y;
     }
     this.pointingAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
     //this.travelAngle = calcAngle(this.x, this.y, this.destX, this.destY);
     this.sequence = this.setSequence();
   }
+  setEngineSeq() {
+    if (this.isFly) {
+      this.engineSeq--;
+    } else {
+      this.engineSeq++;
+    }
+    if (this.engineSeq < 0) this.engineSeq = 0;
+    if (this.engineSeq > 11) this.engineSeq = 11;
+  }
   setSequence() {
-    return `./spacemap/ships/${this.ship}/${Math.round(
+    this.sequenceNum = Math.round(
       toDegs(this.pointingAngle) / this.rotationCalc
-    )}.png`;
+    );
+    return `./spacemap/ships/${this.ship}/${this.sequenceNum}.png`;
   }
   hover() {
     this.isHover = true;
@@ -203,8 +217,17 @@ class Hero {
     );
     this.sprite.src = this.sequence;
     ctx.drawImage(this.sprite, this.render.renderX, this.render.renderY);
+    drawEngine(
+      halfScreenWidth,
+      halfScreenHeight,
+      Math.round(toDegs(this.pointingAngle) / this.rotationCalc),
+      this.pointingAngle,
+      this.engineClass,
+      this.engineSeq
+    );
   }
   update() {
+    this.setEngineSeq();
     if (this.isFly) {
       if (this.isHover) {
         //ship state has changed from hover to flying one

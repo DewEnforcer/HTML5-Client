@@ -18,17 +18,23 @@ class CombatLayer {
     const laserBlast = new Sound(
       `./spacemap/audio/lasers/laser${ship.laserID}.mp3`
     );
-    //change to starting point selection - for loop etc
-    //simple laser generation for now
-    LASER_LAYER.push(
-      new Laser(
-        ship.x,
-        ship.y,
-        target.x + target.offset.x,
-        target.y + target.offset.y,
-        ship.laserID
-      )
-    );
+    const LaserToFire = LASER_DISTRIBUTION[ship.shipID][ship.salvoPhase - 1];
+    LaserToFire.forEach((posKey) => {
+      let offset = LASER_POS[ship.shipID][posKey][ship.sequenceNum];
+      LASER_LAYER.push(
+        new Laser(
+          ship.x, //start point
+          ship.y,
+          offset,
+          target.x,
+          target.y,
+          ship.laserID
+        )
+      );
+    });
+    ship.salvoPhase++;
+    if (ship.salvoPhase > LASER_DISTRIBUTION[ship.shipID].length)
+      ship.salvoPhase = 1;
     laserBlast.play();
   }
   static generateHit(data) {
@@ -40,8 +46,8 @@ class CombatLayer {
     isHeal = !!Number(isHeal);
     HIT_LAYER.push(
       new Hit(
-        ship.renderX + ship.offset.x,
-        ship.renderY + ship.offset.y,
+        ship.render.renderX + ship.offset.x,
+        ship.render.renderY + ship.offset.y,
         value,
         isHeal
       )

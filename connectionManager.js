@@ -41,6 +41,8 @@ class Socket {
       case SHIP_DATA_CHANGE:
         ShipManager.shipData(data);
         break;
+      case DRONES_INFO:
+        DroneManager.handleDroneData(data);
       default:
         break;
     }
