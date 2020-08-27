@@ -36,7 +36,7 @@ const LOCK_OFFSETS = {
 //
 const USERNAME_FONT = "bold 16px sans-serif";
 const REFRESH_TIME = 100;
-const LASER_SPEED = 150;
+const LASER_SPEED = 3000;
 const HIT_OFFSET = {
   x: 50,
   y: -50,
@@ -193,6 +193,7 @@ window.onload = () => {
   fetchDroneObjects();
   fetchEngineData();
   fetchLaserData();
+  addFetchOffset();
   EVENT_MANAGER = new EventManager();
   MAIN = new Client();
   SOCKET = new Socket(HOST);

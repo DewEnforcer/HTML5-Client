@@ -14,13 +14,13 @@ class Laser {
     };
     this.offsetX = 15.5;
     this.offsetY = 40;
+    this.pointOffsets = pointOffsets;
     this.angle = calcAngle(
-      this.x - this.offsetX,
-      this.y - this.offsetY,
+      this.x - this.offsetX + this.pointOffsets.x,
+      this.y - this.offsetY + this.pointOffsets.y,
       this.dest.x,
       this.dest.y
     );
-    this.pointOffsets = pointOffsets;
     this.timeTo = 0;
     this.setSpeed();
     this.end = false;
@@ -75,7 +75,7 @@ class Laser {
   }
   update() {
     if (this.end) return;
-    this.drawPoint();
+    //this.drawPoint();
     this.changeRenderPos();
     this.changePos();
     this.draw();

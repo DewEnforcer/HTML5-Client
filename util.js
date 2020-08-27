@@ -98,3 +98,17 @@ function fixData(pos) {
   element.click();
   document.body.removeChild(element);
 }
+function addFetchOffset() {
+  fetch("./js/client/offsetImage.json")
+    .then((res) => res.json())
+    .then((data) => {
+      let offsets = data;
+      for (j in offsets[2]) {
+        Object.keys(LASER_POS[2]).forEach((key) => {
+          console.log(offsets[2][j]);
+          LASER_POS[2][key][j].x += offsets[2][j].x;
+          LASER_POS[2][key][j].y += offsets[2][j].y;
+        });
+      }
+    });
+}
