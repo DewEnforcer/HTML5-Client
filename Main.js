@@ -82,7 +82,12 @@ let LASER_POS = null;
 const LASER_DISTRIBUTION = {
   0: [],
   1: [],
-  2: [["LeftRearIn"]],
+  2: [
+    ["LeftRearIn", "RightRearIn"],
+    ["LeftFrontIn", "RightFrontIn", "CenterRear"],
+    ["LeftFrontOut", "RightFrontOut"],
+    ["LeftRearOut", "RightRearOut", "CenterFront"],
+  ],
 };
 let MAP_OBJECTS_LIST = null;
 // fly sound - sort later, 2 sounds required to create proper sound - fix later too
