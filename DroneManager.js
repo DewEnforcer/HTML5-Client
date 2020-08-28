@@ -14,7 +14,6 @@ class DroneManager {
     data.forEach((element) => {
       drones.push(element.split(";"));
     });
-    //add settings here later on, for now generate drones on
     drones.forEach((drone, i) => {
       DRONES_LAYER.push(new Drone(i, ship, drone[0], drone[1], drone[2]));
     });

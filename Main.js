@@ -9,6 +9,7 @@ const TEXT_TRANSLATIONS = {
   logout_init: "Logging out, please standby!",
 };
 //
+const displayDrones = false;
 const HP_COLOR = "#49BE40";
 const SHD_COLOR = "#338FCC";
 const STRUCTURE_BG = "#6D6D6D";
@@ -63,6 +64,8 @@ const lockOnSprite = new Image();
 lockOnSprite.src = `./spacemap/ui/lockOn.png`;
 let DRONE_POSITIONS = null;
 const DRONE_DISTANCE = 100;
+const DRONE_SIMPLE_Y = -5;
+const DRONE_SIMPLE_MARGIN_X = 3;
 //
 const clickRange = 100;
 const mapWidth = 10000;

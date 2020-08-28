@@ -2,6 +2,26 @@ const getTextOffset = (font, txt) => {
   ctx.font = font;
   return Math.ceil(ctx.measureText(txt).width / 2);
 };
+const drawCenter = (ship) => {
+  ctx.fillStyle = "red";
+  ctx.fillRect(
+    ship.render.renderX + ship.offset.x - 5,
+    ship.render.renderY + ship.offset.y - 5,
+    10,
+    10
+  );
+  ctx.fillStyle = "black";
+};
+const drawBounds = (ship) => {
+  ctx.strokeStyle = "red";
+  ctx.strokeRect(
+    ship.render.renderX,
+    ship.render.renderY,
+    ship.offset.x * 2,
+    ship.offset.y * 2
+  );
+  ctx.strokeStyle = "black";
+};
 const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   const width = 70;
   const height = 5;
