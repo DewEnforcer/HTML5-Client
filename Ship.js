@@ -56,6 +56,8 @@ class Ship {
       renderY: null,
     };
     this.changeRenderPos(); //initial display
+    this.engineClass = 10;
+    this.engine = new Engine(this);
   }
   setTarget(target) {
     this.targetID = target;
@@ -68,6 +70,7 @@ class Ship {
     let distanceY = this.destY - this.y;
     this.speed.x = distanceX / this.timeTo;
     this.speed.y = distanceY / this.timeTo;
+    this.isFly = true;
   }
   startAttack() {
     this.isAttacking = true;
@@ -83,13 +86,13 @@ class Ship {
       x: this.destX,
       y: this.destY,
     };
-    if (isAttacking) {
+    if (this.isAttacking) {
       let enemyCoords = getShipCoords(this.targetID);
       rotateTo.x = enemyCoords.x;
       rotateTo.y = enemyCoords.y;
     }
     this.pointingAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
-    this.setSequence();
+    this.sequence = this.setSequence();
   }
   setSequence() {
     this.sequenceNum = Math.round(
@@ -108,6 +111,9 @@ class Ship {
   resetHover() {
     this.isHover = false;
   }
+  stopFlying() {
+    this.isFly = false;
+  }
   changePos() {
     this.x += this.speed.x * DELTA_TIME;
     this.y += this.speed.y * DELTA_TIME;
@@ -125,7 +131,8 @@ class Ship {
       this.faction,
       false,
       this.render.renderX + this.offset.x,
-      this.render.renderY
+      this.render.renderY,
+      this.nickOffsetY
     );
     drawRank(
       this.rank,
@@ -163,7 +170,8 @@ class Ship {
     } else {
       this.hover();
     }
-    if (HERO.isFly) this.changeRenderPos(); //only when hero is flying, else enable hover animation
+    this.changeRenderPos(); //only when hero is flying, else enable hover animation
     this.draw();
+    this.engine.update();
   }
 }

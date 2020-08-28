@@ -13,3 +13,6 @@ const TARGET_INFO = "TI";
 const DAMAGE_INFO = "DI";
 const SHIP_DATA_CHANGE = "SDCH";
 const DRONES_INFO = "DNSI";
+const TECH_INFO = "TCHI";
+const TECH_LEECH = "TCHL";
+const SHIP_MOVEMENT = "SHM";

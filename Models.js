@@ -5,4 +5,5 @@ const Models = [
   ["portals/portalActive", 112, 0],
   ["portals/jumpAnimation", 112, 0],
   ["portals/portalInactive", 48, 0],
+  ["sfx/leech", 29, 0],
 ];

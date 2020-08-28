@@ -18,17 +18,18 @@ const COLOR_ALLY = "#7CFC00";
 const COLOR_HERO = "white";
 //
 const elements = [
-  { name: "HP", isBar: true, color: HP_COLOR },
-  { name: "SHD", isBar: true, color: SHD_COLOR },
-  { name: "CFG", isBar: false, color: "white" },
-  { name: "CARGO", isBar: true, color: "yellow" },
-  { name: "SPEED", isBar: false, color: "white" },
+  { name: "HP", isBar: true, color: HP_COLOR, icon: "iconHp" },
+  { name: "SHD", isBar: true, color: SHD_COLOR, icon: "iconShd" },
+  { name: "CFG", isBar: false, color: "white", icon: "iconCfg" },
+  { name: "CARGO", isBar: true, color: "yellow", icon: "iconCargo" },
+  { name: "SPEED", isBar: false, color: "white", icon: "iconSpd" },
 ];
 const BTN_FPS = "f";
 const BTN_ATTACK = " ";
 const BTN_LOGOUT = "l";
 const BTN_PORT = "j";
 const BTN_SHIP = "q";
+const BTN_RNDMOV = "é";
 const BTN_SWITCH = ["+", "ě"];
 const DEFAULT_NICK_Y = 120;
 const SHIP_OFFSETS = {
@@ -40,7 +41,7 @@ const LOCKON_RING = 15;
 const LOCK_OFFSETS = {
   0: { x: 40 - LOCKON_RING, y: 0 },
   1: { x: 40 - LOCKON_RING, y: 0 },
-  1: { x: 30 - LOCKON_RING, y: 0 },
+  2: { x: 27 - LOCKON_RING, y: 20 },
 };
 //
 const USERNAME_FONT = "bold 16px sans-serif";

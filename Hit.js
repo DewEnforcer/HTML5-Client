@@ -4,7 +4,7 @@ class Hit {
     this.x = x + HIT_OFFSET.x;
     this.y = y + HIT_OFFSET.y;
     this.value = value;
-    this.color = isHeal ? "green" : "red";
+    this.color = isHeal ? "#49BE40" : "#ff0000";
     this.fontSize = 20;
     this.seq = 1;
     this.MAX_SEQUENCE = 700;

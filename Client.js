@@ -88,6 +88,13 @@ class Client {
     elements.forEach((el) => {
       const wrapper = document.createElement("div");
       wrapper.classList.add(`${el.name}_wrapper`, "wrapper_main_shipinfo");
+      if (el.icon != null) {
+        const icon = document.createElement("img");
+        icon.src = `./spacemap/ui/ship_info/${el.icon}.png`;
+        icon.id = `${el.name}_icon`;
+        icon.classList.add("icon_info");
+        wrapper.appendChild(icon);
+      }
       const textRepr = document.createElement("span");
       textRepr.innerText = 0;
       textRepr.id = `${el.name}_text`;

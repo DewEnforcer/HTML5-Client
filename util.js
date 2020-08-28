@@ -49,6 +49,10 @@ function getNearestPortal() {
   });
   return portalID;
 }
+function trimData(data, index = 2) {
+  data.splice(0, index);
+  return data;
+}
 /* remove later on */
 function decompileData(data) {
   let positions = {};

@@ -65,17 +65,13 @@ const drawFaction = (x, y, faction, offsetY) => {
   factionSprite.src = `./spacemap/ui/faction/${faction}.png`;
   ctx.drawImage(factionSprite, x + xMargin, y + offsetY - marginTOP);
 };
-const drawEngine = (x, y, shipSeq, angle, engineClass, seq) => {
+const drawLeech = (width, height, x, y, seq) => {
+  const leechSize = 301;
+  x += (width - leechSize) / 2;
+  y += (height - leechSize) / 2;
   const sprite = new Image();
-  sprite.src = `./spacemap/engines/standard/${seq}.png`;
-  const offset = SHIPS_ENGINES[engineClass][shipSeq];
-  let renderX = x + offset.x;
-  let renderY = y + offset.y;
-  ctx.translate(renderX, renderY);
-  ctx.rotate(-angle);
-  ctx.drawImage(sprite, -engineOFFSET.x, -engineOFFSET.y);
-  ctx.rotate(angle);
-  ctx.translate(-renderX, -renderY);
+  sprite.src = `./spacemap/sfx/leech/${seq}.png`;
+  ctx.drawImage(sprite, x, y);
 };
 const manageLogoutWindow = () => {
   if (HERO.loggingOut) {
@@ -157,7 +153,6 @@ const checkCollision = () => {
       EVENT_MANAGER.mouse.x,
       EVENT_MANAGER.mouse.y
     );
-    console.log(dist);
     if (dist <= clickRange) {
       HERO.requestTarget(ship.ID);
       return true;

@@ -15,7 +15,6 @@ class Hero {
     mapID
   ) {
     this.engineClass = 10;
-    this.engineSeq = 11;
     this.faction = faction;
     this.config = 1;
     this.shipID = shipID;
@@ -62,6 +61,16 @@ class Hero {
       renderX: halfScreenWidth - this.offset.x,
       renderY: halfScreenHeight - this.offset.y,
     };
+    this.engine = new Engine(this);
+
+    //
+    this.leechAwaitFrameMax = -1;
+    this.leechAwaitFrame = 0;
+    this.leechSeq = 0;
+    this.leechOn = false;
+    this.leechDisplay = false;
+    this.leechFrame = 0;
+    this.onFrameLeechChange = 3;
   }
   changeMap(newMap) {
     if (this.mapID === newMap) return;
@@ -151,14 +160,24 @@ class Hero {
     //this.travelAngle = calcAngle(this.x, this.y, this.destX, this.destY);
     this.sequence = this.setSequence();
   }
-  setEngineSeq() {
-    if (this.isFly) {
-      this.engineSeq--;
-    } else {
-      this.engineSeq++;
+  controlLeech() {
+    if (this.leechAwaitFrameMax == -1 && !this.leechDisplay)
+      this.leechAwaitFrameMax = Math.round(10000 / DELTA_TIME);
+    this.leechAwaitFrame++;
+    if (this.leechAwaitFrame >= this.leechAwaitFrameMax && !this.leechDisplay) {
+      this.leechFrame = 0;
+      this.leechAwaitFrameMax = -1;
+      this.leechDisplay = true;
+      this.leechAwaitFrame = 0;
     }
-    if (this.engineSeq < 0) this.engineSeq = 0;
-    if (this.engineSeq > 11) this.engineSeq = 11;
+  }
+  setLeechSeq() {
+    const maxLeechFrame = 29;
+    this.leechSeq++;
+    if (this.leechSeq > maxLeechFrame) {
+      this.leechSeq = 0;
+      this.leechDisplay = false;
+    }
   }
   setSequence() {
     this.sequenceNum = Math.round(
@@ -217,17 +236,8 @@ class Hero {
     );
     this.sprite.src = this.sequence;
     ctx.drawImage(this.sprite, this.render.renderX, this.render.renderY);
-    drawEngine(
-      halfScreenWidth,
-      halfScreenHeight,
-      Math.round(toDegs(this.pointingAngle) / this.rotationCalc),
-      this.pointingAngle,
-      this.engineClass,
-      this.engineSeq
-    );
   }
   update() {
-    this.setEngineSeq();
     if (this.isFly) {
       if (this.isHover) {
         //ship state has changed from hover to flying one
@@ -240,5 +250,23 @@ class Hero {
       this.hover();
     }
     this.draw();
+    this.engine.update();
+    if (this.leechOn) {
+      this.controlLeech();
+    }
+    if (this.leechDisplay) {
+      this.leechFrame++;
+      if (this.leechFrame % this.onFrameLeechChange == 0) {
+        this.leechFrame = 1;
+        this.setLeechSeq();
+      }
+      drawLeech(
+        this.offset.x * 2,
+        this.offset.y * 2,
+        this.render.renderX,
+        this.render.renderY,
+        this.leechSeq
+      );
+    }
   }
 }

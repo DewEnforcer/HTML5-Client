@@ -43,6 +43,12 @@ class Socket {
         break;
       case DRONES_INFO:
         DroneManager.handleDroneData(data);
+        break;
+      case TECH_INFO:
+        HitechManager.manageHitechData(data);
+        break;
+      case SHIP_MOVEMENT:
+        ShipManager.moveShip(data);
       default:
         break;
     }

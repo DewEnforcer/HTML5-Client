@@ -38,6 +38,9 @@ class EventManager {
       case BTN_ATTACK:
         HERO.handleAttackState();
         break;
+      case BTN_RNDMOV:
+        SOCKET.sendPacket([RANDOM_MOV]);
+        break;
       default:
         if (BTN_SWITCH.includes(key))
           HERO.switchAmmo(BTN_SWITCH.indexOf(key) + 1);

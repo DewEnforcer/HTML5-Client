@@ -19,7 +19,6 @@ class Drone {
     this.position = position;
     this.offset = DRONE_POSITIONS[position + 1];
     this.simpleRepresentation = this.type[0].toUpperCase();
-    console.log(this.simpleRepresentation);
     this.spriteOffset = {
       x: 32.5,
       y: 28.5,
@@ -72,7 +71,6 @@ class Drone {
       DRONE_SIMPLE_MARGIN_X * this.position -
       12;
     this.y = this.owner.render.baseY + DRONE_SIMPLE_Y;
-    console.log(this.x, this.y);
     ctx.fillStyle = "white";
     ctx.font = "12px Arial";
     ctx.fillText(this.simpleRepresentation, this.x, this.y);

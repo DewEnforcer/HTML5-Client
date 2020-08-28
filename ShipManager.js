@@ -11,4 +11,9 @@ class ShipManager {
     ship.maxHP = Number(data[3]);
     ship.maxSHD = Number(data[4]);
   }
+  static moveShip(data) {
+    data = trimData(data);
+    const ship = getShipById(data[0]);
+    ship.setDestination(Number(data[1]), Number(data[2]), Number(data[3]));
+  }
 }
