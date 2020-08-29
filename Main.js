@@ -17,13 +17,22 @@ const COLOR_ENEMY = "red";
 const COLOR_ALLY = "#7CFC00";
 const COLOR_HERO = "white";
 //
-const elements = [
-  { name: "HP", isBar: true, color: HP_COLOR, icon: "iconHp" },
-  { name: "SHD", isBar: true, color: SHD_COLOR, icon: "iconShd" },
-  { name: "CFG", isBar: false, color: "white", icon: "iconCfg" },
-  { name: "CARGO", isBar: true, color: "yellow", icon: "iconCargo" },
-  { name: "SPEED", isBar: false, color: "white", icon: "iconSpd" },
-];
+const elements = {
+  shipInfo: [
+    { name: "HP", isBar: true, color: HP_COLOR, icon: "iconHp" },
+    { name: "SHD", isBar: true, color: SHD_COLOR, icon: "iconShd" },
+    { name: "CFG", isBar: false, color: "white", icon: "iconCfg" },
+    { name: "CARGO", isBar: true, color: "yellow", icon: "iconCargo" },
+    { name: "SPEED", isBar: false, color: "white", icon: "iconSpd" },
+  ],
+  userInfo: [
+    { name: "EP", isBar: false, color: "white", icon: "iconEp" },
+    { name: "CRED", isBar: false, color: "white", icon: "iconCreds" },
+    { name: "LVL", isBar: false, color: "white", icon: "iconLevel" },
+    { name: "URI", isBar: false, color: "white", icon: "iconUri" },
+    { name: "HON", isBar: false, color: "white", icon: "iconHon" },
+  ],
+};
 const BTN_FPS = "f";
 const BTN_ATTACK = " ";
 const BTN_LOGOUT = "l";

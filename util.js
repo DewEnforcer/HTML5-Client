@@ -53,6 +53,10 @@ function trimData(data, index = 2) {
   data.splice(0, index);
   return data;
 }
+function getShip(ID) {
+  if (ID === "HERO") return HERO;
+  return getShipById(ID);
+}
 /* remove later on */
 function decompileData(data) {
   let positions = {};

@@ -85,7 +85,7 @@ class Client {
   }
   generateShipInfoElements() {
     const target = document.querySelector(".shipinfo_main");
-    elements.forEach((el) => {
+    elements["shipInfo"].forEach((el) => {
       const wrapper = document.createElement("div");
       wrapper.classList.add(`${el.name}_wrapper`, "wrapper_main_shipinfo");
       if (el.icon != null) {

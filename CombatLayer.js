@@ -4,7 +4,7 @@ class CombatLayer {
     let projectileType = data[2];
     switch (projectileType) {
       case LASER:
-        this.generateLasers(getShipById(data[3]));
+        this.generateLasers(data);
         break;
 
       default:
@@ -12,9 +12,12 @@ class CombatLayer {
     }
   }
   static generateRocket() {}
-  static generateLasers(target, isHero = true, id = 0) {
-    let ship = HERO;
-    if (!isHero) ship = getShipById(id);
+  static generateLasers(data) {
+    data = trimData(data, 3);
+    let ship, target;
+    ship = getShip(data[0]);
+    target = getShip(data[1]);
+    ship.isAttacking = true;
     const laserBlast = new Sound(
       `./spacemap/audio/lasers/laser${ship.laserID}.mp3`
     );
