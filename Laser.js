@@ -63,8 +63,10 @@ class Laser {
     if (Math.round(this.timeTo) <= 0) this.terminate();
   }
   changeRenderPos() {
-    this.renderX = this.x + this.pointOffsets.x - HERO.x + halfScreenWidth; //count real distance to render one to the center
-    this.renderY = this.y + this.pointOffsets.y - HERO.y + halfScreenHeight;
+    this.renderX =
+      this.x + this.pointOffsets.x - CAMERA.followX + halfScreenWidth; //count real distance to render one to the center
+    this.renderY =
+      this.y + this.pointOffsets.y - CAMERA.followY + halfScreenHeight;
   }
   draw() {
     ctx.translate(this.renderX, this.renderY);

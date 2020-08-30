@@ -23,8 +23,8 @@ class Engine {
     this.angle = this.enginePoint.pointingAngle;
   }
   changeRenderPos() {
-    this.renderX = this.x - HERO.x + halfScreenWidth; //count real distance to render one to the center
-    this.renderY = this.y - HERO.y + halfScreenHeight;
+    this.renderX = this.x - CAMERA.followX + halfScreenWidth; //count real distance to render one to the center
+    this.renderY = this.y - CAMERA.followY + halfScreenHeight;
   }
   changePos() {
     this.x = this.enginePoint.x + this.positionOffset.x;

@@ -52,8 +52,8 @@ class Drone {
     });
   }
   setRender() {
-    this.renderX = this.x - HERO.x + halfScreenWidth; //count real distance to render one to the center
-    this.renderY = this.y - HERO.y + halfScreenHeight;
+    this.renderX = this.x - CAMERA.followX + halfScreenWidth; //count real distance to render one to the center
+    this.renderY = this.y - CAMERA.followY + halfScreenHeight;
     this.prevCoords.push({ x: this.renderX, y: this.renderY });
   }
   rotateAround() {
@@ -66,11 +66,11 @@ class Drone {
   }
   drawSimpleDrone() {
     this.x =
-      this.owner.render.baseX +
+      this.owner.render.renderX +
       this.owner.offset.x +
       DRONE_SIMPLE_MARGIN_X * this.position -
       12;
-    this.y = this.owner.render.baseY + DRONE_SIMPLE_Y;
+    this.y = this.owner.render.renderY + DRONE_SIMPLE_Y;
     ctx.fillStyle = "white";
     ctx.font = "12px Arial";
     ctx.fillText(this.simpleRepresentation, this.x, this.y);

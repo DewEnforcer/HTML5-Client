@@ -2,12 +2,7 @@ class DroneManager {
   static handleDroneData(data) {
     //SHIP|DRONETYPE;LVL;DESIGN|...
     data.splice(0, 2);
-    let ship = null;
-    if (data[0] == "HERO") {
-      ship = HERO;
-    } else {
-      ship = getShipById(data[0]);
-    }
+    let ship = getShipById(data[0]);
     data.splice(0, 1);
     let drones = [];
     //parse the data

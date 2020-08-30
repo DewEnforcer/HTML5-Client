@@ -57,7 +57,8 @@ class Client {
     this.uiLoaded = true;
     this.resizeCanvas();
     EVENT_MANAGER.initListeners();
-    this.generateShipInfoElements();
+    this.generateInfoElements("shipinfo", "shipInfo", "ship_info");
+    this.generateInfoElements("userinfo", "userInfo", "user_info");
   }
   resizeCanvas() {
     this.CANVAS.width = window.innerWidth;
@@ -67,30 +68,41 @@ class Client {
     this.resizeMinimap();
   }
   resizeMinimap() {
-    let offsetX = 20;
-    let offsetY = 30;
-    this.MINIMAP_C.width = Number($(".spacemap_main").width()) - offsetX;
-    this.MINIMAP_C.height = Number($(".spacemap_main").height()) - offsetY;
+    const scaleX = 21;
+    const scaleY = 13;
+    const offset = 0.2;
+    let width = document.querySelector(".spacemap").getBoundingClientRect()
+      .width;
+    let height = (width / scaleX) * scaleY;
+
+    let offsetX = width * offset;
+    let offsetY = height * offset;
+    this.MINIMAP_C.width = width - offsetX;
+    this.MINIMAP_C.height = height - offsetY;
   }
   initHero(data) {
     this.generateElements();
     data.splice(0, 2);
     HERO = new Hero(...data);
+    CAMERA = new Camera(HERO.ship);
     initiatePostHero();
     //init values
-    this.handleShipInfoData("HP", HERO.HP, HERO.maxHP);
-    this.handleShipInfoData("SHD", HERO.SHD, HERO.maxSHD);
-    this.handleShipInfoData("SPEED", HERO.baseSpeed, 0);
+    this.handleShipInfoData("HP", HERO.ship.HP, HERO.ship.maxHP);
+    this.handleShipInfoData("SHD", HERO.ship.SHD, HERO.ship.maxSHD);
+    this.handleShipInfoData("SPEED", HERO.speed, 0);
     this.handleShipInfoData("CFG", HERO.config, 0);
   }
-  generateShipInfoElements() {
-    const target = document.querySelector(".shipinfo_main");
-    elements["shipInfo"].forEach((el) => {
+  generateInfoElements(className, jsonName, dir) {
+    const target = document.querySelector("." + className + "_main");
+    elements[jsonName].forEach((el) => {
       const wrapper = document.createElement("div");
-      wrapper.classList.add(`${el.name}_wrapper`, "wrapper_main_shipinfo");
+      wrapper.classList.add(
+        `${el.name}_wrapper`,
+        "wrapper_main_" + className + ""
+      );
       if (el.icon != null) {
         const icon = document.createElement("img");
-        icon.src = `./spacemap/ui/ship_info/${el.icon}.png`;
+        icon.src = `./spacemap/ui/${dir}/${el.icon}.png`;
         icon.id = `${el.name}_icon`;
         icon.classList.add("icon_info");
         wrapper.appendChild(icon);

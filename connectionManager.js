@@ -30,7 +30,7 @@ class Socket {
         break;
       case TARGET_INFO:
         //add update ship stats etc
-        HERO.setTarget(data[2]);
+        HERO.ship.setTarget(data[2]);
         break;
       case FIRE:
         CombatLayer.handleFireRequest(data);
@@ -49,6 +49,19 @@ class Socket {
         break;
       case SHIP_MOVEMENT:
         ShipManager.moveShip(data);
+        break;
+      case SHIP_TELEPORT:
+        ShipManager.tpShip(data);
+        break;
+      case SHIP_ATTACK_STATUS:
+        ShipManager.setAttackState(data);
+        break;
+      case PORTAL_REQUEST_ACTIVATE:
+        handlePortalJump(data);
+        break;
+      case CHANGE_MAP:
+        HERO.changeMap(data[2]);
+        break;
       default:
         break;
     }

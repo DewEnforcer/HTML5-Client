@@ -46,6 +46,12 @@ const SHIP_OFFSETS = {
   1: { x: 100, y: 61.5, nickY: DEFAULT_NICK_Y },
   2: { x: 84.5, y: 75, nickY: DEFAULT_NICK_Y + 35 },
 };
+const MISSILE_OFFSETS = {
+  1: { x: 3, y: 13.5 },
+  2: { x: 3.5, y: 13.5 },
+  3: { x: 5, y: 17.5 },
+  4: { x: 4, y: 13 },
+};
 const LOCKON_RING = 15;
 const LOCK_OFFSETS = {
   0: { x: 40 - LOCKON_RING, y: 0 },
@@ -56,6 +62,8 @@ const LOCK_OFFSETS = {
 const USERNAME_FONT = "bold 16px sans-serif";
 const REFRESH_TIME = 100;
 const LASER_SPEED = 3000;
+const MISSILE_SPEED = 1000;
+const MAX_MISSILE_FLY_TIME = 5000;
 const HIT_OFFSET = {
   x: 50,
   y: -50,
@@ -78,8 +86,8 @@ const DRONE_SIMPLE_Y = -5;
 const DRONE_SIMPLE_MARGIN_X = 3;
 //
 const clickRange = 100;
-const mapWidth = 10000;
-const mapHeight = 7000;
+const mapWidth = 21000;
+const mapHeight = 13000;
 //
 const LOGOUT_TIME = 5000;
 let END = false;
@@ -114,10 +122,11 @@ const MAP_PLANETS = [];
 const MAP_PORTALS = [];
 const MAP_SHIPS = [];
 const LASER_LAYER = [];
+const ROCKET_LAYER = [];
 const HIT_LAYER = [];
 const DRONES_LAYER = [];
 //
-let EVENT_MANAGER, MAIN, HERO, SOCKET, BG_LAYER, MINIMAP, PRELOADER;
+let EVENT_MANAGER, MAIN, HERO, SOCKET, BG_LAYER, MINIMAP, PRELOADER, CAMERA;
 let halfScreenWidth;
 let halfScreenHeight;
 let ctx;
@@ -154,15 +163,26 @@ const initiatePostHero = () => {
   //initiates game objects after hero is init
   MINIMAP = new Minimap();
   BG_LAYER = new Background(HERO.mapID);
-  //init all planets, portals on the map
-  MAP_OBJECTS_LIST[HERO.mapID].planets.forEach((planet) => {
-    MAP_PLANETS.push(new Planet(planet.id, planet.x, planet.y));
-  });
-  MAP_OBJECTS_LIST[HERO.mapID].portals.forEach((portal) => {
-    MAP_PORTALS.push(new Portal(portal.x, portal.y));
-  });
+  setGamemapObjects();
   gameInit = true;
   drawGame();
+};
+const setGamemapObjects = () => {
+  //init all planets, portals on the map
+  MAP_OBJECTS_LIST[HERO.mapID].planets.forEach((planet) => {
+    MAP_PLANETS.push(new Planet(planet.id, planet.x, planet.y, planet.z));
+  });
+  MAP_OBJECTS_LIST[HERO.mapID].portals.forEach((portal) => {
+    MAP_PORTALS.push(new Portal(portal.x, portal.y, portal.id));
+  });
+};
+const cleanupGameobjects = () => {
+  MAP_PLANETS.splice(0, MAP_PLANETS.length);
+  MAP_PORTALS.splice(0, MAP_PORTALS.length);
+  MAP_SHIPS.splice(0, MAP_SHIPS.length - 1); //-1 to leave hero ship
+  DRONES_LAYER.splice(0, DRONES_LAYER.length);
+  LASER_LAYER.splice(0, LASER_LAYER.length);
+  ROCKET_LAYER.splice(0, ROCKET_LAYER.length);
 };
 const drawGame = (timestamp) => {
   if (END) return;
@@ -172,15 +192,24 @@ const drawGame = (timestamp) => {
   requestAnimationFrame(drawGame);
   MAIN.cleanup();
   BG_LAYER.update();
+  HERO.processDest();
   MAP_PLANETS.forEach((planet) => planet.update());
   MAP_PORTALS.forEach((portal) => portal.update());
   MAP_SHIPS.forEach((ship) => ship.update());
   DRONES_LAYER.forEach((drone) => drone.update());
   LASER_LAYER.forEach((laser) => laser.update());
-  HERO.update();
+  ROCKET_LAYER.forEach((rocket) => rocket.update());
   lockTarget();
   HIT_LAYER.forEach((hit) => hit.update());
   MINIMAP.minimapManager();
+};
+const resetGamemap = () => {
+  const sound = new Sound(`./spacemap/audio/portal/mapChange.mp3`);
+  cleanupGameobjects();
+  sound.play();
+  MINIMAP.changeBackground();
+  BG_LAYER.setNewMap();
+  setGamemapObjects();
 };
 const terminateGame = () => {
   END = true;

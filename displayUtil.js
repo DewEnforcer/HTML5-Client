@@ -31,11 +31,15 @@ const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   let hpPerc = (hp / hpStart) * width;
   let shdPerc = (shd / shdStart) * width;
   ctx.strokeStyle = "black";
-  ctx.strokeRect(start, top, width, height); //container
+  ctx.strokeRect(start, top, width, height); //container border
+  ctx.fillStyle = STRUCTURE_BG;
+  ctx.fillRect(start, top, width, height); //bgcont
   ctx.fillStyle = HP_COLOR;
   ctx.fillRect(start, top, hpPerc, height); //hp
   if (shdPerc > 0) {
     ctx.strokeRect(start, top + margin, width, height); //container
+    ctx.fillStyle = STRUCTURE_BG;
+    ctx.fillRect(start, top + margin, width, height); //bgcont
     ctx.fillStyle = SHD_COLOR;
     ctx.fillRect(start, top + margin, shdPerc, height); //shd
   }
@@ -43,7 +47,7 @@ const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
 };
 const drawName = (offsetX, username, faction, isHero, x, y, offsetY = 120) => {
   let color = COLOR_ENEMY;
-  if (faction == HERO.faction) color = COLOR_ALLY;
+  if (faction == HERO.ship.faction) color = COLOR_ALLY;
   if (isHero) color = COLOR_HERO;
   ctx.textAlign = "left";
   ctx.font = USERNAME_FONT;
@@ -74,7 +78,7 @@ const drawLeech = (width, height, x, y, seq) => {
   ctx.drawImage(sprite, x, y);
 };
 const manageLogoutWindow = () => {
-  if (HERO.loggingOut) {
+  if (HERO.isLogout) {
     document.querySelector(".logout_window").remove();
     MAIN.writeToLog("logout_cancel", true);
   } else {
@@ -92,7 +96,7 @@ const initLogoutCountdown = () => {
   let time = document.querySelector("#logout_countdown");
   let TIME_LEFT = LOGOUT_TIME;
   setInterval(() => {
-    if (!HERO.loggingOut || TIME_LEFT <= 0) return;
+    if (!HERO.isLogout || TIME_LEFT <= 0) return;
     TIME_LEFT -= 1000;
     time.innerText = TIME_LEFT / 1000;
   }, 1000);
@@ -114,10 +118,13 @@ const displayFPS = () => {
   document.querySelector(".fps_display").innerHTML = `<span>FPS: ${fps}</span>`;
 };
 //game objects interactions
-const handlePortalJump = ({ portalID, newMap, isHeroJump = false }) => {
-  const portal = MAP_PORTALS[portalID];
-  if (portal === "") return;
-  portal.activate(newMap, isHeroJump);
+const handlePortalJump = (data) => {
+  data = trimData(data);
+  const portal = getPortalById(data[0]);
+  if (portal == null) return;
+  const sound = new Sound(`./spacemap/audio/portal/portalJump.mp3`);
+  sound.play();
+  portal.activate();
 };
 const handlePortalRange = () => {
   writeToLog(TEXT_TRANSLATIONS.port_away, true);
@@ -132,12 +139,22 @@ const getShipById = (id) => {
   });
   return ship;
 };
+const getPortalById = (id) => {
+  let portal = null;
+  MAP_PORTALS.some((p) => {
+    if (p.ID == id) {
+      portal = p;
+      return true;
+    }
+  });
+  return portal;
+};
 const getLockOffset = (id) => {
   return LOCK_OFFSETS[id];
 };
 const lockTarget = () => {
-  if (HERO.targetID === 0) return;
-  const ship = getShipById(HERO.targetID);
+  if (HERO.ship.targetID === 0) return;
+  const ship = getShipById(HERO.ship.targetID);
   if (ship == null) return;
   const targetRndrX = ship.render.renderX;
   const targetRndrY = ship.render.renderY;

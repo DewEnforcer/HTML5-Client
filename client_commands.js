@@ -10,3 +10,4 @@ const START_ATTACK = "SRTA";
 const STOP_ATTACK = "STPA";
 const CHANGE_LASER = "ASL";
 const RANDOM_MOV = "SHMRND";
+const REQUEST_PORTAL_JUMP = "RQPJ";

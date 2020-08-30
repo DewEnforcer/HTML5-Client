@@ -1,60 +1,68 @@
-class Ship {
+class Hero {
   constructor(
-    ID,
     x,
     y,
+    speed,
     shipID,
     username,
     faction,
     rank,
+    laserID,
     hp,
     shd,
     maxHP,
     maxSHD,
-    isHero = false
+    mapID
   ) {
-    this.isHero = isHero;
+    this.engineClass = 10;
+    this.faction = faction;
+    this.config = 1;
     this.shipID = shipID;
     this.ship = ships[shipID];
     this.name = username;
+    this.rank = rank;
     this.x = Number(x);
     this.y = Number(y);
     this.destX = this.x;
     this.destY = this.y;
-    this.ID = ID;
-    this.rank = rank;
-    this.faction = faction;
+    this.mapID = mapID;
+    this.baseSpeed = Number(speed);
     this.hoverVal = 0;
     this.speed = {
       x: 0,
       y: 0,
     };
-    this.timeTo = 0;
     this.isFly = false;
     this.isHover = true;
     this.offset = getOffset(shipID);
     this.nickOffset = getTextOffset(USERNAME_FONT, this.name);
     this.nickOffsetY = SHIP_OFFSETS[shipID].nickY;
     this.sprite = new Image();
+    this.travelAngle = 0;
     this.pointingAngle = 0;
     this.rotationCalc = 360 / Models[shipID][1];
-    this.sequenceNum = 0;
     this.sequence = this.setSequence(0);
+    this.sequenceNum = 0;
     this.isAttacking = false;
     this.targetID = 0;
+    this.laserID = laserID;
     this.salvoPhase = 1;
-    this.HP = hp;
-    this.SHD = shd;
-    this.maxHP = maxHP;
-    this.maxSHD = maxSHD;
+    this.HP = Number(hp);
+    this.SHD = Number(shd);
+    this.maxHP = Number(maxHP);
+    this.maxSHD = Number(maxSHD);
     this.loggingOut = false;
     this.isJumping = false;
+    this.lockedControls = false;
+    this.timeTo = 0;
     this.render = {
-      renderX: null,
-      renderY: null,
+      baseX: halfScreenWidth - this.offset.x,
+      baseY: halfScreenHeight - this.offset.y,
+      renderX: halfScreenWidth - this.offset.x,
+      renderY: halfScreenHeight - this.offset.y,
     };
-    this.engineClass = 10;
     this.engine = new Engine(this);
+
     //
     this.leechAwaitFrameMax = -1;
     this.leechAwaitFrame = 0;
@@ -64,31 +72,76 @@ class Ship {
     this.leechFrame = 0;
     this.onFrameLeechChange = 3;
   }
-  setTarget(target) {
-    this.targetID = target;
-    if (this.isAttacking) this.rotate();
+  changeMap(newMap) {
+    if (this.mapID === newMap) return;
+    this.mapID = newMap;
   }
-  teleport(x, y) {
-    this.isFly = false;
-    this.x = x;
-    this.y = y;
-    if (this.isHero) CAMERA.update();
+  setLogout() {
+    this.loggingOut = !this.loggingOut;
+    this.lockedControls = this.loggingOut;
   }
-  setDestination(x, y, time) {
+  requestTarget(target) {
+    SOCKET.sendPacket([REQUEST_TARGET, target]);
+  }
+  setTarget(targetID) {
+    this.targetID = targetID;
+  }
+  resetTarget() {
+    this.targetID = 0;
+    this.stopAttack();
+  }
+  setDestinationMinimap({ x, y }) {
     this.destX = x;
     this.destY = y;
-    this.timeTo = time;
-    let distanceX = this.destX - this.x;
-    let distanceY = this.destY - this.y;
-    this.speed.x = distanceX / this.timeTo;
-    this.speed.y = distanceY / this.timeTo;
+    this.processDestCalc();
     this.isFly = true;
   }
+  switchAmmo(laserID) {
+    SOCKET.sendPacket([CHANGE_LASER, laserID]);
+    this.laserID = laserID;
+  }
+  setDestination() {
+    if (!EVENT_MANAGER.isMouseDown) return;
+    MINIMAP.minimapNavigating = false;
+    let dest = convertToMapCoords(EVENT_MANAGER.mouse);
+    this.destX = Math.round(dest.x);
+    this.destY = Math.round(dest.y);
+    this.processDestCalc();
+  }
+  processDestCalc() {
+    let distanceX = this.destX - this.x;
+    let distanceY = this.destY - this.y;
+    this.timeTo =
+      (getDistance(this.x, this.y, this.destX, this.destY) / this.baseSpeed) *
+      1000;
+    this.speed.x = distanceX / this.timeTo;
+    this.speed.y = distanceY / this.timeTo;
+    SOCKET.sendPacket([MOV_DATA, this.destX, this.destY]);
+  }
+  stopFlying() {
+    this.isFly = false;
+    MINIMAP.minimapNavigating = false;
+    stopFlySound();
+  }
+  handleAttackState() {
+    if (this.isAttacking) {
+      this.stopAttack();
+    } else {
+      this.startAttack();
+    }
+  }
   startAttack() {
+    if (this.targetID == 0) return;
+    SOCKET.sendPacket([START_ATTACK]);
     this.isAttacking = true;
+    MAIN.writeToLog("attack", true);
+    this.rotate(); // if hero isnt flying, it wont turn him to the enemy, fixed by this
   }
   stopAttack() {
+    if (this.targetID == 0) return;
+    SOCKET.sendPacket([STOP_ATTACK]);
     this.isAttacking = false;
+    MAIN.writeToLog("end_attack", true);
   }
   isFlying() {
     return this.isFly;
@@ -98,19 +151,14 @@ class Ship {
       x: this.destX,
       y: this.destY,
     };
-    if (this.isAttacking && this.targetID != 0) {
+    if (this.isAttacking) {
       let enemyCoords = getShipById(this.targetID);
       rotateTo.x = enemyCoords.x;
       rotateTo.y = enemyCoords.y;
     }
     this.pointingAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
+    //this.travelAngle = calcAngle(this.x, this.y, this.destX, this.destY);
     this.sequence = this.setSequence();
-  }
-  setSequence() {
-    this.sequenceNum = Math.round(
-      toDegs(this.pointingAngle) / this.rotationCalc
-    );
-    return `./spacemap/ships/${this.ship}/${this.sequenceNum}.png`;
   }
   controlLeech() {
     if (this.leechAwaitFrameMax == -1 && !this.leechDisplay)
@@ -131,65 +179,61 @@ class Ship {
       this.leechDisplay = false;
     }
   }
+  setSequence() {
+    this.sequenceNum = Math.round(
+      toDegs(this.pointingAngle) / this.rotationCalc
+    );
+    return `./spacemap/ships/${this.ship}/${this.sequenceNum}.png`;
+  }
   hover() {
     this.isHover = true;
     const hoverSpeed = 0.05;
     this.speed.x = 0;
     this.speed.y = 0;
     this.hoverVal += hoverSpeed;
-    this.render.renderY += Math.cos(this.hoverVal) * 3;
+    this.render.renderY += Math.cos(this.hoverVal) / 10;
   }
   resetHover() {
+    this.render.renderY = this.render.baseY;
     this.isHover = false;
   }
-  stopFlying() {
-    this.isFly = false;
-  }
   changePos() {
+    playFlySound();
     this.x += this.speed.x * DELTA_TIME;
     this.y += this.speed.y * DELTA_TIME;
     this.timeTo -= DELTA_TIME;
-    if (this.isHero) CAMERA.update();
     if (Math.round(this.timeTo) <= 0) this.stopFlying();
-  }
-  changeRenderPos() {
-    this.render.renderX =
-      this.x - this.offset.x - CAMERA.followX + halfScreenWidth; //count real distance to render one to the center
-    this.render.renderY =
-      this.y - this.offset.y - CAMERA.followY + halfScreenHeight;
   }
   draw() {
     drawName(
       this.nickOffset,
       this.name,
       this.faction,
-      this.isHero,
-      this.render.renderX + this.offset.x,
-      this.render.renderY,
+      true,
+      halfScreenWidth,
+      this.render.baseY,
       this.nickOffsetY
-    );
+    ); //always in the middle
     drawRank(
       this.rank,
-      this.render.renderX + this.offset.x - this.nickOffset,
-      this.render.renderY,
+      halfScreenWidth - this.nickOffset,
+      this.render.baseY,
       this.nickOffsetY
     );
     drawFaction(
-      this.render.renderX + this.offset.x + this.nickOffset,
-      this.render.renderY,
+      halfScreenWidth + this.nickOffset,
+      this.render.baseY,
       this.faction,
       this.nickOffsetY
     );
-    if (this.isHero || this.ID == HERO.ship.targetID) {
-      displayShipStructure(
-        this.HP,
-        this.SHD,
-        this.maxHP,
-        this.maxSHD,
-        this.render.renderX + this.offset.x,
-        this.render.renderY
-      );
-    }
+    displayShipStructure(
+      this.HP,
+      this.SHD,
+      this.maxHP,
+      this.maxSHD,
+      this.render.baseX + this.offset.x,
+      this.render.baseY
+    );
     this.sprite.src = this.sequence;
     ctx.drawImage(this.sprite, this.render.renderX, this.render.renderY);
   }
@@ -199,11 +243,12 @@ class Ship {
         //ship state has changed from hover to flying one
         this.resetHover();
       }
+      this.setDestination();
       this.rotate();
       this.changePos();
+    } else {
+      this.hover();
     }
-    this.changeRenderPos();
-    if (!this.isFly) this.hover(); //have to put it here, else it would get reset by render pos method
     this.draw();
     this.engine.update();
     if (this.leechOn) {

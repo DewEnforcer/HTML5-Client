@@ -6,23 +6,42 @@ class CombatLayer {
       case LASER:
         this.generateLasers(data);
         break;
-
+      case ROCKET:
+        this.generateRocket(data);
+        break;
       default:
         break;
     }
   }
-  static generateRocket() {}
+  static generateRocket(data) {
+    const smokeStrings = ["Standard", "Advanced", "Hitech"];
+    data = trimData(data, 3);
+    let startPoint, target, rocketID;
+    startPoint = getShipById(data[0]);
+    target = getShipById(data[1]);
+    rocketID = data[2];
+    const rocketFire = new Sound(`./spacemap/audio/rockets/rocket.mp3`);
+    ROCKET_LAYER.push(
+      new Missile(
+        startPoint.x,
+        startPoint.y,
+        target,
+        rocketID,
+        smokeStrings[data[3]]
+      )
+    );
+    rocketFire.play();
+  }
   static generateLasers(data) {
     data = trimData(data, 3);
-    let ship, target;
-    ship = getShip(data[0]);
-    target = getShip(data[1]);
+    let ship, target, laserID;
+    ship = getShipById(data[0]);
+    target = getShipById(data[1]);
+    ship.setTarget(target.ID);
+    laserID = data[2];
     ship.isAttacking = true;
-    const laserBlast = new Sound(
-      `./spacemap/audio/lasers/laser${ship.laserID}.mp3`
-    );
+    const laserBlast = new Sound(`./spacemap/audio/lasers/laser${laserID}.mp3`);
     let isRapidSalvo = false;
-    let laserID = ship.laserID;
     let salvos = 1;
     if (laserID == 2) isRapidSalvo = true;
     if (isRapidSalvo) salvos = LASER_DISTRIBUTION[ship.shipID].length;
@@ -39,7 +58,7 @@ class CombatLayer {
             offset,
             target.x,
             target.y,
-            ship.laserID
+            laserID
           )
         );
       });

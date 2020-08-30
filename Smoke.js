@@ -21,8 +21,8 @@ class Smoke {
     this.sprite.src = `./spacemap/smokes/${this.type}/${this.seq}.png`;
   }
   setRenderPos() {
-    this.renderX = this.x - HERO.x + halfScreenWidth; //count real distance to render one to the center
-    this.renderY = this.y - HERO.y + halfScreenHeight;
+    this.renderX = this.x - CAMERA.followX + halfScreenWidth; //count real distance to render one to the center
+    this.renderY = this.y - CAMERA.followY + halfScreenHeight;
   }
   draw() {
     ctx.drawImage(this.sprite, this.renderX, this.renderY);

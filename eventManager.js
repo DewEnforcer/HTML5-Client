@@ -10,7 +10,7 @@ class EventManager {
     };
   }
   handleLogoutRequest() {
-    if (HERO.loggingOut) {
+    if (HERO.isLogout) {
       manageLogoutWindow();
       HERO.setLogout();
       SOCKET.sendPacket([REQUEST_LOGOUT_STOP]);
@@ -78,7 +78,7 @@ class EventManager {
     if (!this.isMouseDown && checkCollision()) return; //checks only on first click, checks whether user wanted to lock on
     if (HERO.lockedControls) return;
     this.isMouseDown = true;
-    HERO.isFly = true;
+    HERO.ship.isFly = true;
   }
   handleInfoVisualChange(ev) {
     //handle changes between text and visual info

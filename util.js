@@ -29,9 +29,12 @@ function speedVelocity(shipSpeed, vectorAngle) {
 function getOffset(shipID) {
   return SHIP_OFFSETS[shipID];
 }
+function getPortalOffset() {
+  return { x: 100, y: 100 }; //change once more portal types appear
+}
 function convertToMapCoords({ x, y }) {
-  x = HERO.x + (x - halfScreenWidth);
-  y = HERO.y + (y - halfScreenHeight);
+  x = CAMERA.followX + (x - halfScreenWidth);
+  y = CAMERA.followY + (y - halfScreenHeight);
   return { x, y };
 }
 function getLaserID() {
@@ -40,8 +43,8 @@ function getLaserID() {
 function getNearestPortal() {
   let range = null;
   let portalID = null;
-  Object.values(MAP_PORTALS).forEach((port) => {
-    let dist = getDistance(HERO.x, HERO.y, port.x, port.y);
+  MAP_PORTALS.forEach((port) => {
+    let dist = getDistance(HERO.ship.x, HERO.ship.y, port.x, port.y);
     if (range === null || dist < range) {
       range = dist;
       portalID = port.ID;
@@ -61,9 +64,7 @@ function getShip(ID) {
 function decompileData(data) {
   let positions = {};
   data = data.replace(/\s/g, "");
-  console.log(data);
   data = data.split(",");
-  console.log(data);
   data.forEach((item, i) => {
     if (i % 2 == 0) {
       positions = { ...positions, [i]: { x: Number(item), y: null } };
