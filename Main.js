@@ -120,6 +120,7 @@ let isPlayingFly = false;
 //layers
 const MAP_PLANETS = [];
 const MAP_PORTALS = [];
+const MAP_STATIONS = [];
 const MAP_SHIPS = [];
 const LASER_LAYER = [];
 const ROCKET_LAYER = [];
@@ -175,10 +176,16 @@ const setGamemapObjects = () => {
   MAP_OBJECTS_LIST[HERO.mapID].portals.forEach((portal) => {
     MAP_PORTALS.push(new Portal(portal.x, portal.y, portal.id));
   });
+  MAP_OBJECTS_LIST[HERO.mapID].stations.forEach((sta) => {
+    MAP_STATIONS.push(
+      new Station(sta.x, sta.y, sta.z, sta.rotation, sta.type, sta.id)
+    );
+  });
 };
 const cleanupGameobjects = () => {
   MAP_PLANETS.splice(0, MAP_PLANETS.length);
   MAP_PORTALS.splice(0, MAP_PORTALS.length);
+  MAP_STATIONS.splice(0, MAP_STATIONS.length);
   MAP_SHIPS.splice(0, MAP_SHIPS.length - 1); //-1 to leave hero ship
   DRONES_LAYER.splice(0, DRONES_LAYER.length);
   LASER_LAYER.splice(0, LASER_LAYER.length);
@@ -195,6 +202,7 @@ const drawGame = (timestamp) => {
   HERO.processDest();
   MAP_PLANETS.forEach((planet) => planet.update());
   MAP_PORTALS.forEach((portal) => portal.update());
+  MAP_STATIONS.forEach((sta) => sta.update());
   MAP_SHIPS.forEach((ship) => ship.update());
   DRONES_LAYER.forEach((drone) => drone.update());
   LASER_LAYER.forEach((laser) => laser.update());

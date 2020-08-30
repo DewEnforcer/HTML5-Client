@@ -54,6 +54,10 @@ class Minimap {
       MAIN.MINIMAP_C.width,
       MAIN.MINIMAP_C.height
     );
+    this.drawShips(offset);
+    this.drawPortals();
+    this.drawPlanets();
+    this.drawStations();
     MAIN.MINIMAP_CTX.beginPath();
     MAIN.MINIMAP_CTX.moveTo(0, minimapY); //draw left to middle
     MAIN.MINIMAP_CTX.lineTo(minimapX - offset, minimapY);
@@ -74,9 +78,6 @@ class Minimap {
     MAIN.MINIMAP_CTX.lineTo(minimapX, MAIN.MINIMAP_C.height);
     MAIN.MINIMAP_CTX.stroke();
     this.setMinimapCoordinates();
-    this.drawShips(offset);
-    this.drawPortals();
-    this.drawPlanets();
     if (this.minimapNavigating) this.drawDestLine(minimapX, minimapY);
   }
   leadHero(ev) {
@@ -139,12 +140,48 @@ class Minimap {
     });
   }
   drawPlanets() {
+    const minimapScaleX = MAIN.MINIMAP_C.width / mapWidth;
+    const minimapScaleY = MAIN.MINIMAP_C.height / mapHeight;
     MAP_PLANETS.forEach((p) => {
-      let iconSprite = new Image();
+      let minimapX = MAIN.MINIMAP_C.width * (p.x / mapWidth) * p.z;
+      let minimapY = MAIN.MINIMAP_C.height * (p.y / mapHeight) * p.z;
+      const iconSprite = new Image();
       iconSprite.src = `${PATH_TO_PLANETS}/planet_${p.planetID}.png`;
-      let minimapX = MAIN.MINIMAP_C.width * (p.x / mapWidth);
-      let minimapY = MAIN.MINIMAP_C.height * (p.y / mapHeight);
-      MAIN.MINIMAP_CTX.drawImage(iconSprite, minimapX, minimapY, 103.5, 60.8);
+      MAIN.MINIMAP_CTX.drawImage(
+        iconSprite,
+        minimapX - p.offset.x * minimapScaleX,
+        minimapY - p.offset.y * minimapScaleY,
+        p.offset.x * 2 * minimapScaleX,
+        p.offset.y * 2 * minimapScaleY
+      );
+    });
+  }
+  /* 
+          let width = p.offset.x * sizeScale;
+      let height = p.offset.y * sizeScale;
+      const iconSprite = new Image();
+      iconSprite.src = `${PATH_TO_PLANETS}/planet_${p.planetID}.png`;
+      MAIN.MINIMAP_CTX.drawImage(
+        iconSprite,
+        minimapX - (p.offset.x + p.offset.x * 8) * minimapScaleX,
+        minimapY - (p.offset.y + p.offset.y * 8) * minimapScaleY,
+        width * minimapScaleX,
+        height * minimapScaleY
+      );
+  */
+  drawStations() {
+    const minimapScaleX = MAIN.MINIMAP_C.width / mapWidth;
+    const minimapScaleY = MAIN.MINIMAP_C.height / mapHeight;
+    MAP_STATIONS.forEach((sta) => {
+      let minimapX = MAIN.MINIMAP_C.width * (sta.x / mapWidth) * sta.z;
+      let minimapY = MAIN.MINIMAP_C.height * (sta.y / mapHeight) * sta.z;
+      MAIN.MINIMAP_CTX.drawImage(
+        sta.sprite,
+        minimapX - sta.offset.x * minimapScaleX,
+        minimapY - sta.offset.y * minimapScaleY,
+        sta.offset.x * 2 * minimapScaleX,
+        sta.offset.y * 2 * minimapScaleY
+      );
     });
   }
 }

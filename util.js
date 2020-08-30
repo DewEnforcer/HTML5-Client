@@ -32,6 +32,26 @@ function getOffset(shipID) {
 function getPortalOffset() {
   return { x: 100, y: 100 }; //change once more portal types appear
 }
+function getStationOffset(id) {
+  const stationOffsets = {
+    Mmo: { x: 851.5, y: 979 },
+    Eic: { x: 1000.5, y: 1000.5 },
+    Vru: { x: 1000.5, y: 1000.5 },
+    Pirate: { x: 1500.5, y: 993 },
+    Low: { x: 500.5, y: 500.5 },
+  };
+  let offsets = { x: 0, y: 0 };
+  if (id in stationOffsets === true) offsets = stationOffsets[id];
+  return offsets;
+}
+function getPlanetOffset(id) {
+  const planetOffsets = {
+    1: { x: 517.5, y: 304 },
+  };
+  let offset = { x: 0, y: 0 };
+  if (id in planetOffsets === true) offset = planetOffsets[id];
+  return offset;
+}
 function convertToMapCoords({ x, y }) {
   x = CAMERA.followX + (x - halfScreenWidth);
   y = CAMERA.followY + (y - halfScreenHeight);
