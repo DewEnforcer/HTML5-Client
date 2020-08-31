@@ -1,5 +1,5 @@
 class Smoke {
-  constructor(x, y, type, parentEngine) {
+  constructor(x, y, type, parentEngine, activateOn = 2) {
     this.x = x;
     this.y = y;
     this.renderX = this.x;
@@ -9,7 +9,7 @@ class Smoke {
     this.startFrame = 0;
     this.seq = 0;
     this.frame = 0;
-    this.activateOnFrame = 4;
+    this.activateOnFrame = activateOn;
     this.sprite = new Image();
     this.setSpriteSeq();
     this.x -= 15.5; //change later to dynamic value
@@ -36,6 +36,6 @@ class Smoke {
     if (this.frame % this.activateOnFrame == 0) this.seq++;
     this.setSpriteSeq();
     this.draw();
-    if (this.frame >= this.fadeOutFrame) this.terminate();
+    if (this.seq >= this.fadeOutFrame) this.terminate();
   }
 }

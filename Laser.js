@@ -71,7 +71,7 @@ class Laser {
   draw() {
     ctx.translate(this.renderX, this.renderY);
     ctx.rotate(-this.angle);
-    ctx.drawImage(this.sprite, 0, 0);
+    ctx.drawImage(this.sprite, -this.offsetX, -this.offsetY);
     ctx.rotate(this.angle);
     ctx.translate(-this.renderX, -this.renderY);
   }

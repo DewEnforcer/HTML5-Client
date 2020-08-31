@@ -74,8 +74,9 @@ const PATH_TO_PLANETS = `./spacemap/planets`;
 const PATH_TO_BG = `./spacemap/backgrounds`;
 //
 const mapNames = {
-  1: "Alpha",
-  2: "Beta",
+  1: "1-1",
+  2: "1-2",
+  14: "4-2",
 };
 //
 const lockOnSprite = new Image();

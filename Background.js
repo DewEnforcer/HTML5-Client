@@ -6,13 +6,13 @@ class Background {
     this.renderX = null;
     this.renderY = null;
     this.sprite = new Image();
-    this.sprite.src = `${PATH_TO_BG}/background_${this.mapID}.jpg`;
+    this.sprite.src = `${PATH_TO_BG}/background${this.mapID}.jpg`;
     this.relativeX = mapWidth / 2100;
     this.relativeY = mapHeight / 1310;
   }
   setNewMap() {
     this.mapID = HERO.mapID;
-    this.sprite.src = `${PATH_TO_BG}/background_${this.mapID}.jpg`;
+    this.sprite.src = `${PATH_TO_BG}/background${this.mapID}.jpg`;
   }
   draw() {
     ctx.drawImage(this.sprite, this.renderX, this.renderY);

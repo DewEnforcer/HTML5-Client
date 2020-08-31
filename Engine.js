@@ -55,7 +55,6 @@ class Engine {
     this.setSpriteSeq();
   }
   createSmoke() {
-    if (this.smoke.length >= this.maxSmokes) return;
     this.smoke.push(new Smoke(this.x, this.y, "engineSmoke", this));
   }
   update() {

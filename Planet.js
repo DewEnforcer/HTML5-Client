@@ -8,7 +8,8 @@ class Planet {
     this.renderX = null;
     this.renderY = null;
     this.sprite = new Image();
-    this.sprite.src = `${PATH_TO_PLANETS}/planet_${this.planetID}.png`;
+    this.sprite.src = `${PATH_TO_PLANETS}/planet${this.planetID}.png`;
+    console.log(this.sprite.src);
     this.offset = getPlanetOffset(planetID);
   }
   draw() {

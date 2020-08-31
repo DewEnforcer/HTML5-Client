@@ -63,7 +63,7 @@ class Missile {
     this.frame++;
     if (this.frame % this.smokeOnFrame == 0) {
       this.smoke.push(
-        new Smoke(this.x, this.y, "rocketSmoke" + this.missileSmoke, this)
+        new Smoke(this.x, this.y, "rocketSmoke" + this.missileSmoke, this, 1)
       );
       this.frame = 0;
     }

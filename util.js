@@ -46,7 +46,9 @@ function getStationOffset(id) {
 }
 function getPlanetOffset(id) {
   const planetOffsets = {
-    1: { x: 517.5, y: 304 },
+    1: { x: 256, y: 256 },
+    2: { x: 128, y: 128 },
+    3: { x: 256, y: 256 },
   };
   let offset = { x: 0, y: 0 };
   if (id in planetOffsets === true) offset = planetOffsets[id];

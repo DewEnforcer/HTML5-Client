@@ -11,7 +11,7 @@ class Minimap {
     this.changeBackground();
   }
   changeBackground() {
-    this.sprite.src = `${PATH_TO_BG}/background_${HERO.mapID}.jpg`;
+    this.sprite.src = `${PATH_TO_BG}/background${HERO.mapID}.jpg`;
   }
   setMinimapCoordinates() {
     const scaleDown = 100;
@@ -147,7 +147,7 @@ class Minimap {
       let minimapX = MAIN.MINIMAP_C.width * (p.x / mapWidth) * p.z;
       let minimapY = MAIN.MINIMAP_C.height * (p.y / mapHeight) * p.z;
       const iconSprite = new Image();
-      iconSprite.src = `${PATH_TO_PLANETS}/planet_${p.planetID}.png`;
+      iconSprite.src = `${PATH_TO_PLANETS}/planet${p.planetID}.png`;
       MAIN.MINIMAP_CTX.drawImage(
         iconSprite,
         minimapX - p.offset.x * minScaleX,

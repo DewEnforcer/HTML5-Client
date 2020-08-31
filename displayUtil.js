@@ -23,8 +23,8 @@ const drawBounds = (ship) => {
   ctx.strokeStyle = "black";
 };
 const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
-  const width = 70;
-  const height = 5;
+  const width = 60;
+  const height = 4;
   const top = y - 30;
   const margin = 7;
   const start = x - width / 2;
@@ -57,7 +57,7 @@ const drawName = (offsetX, username, faction, isHero, x, y, offsetY = 120) => {
 };
 const drawRank = (rank, x, y, offsetY) => {
   const xMargin = 18; //16 + 2
-  const marginTOP = 16; //accounts for rank height
+  const marginTOP = 14; //accounts for rank height
   let rankSprite = new Image();
   rankSprite.src = `./spacemap/ui/rank/rank_${rank}.png`;
   ctx.drawImage(rankSprite, x - xMargin, y + offsetY - marginTOP);
