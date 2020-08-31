@@ -41,7 +41,6 @@ class Minimap {
       MAIN.MINIMAP_C.height
     );
     MAIN.MINIMAP_CTX.fillRect(
-      //fill black
       2,
       2,
       MAIN.MINIMAP_C.width - 4,
@@ -54,10 +53,10 @@ class Minimap {
       MAIN.MINIMAP_C.width,
       MAIN.MINIMAP_C.height
     );
-    this.drawShips(offset);
-    this.drawPortals();
     this.drawPlanets();
     this.drawStations();
+    this.drawPortals();
+    this.drawShips(offset);
     MAIN.MINIMAP_CTX.beginPath();
     MAIN.MINIMAP_CTX.moveTo(0, minimapY); //draw left to middle
     MAIN.MINIMAP_CTX.lineTo(minimapX - offset, minimapY);
@@ -143,16 +142,18 @@ class Minimap {
     const minimapScaleX = MAIN.MINIMAP_C.width / mapWidth;
     const minimapScaleY = MAIN.MINIMAP_C.height / mapHeight;
     MAP_PLANETS.forEach((p) => {
+      let minScaleX = minimapScaleX * p.minimapScale;
+      let minScaleY = minimapScaleY * p.minimapScale;
       let minimapX = MAIN.MINIMAP_C.width * (p.x / mapWidth) * p.z;
       let minimapY = MAIN.MINIMAP_C.height * (p.y / mapHeight) * p.z;
       const iconSprite = new Image();
       iconSprite.src = `${PATH_TO_PLANETS}/planet_${p.planetID}.png`;
       MAIN.MINIMAP_CTX.drawImage(
         iconSprite,
-        minimapX - p.offset.x * minimapScaleX,
-        minimapY - p.offset.y * minimapScaleY,
-        p.offset.x * 2 * minimapScaleX,
-        p.offset.y * 2 * minimapScaleY
+        minimapX - p.offset.x * minScaleX,
+        minimapY - p.offset.y * minScaleY,
+        p.offset.x * 2 * minScaleX,
+        p.offset.y * 2 * minScaleY
       );
     });
   }

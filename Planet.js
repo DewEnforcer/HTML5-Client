@@ -1,9 +1,10 @@
 class Planet {
-  constructor(planetID, x, y, z) {
+  constructor(planetID, x, y, z, minimapScale) {
     this.planetID = planetID;
     this.x = x;
     this.y = y;
     this.z = z;
+    this.minimapScale = minimapScale;
     this.renderX = null;
     this.renderY = null;
     this.sprite = new Image();

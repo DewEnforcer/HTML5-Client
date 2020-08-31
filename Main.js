@@ -171,7 +171,9 @@ const initiatePostHero = () => {
 const setGamemapObjects = () => {
   //init all planets, portals on the map
   MAP_OBJECTS_LIST[HERO.mapID].planets.forEach((planet) => {
-    MAP_PLANETS.push(new Planet(planet.id, planet.x, planet.y, planet.z));
+    MAP_PLANETS.push(
+      new Planet(planet.id, planet.x, planet.y, planet.z, planet.mScale)
+    );
   });
   MAP_OBJECTS_LIST[HERO.mapID].portals.forEach((portal) => {
     MAP_PORTALS.push(new Portal(portal.x, portal.y, portal.id));

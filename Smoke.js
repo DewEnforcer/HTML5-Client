@@ -32,8 +32,8 @@ class Smoke {
   }
   update() {
     this.setRenderPos();
-    if (this.frame % this.activateOnFrame == 0) this.seq++;
     this.frame++;
+    if (this.frame % this.activateOnFrame == 0) this.seq++;
     this.setSpriteSeq();
     this.draw();
     if (this.frame >= this.fadeOutFrame) this.terminate();
