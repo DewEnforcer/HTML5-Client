@@ -38,7 +38,13 @@ class Laser {
     let distanceX = this.dest.x - this.x;
     let distanceY = this.dest.y - this.y;
     this.timeTo =
-      (getDistance(this.x, this.y, this.dest.x, this.dest.y) / LASER_SPEED) *
+      (getDistance(
+        this.x + this.pointOffsets.x,
+        this.y + this.pointOffsets.y,
+        this.dest.x,
+        this.dest.y
+      ) /
+        LASER_SPEED) *
       1000;
     this.speed.x = distanceX / this.timeTo;
     this.speed.y = distanceY / this.timeTo;

@@ -33,6 +33,13 @@ const elements = {
     { name: "HON", isBar: false, color: "white", icon: "iconHon" },
   ],
 };
+//
+const fonts = {
+  1: { size: "20px", shadowC: 0, shadowBlur: 0, way: 1 },
+  2: { size: "50px", shadowC: 0, shadowBlur: 0, way: 1 },
+  3: { size: "bold 48px", shadowC: "#0000ff", shadowBlur: 10, way: 1 },
+};
+//
 const BTN_FPS = "f";
 const BTN_ATTACK = " ";
 const BTN_LOGOUT = "l";
@@ -77,6 +84,9 @@ const mapNames = {
   1: "1-1",
   2: "1-2",
   14: "4-2",
+};
+const messageFonts = {
+  1: "16px sans-serif",
 };
 //
 const lockOnSprite = new Image();
@@ -127,10 +137,15 @@ const LASER_LAYER = [];
 const ROCKET_LAYER = [];
 const HIT_LAYER = [];
 const DRONES_LAYER = [];
+const EXPLOSION_LAYER = [];
+const MESSAGE_LAYER = [];
+const LENSFLARE_LAYER = [];
 //
 let EVENT_MANAGER, MAIN, HERO, SOCKET, BG_LAYER, MINIMAP, PRELOADER, CAMERA;
 let halfScreenWidth;
 let halfScreenHeight;
+let screenWidth;
+let screenHeight;
 let ctx;
 const fetchMapObjects = () => {
   fetch("./js/client/mapObjects.json")
@@ -167,6 +182,8 @@ const initiatePostHero = () => {
   BG_LAYER = new Background(HERO.mapID);
   setGamemapObjects();
   gameInit = true;
+  const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);
+  welcome.play();
   drawGame();
 };
 const setGamemapObjects = () => {
@@ -184,6 +201,10 @@ const setGamemapObjects = () => {
       new Station(sta.x, sta.y, sta.z, sta.rotation, sta.type, sta.id)
     );
   });
+  MAP_OBJECTS_LIST[HERO.mapID].lensflares.forEach((lens) => {
+    LENSFLARE_LAYER.push(new LensFlare(lens.id, lens.x, lens.y, lens.z));
+  });
+  MESSAGE_LAYER.push(new MapMessage("MAP 1-1", 3));
 };
 const cleanupGameobjects = () => {
   MAP_PLANETS.splice(0, MAP_PLANETS.length);
@@ -193,6 +214,8 @@ const cleanupGameobjects = () => {
   DRONES_LAYER.splice(0, DRONES_LAYER.length);
   LASER_LAYER.splice(0, LASER_LAYER.length);
   ROCKET_LAYER.splice(0, ROCKET_LAYER.length);
+  LENSFLARE_LAYER.splice(0, LENSFLARE_LAYER.length);
+  EXPLOSION_LAYER.splice(0, EXPLOSION_LAYER.length);
 };
 const drawGame = (timestamp) => {
   if (END) return;
@@ -203,6 +226,7 @@ const drawGame = (timestamp) => {
   MAIN.cleanup();
   BG_LAYER.update();
   HERO.processDest();
+  LENSFLARE_LAYER.forEach((lens) => lens.update());
   MAP_PLANETS.forEach((planet) => planet.update());
   MAP_PORTALS.forEach((portal) => portal.update());
   MAP_STATIONS.forEach((sta) => sta.update());
@@ -210,6 +234,8 @@ const drawGame = (timestamp) => {
   DRONES_LAYER.forEach((drone) => drone.update());
   LASER_LAYER.forEach((laser) => laser.update());
   ROCKET_LAYER.forEach((rocket) => rocket.update());
+  EXPLOSION_LAYER.forEach((exp) => exp.update());
+  MESSAGE_LAYER.forEach((msg) => msg.update());
   lockTarget();
   HIT_LAYER.forEach((hit) => hit.update());
   MINIMAP.minimapManager();

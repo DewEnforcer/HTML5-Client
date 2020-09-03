@@ -51,6 +51,11 @@ class Missile {
     this.timeTo -= DELTA_TIME;
     if (Math.round(this.timeTo) <= 0) this.terminate();
   }
+  onDetonation() {
+    EXPLOSION_LAYER.push(
+      new Explosion(this.target.render.renderX, this.target.render.renderY, 0)
+    );
+  }
   terminate() {
     ROCKET_LAYER.some((rocket, i) => {
       if (rocket.ID == this.ID) {
@@ -58,6 +63,7 @@ class Missile {
         return true;
       }
     });
+    this.onDetonation();
   }
   drawSmokeTrail() {
     this.frame++;

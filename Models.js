@@ -6,4 +6,6 @@ const Models = [
   ["portals/jumpAnimation", 112, 0],
   ["portals/portalInactive", 48, 0],
   ["sfx/leech", 29, 0],
+  ["lensflares/lensflare0", 14, 0],
+  ["pyroEffects/rocketExplosion0", 20, 0],
 ];

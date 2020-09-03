@@ -49,9 +49,30 @@ function getPlanetOffset(id) {
     1: { x: 256, y: 256 },
     2: { x: 128, y: 128 },
     3: { x: 256, y: 256 },
+    25: { x: 256, y: 256 },
+    26: { x: 256, y: 256 },
+    27: { x: 64, y: 64 },
   };
   let offset = { x: 0, y: 0 };
   if (id in planetOffsets === true) offset = planetOffsets[id];
+  return offset;
+}
+function getLensOffset(type, id) {
+  const lensOffsets = {
+    0: {
+      1: { x: 85.5, y: 89 },
+      2: { x: 38, y: 38 },
+      3: { x: 17, y: 17.5 },
+      4: { x: 25, y: 24 },
+      5: { x: 68.5, y: 68 },
+    },
+  };
+  let offset = { x: 0, y: 0 };
+  if (type in lensOffsets === true) {
+    if (id in lensOffsets[type] === true) {
+      offset = lensOffsets[type][id];
+    }
+  }
   return offset;
 }
 function convertToMapCoords({ x, y }) {
@@ -81,6 +102,9 @@ function trimData(data, index = 2) {
 function getShip(ID) {
   if (ID === "HERO") return HERO;
   return getShipById(ID);
+}
+function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 /* remove later on */
 function decompileData(data) {

@@ -65,6 +65,8 @@ class Client {
     this.CANVAS.height = window.innerHeight;
     halfScreenWidth = Number(this.CANVAS.width) / 2;
     halfScreenHeight = Number(this.CANVAS.height) / 2;
+    screenWidth = this.CANVAS.width;
+    screenHeight = this.CANVAS.height;
     this.resizeMinimap();
   }
   resizeMinimap() {
