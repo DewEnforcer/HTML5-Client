@@ -6,8 +6,8 @@ class Client {
     this.MINIMAP_TEXT = null;
     this.MINIMAP_CTX = null;
     this.uiLoaded = false;
-    this.maxSlots = 10;
     this.shipInfoStatus = {};
+    this.actionBar = null;
   }
   generateElements() {
     if (this.uiLoaded) return;
@@ -51,10 +51,9 @@ class Client {
     $(".log_header").html(
       `<div><img src="./spacemap/ui/iconlog.png"></div><span>Log-Index</span>`
     );
-    for (var i = 1; i <= this.maxSlots; i++) {
-      $(".actionbar").append(`<div class="slot_actionbar" id="${i}"></div>`);
-    }
+    //TODO ADD ACTION BAR CLASS INIT
     this.uiLoaded = true;
+    this.actionBar = new ActionBar();
     this.resizeCanvas();
     EVENT_MANAGER.initListeners();
     this.generateInfoElements("shipinfo", "shipInfo", "ship_info");

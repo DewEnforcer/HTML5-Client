@@ -52,6 +52,7 @@ const SHIP_OFFSETS = {
   0: { x: 100, y: 61.5, nickY: DEFAULT_NICK_Y },
   1: { x: 100, y: 61.5, nickY: DEFAULT_NICK_Y },
   2: { x: 84.5, y: 75, nickY: DEFAULT_NICK_Y + 35 },
+  3: { x: 84.5, y: 75, nickY: DEFAULT_NICK_Y + 35 },
 };
 const MISSILE_OFFSETS = {
   1: { x: 3, y: 13.5 },
@@ -64,6 +65,7 @@ const LOCK_OFFSETS = {
   0: { x: 40 - LOCKON_RING, y: 0 },
   1: { x: 40 - LOCKON_RING, y: 0 },
   2: { x: 27 - LOCKON_RING, y: 20 },
+  3: { x: 27 - LOCKON_RING, y: 20 },
 };
 //
 const USERNAME_FONT = "bold 16px sans-serif";
@@ -106,13 +108,14 @@ let SHOW_FPS = false;
 let DELTA_TIME = new Date() * 1;
 let LAST_UPDATE = 0;
 let gameInit = false;
-const ships = ["starhawk", "sr100", "enforcer"];
+const ships = ["starhawk", "sr100", "enforcer", "bastion"];
 let SHIPS_ENGINES = null;
 const engineOFFSET = {
   x: 30.5,
   y: 30.5,
 };
 let LASER_POS = null;
+const SHIP_LASER_CLASS = [0, 0, 2, 2];
 const LASER_DISTRIBUTION = {
   0: [],
   1: [],
