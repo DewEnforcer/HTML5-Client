@@ -65,7 +65,7 @@ class ActionBar {
   openActionMenu() {
     if (!this.menuGen) this.genMenu();
     const box = document.querySelector(".action_bar_submenu_list");
-    box.style.display = "flex"; //TODO add fadein fadeout effect, select first button, generate submenu items
+    box.style.display = "flex"; //TODO add fadein fadeout effect, select first button, generate submenu items, hover effects
   }
   closeActionMenu() {
     const box = document.querySelector(".action_bar_submenu_list");
@@ -81,11 +81,15 @@ class ActionBar {
     const box = document.querySelector(".action_bar_submenu_list");
     for (let i = 0; i < this.SUB_MENU_AMOUNT; i++) {
       const subMenuBtn = document.createElement("div");
-      subMenuBtn.classList.add("sub_menu_btn");
+      let classes = "sub_menu_btn";
+      if (i == 0) subMenuBtn.classList.add("sub_menu_btn_active");
+      subMenuBtn.classList.add(classes);
       subMenuBtn.id = i + "_sub_menu";
       subMenuBtn.innerHTML = `<img src="./spacemap/ui/actionBar/icons/subMenu/${i}_normal.png">`;
       box.appendChild(subMenuBtn);
     }
     this.menuGen = true;
   }
+  genSubMenu() {}
+  popularizeSlotBar() {} //adds items on the slotbar
 }

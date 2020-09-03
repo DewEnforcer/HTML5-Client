@@ -1,5 +1,6 @@
 const HOST = "ws://localhost:8080";
 const TEXT_TRANSLATIONS = {
+  welcome_log: "Welcome to LOGIS-SYSTEMS",
   attack: "Commencing attack!",
   no_range: "Out of range",
   end_attack: "Weapons offline",
@@ -188,6 +189,7 @@ const initiatePostHero = () => {
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);
   welcome.play();
   drawGame();
+  MAIN.writeToLog("welcome_log", true);
 };
 const setGamemapObjects = () => {
   //init all planets, portals on the map
