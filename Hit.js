@@ -28,8 +28,11 @@ class Hit {
     ctx.font = this.font;
     ctx.fillStyle = this.color;
     ctx.textAlign = "center";
+    ctx.shadowColor = "black";
+    ctx.shadowBlur = 10;
     ctx.fillText(this.value, this.x, this.y);
     ctx.fillStyle = "black"; //reset fillstyle
+    ctx.shadowBlur = 0;
   }
   update() {
     this.fadeOut();

@@ -44,13 +44,14 @@ class CombatLayer {
     let isRapidSalvo = false;
     let salvos = 1;
     if (laserID == 2) isRapidSalvo = true;
-    if (isRapidSalvo) salvos = LASER_DISTRIBUTION[ship.shipID].length;
+    if (isRapidSalvo) salvos = LASER_DISTRIBUTION[ship.laserClass].length;
     let i = 0;
     setInterval(() => {
       if (i >= salvos) return;
-      const LaserToFire = LASER_DISTRIBUTION[ship.shipID][ship.salvoPhase - 1];
+      const LaserToFire =
+        LASER_DISTRIBUTION[ship.laserClass][ship.salvoPhase - 1];
       LaserToFire.forEach((posKey) => {
-        let offset = LASER_POS[ship.shipID][posKey][ship.sequenceNum];
+        let offset = LASER_POS[ship.laserClass][posKey][ship.sequenceNum];
         LASER_LAYER.push(
           new Laser(
             ship.x, //start point
@@ -63,7 +64,7 @@ class CombatLayer {
         );
       });
       ship.salvoPhase++;
-      if (ship.salvoPhase > LASER_DISTRIBUTION[ship.shipID].length)
+      if (ship.salvoPhase > LASER_DISTRIBUTION[ship.laserClass].length)
         ship.salvoPhase = 1;
       i++;
     }, 60);

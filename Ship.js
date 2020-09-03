@@ -53,6 +53,9 @@ class Ship {
       renderX: null,
       renderY: null,
     };
+    //
+    this.laserClass = getLaserClass(shipID);
+    //
     this.engineClass = 10;
     this.engine = new Engine(this);
     //

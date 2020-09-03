@@ -106,6 +106,15 @@ function getShip(ID) {
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+function getLaserClass(shipID) {
+  const laserClasses = {
+    0: 0,
+    1: 1,
+    2: 2,
+    3: 2,
+  };
+  return laserClasses[shipID];
+}
 /* remove later on */
 function decompileData(data) {
   let positions = {};
