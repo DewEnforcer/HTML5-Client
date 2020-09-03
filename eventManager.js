@@ -8,6 +8,7 @@ class EventManager {
       x: null,
       y: null,
     };
+    this.mouseInterval = null;
   }
   handleLogoutRequest() {
     if (HERO.isLogout) {
@@ -74,11 +75,20 @@ class EventManager {
     this.mouse.y = evMouse.y;
     this.checkHover();
   }
+  initInterval() {
+    this.mouseInterval = setInterval(() => {
+      HERO.processDest();
+    }, 75);
+  }
+  stopInterval() {
+    clearInterval(this.mouseInterval);
+  }
   handleMouseDown() {
     if (!this.isMouseDown && checkCollision()) return; //checks only on first click, checks whether user wanted to lock on
     if (HERO.lockedControls) return;
     this.isMouseDown = true;
     HERO.ship.isFly = true;
+    //this.initInterval();
   }
   handleInfoVisualChange(ev) {
     //handle changes between text and visual info
@@ -99,6 +109,7 @@ class EventManager {
     MAIN.shipInfoStatus[section] = !MAIN.shipInfoStatus[section];
   }
   handleMouseUp() {
+    //this.stopInterval();
     this.isMouseDown = false;
   }
   initListeners() {
@@ -113,5 +124,8 @@ class EventManager {
     MAIN.CANVAS.addEventListener("mousedown", () => this.handleMouseDown());
     MAIN.CANVAS.addEventListener("mouseup", () => this.handleMouseUp());
     MAIN.MINIMAP_C.addEventListener("mousedown", (ev) => MINIMAP.leadHero(ev));
+    window.addEventListener("resize", () => {
+      MAIN.resizeCanvas();
+    });
   }
 }
