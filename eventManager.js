@@ -44,7 +44,7 @@ class EventManager {
         break;
       default:
         if (BTN_SWITCH.includes(key))
-          HERO.switchAmmo(BTN_SWITCH.indexOf(key) + 1);
+          MAIN.actionBar.handleSlotChangeKeyboard(key);
         break;
     }
   }

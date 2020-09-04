@@ -17,6 +17,8 @@ const STRUCTURE_BG = "#6D6D6D";
 const COLOR_ENEMY = "red";
 const COLOR_ALLY = "#7CFC00";
 const COLOR_HERO = "white";
+// UI
+let SUB_MENU_ITEMS;
 //
 const elements = {
   shipInfo: [
@@ -46,8 +48,8 @@ const BTN_ATTACK = " ";
 const BTN_LOGOUT = "l";
 const BTN_PORT = "j";
 const BTN_SHIP = "q";
-const BTN_RNDMOV = "é";
-const BTN_SWITCH = ["+", "ě"];
+const BTN_RNDMOV = "=";
+const BTN_SWITCH = ["+", "ě", "š", "č", "ř", "ž", "ý", "á", "í", "é"];
 const DEFAULT_NICK_Y = 120;
 const SHIP_OFFSETS = {
   0: { x: 100, y: 61.5, nickY: DEFAULT_NICK_Y },
@@ -179,6 +181,13 @@ const fetchLaserData = () => {
       LASER_POS = data;
     });
 };
+const fetchActionbarData = () => {
+  fetch("./js/client/SubmenuItems.json")
+    .then((res) => res.json())
+    .then((data) => {
+      SUB_MENU_ITEMS = data;
+    });
+};
 const initiatePostHero = () => {
   PRELOADER.preload();
   //initiates game objects after hero is init
@@ -279,6 +288,7 @@ window.onload = () => {
   fetchDroneObjects();
   fetchEngineData();
   fetchLaserData();
+  fetchActionbarData();
   addFetchOffset();
   EVENT_MANAGER = new EventManager();
   MAIN = new Client();
