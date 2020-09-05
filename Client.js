@@ -154,4 +154,30 @@ class Client {
     $(".server_connect").remove();
     $("body").append(`<div class='server_connect'><p>${msg}</p></div>`);
   }
+  fadeIn(minFade, maxFade, fadeDuration, el, fadeTick = 0.2) {
+    const fadePerTick = fadeTick;
+    const interval = fadeDuration / ((maxFade - minFade) / fadePerTick);
+    let opacity = minFade;
+    let intervalF = setInterval(() => {
+      if (opacity >= maxFade) {
+        clearInterval(intervalF);
+        return;
+      }
+      opacity += fadePerTick;
+      el.style.opacity = opacity;
+    }, interval);
+  }
+  fadeOut(minFade, maxFade, fadeDuration, el, fadeTick = 0.2) {
+    const fadePerTick = fadeTick;
+    const interval = fadeDuration / ((maxFade - minFade) / fadePerTick);
+    let opacity = maxFade;
+    let intervalF = setInterval(() => {
+      if (opacity <= minFade) {
+        clearInterval(intervalF);
+        return;
+      }
+      opacity -= fadePerTick;
+      el.style.opacity = opacity;
+    }, interval);
+  }
 }

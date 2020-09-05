@@ -47,6 +47,12 @@ class ActionBar {
       false,
       true
     );
+    //
+    this.fadeDuration = 500;
+    this.maxOpacity = 1;
+    this.minOpacity = 0;
+    //
+
     this.init();
   }
 
@@ -135,12 +141,30 @@ class ActionBar {
     const box = document.querySelector(".action_bar_submenu_list");
     box.style.display = "flex"; //TODO add fadein fadeout effect,hover effects
     this.subMenuBox.style.display = "flex";
+    MAIN.fadeIn(this.minOpacity, this.maxOpacity, this.fadeDuration, box, 0.1);
+    MAIN.fadeIn(
+      this.minOpacity,
+      this.maxOpacity,
+      this.fadeDuration,
+      this.subMenuBox,
+      0.1
+    );
     this.genSubMenu();
   }
   closeActionMenu() {
     const box = document.querySelector(".action_bar_submenu_list");
-    box.style.display = "none";
-    this.subMenuBox.style.display = "none";
+    MAIN.fadeOut(this.minOpacity, this.maxOpacity, this.fadeDuration, box, 0.1);
+    MAIN.fadeOut(
+      this.minOpacity,
+      this.maxOpacity,
+      this.fadeDuration,
+      this.subMenuBox,
+      0.1
+    );
+    setTimeout(() => {
+      box.style.display = "none";
+      this.subMenuBox.style.display = "none";
+    }, this.fadeDuration);
   }
   genMenuBox() {
     const box = document.createElement("div");
