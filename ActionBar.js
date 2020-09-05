@@ -261,6 +261,7 @@ class ActionBar {
     data.forEach((item, i) => {
       if (i >= this.maxSlots) return;
       const itemPos = item.split(";");
+      if (itemPos[0] == -1) return;
       const itemData = {
         ...SUB_MENU_ITEMS[itemPos[0]][itemPos[1]],
         menu: itemPos[0],
@@ -371,6 +372,7 @@ class ActionBar {
       this.transferElement(itemData);
     }
     this.popularizeSlotBar();
+    this.dispatchActionbarSlotsData();
   }
   switchItems(itemData) {
     //here we can use actionbaritems since we know the change is coming from actionbar
@@ -392,6 +394,21 @@ class ActionBar {
     };
     this.actionBarItems[originIndex] = {};
     this.actionBarItems[targetIndex] = transferedItem;
+  }
+  dispatchActionbarSlotsData() {
+    const packetCollection = [ACTIONBAR_CHANGE];
+    let menu, id;
+    this.actionBarItems.forEach((item) => {
+      menu = -1; // -1 = empty
+      id = -1;
+      console.log(item);
+      if ("id" in item === true) {
+        menu = item.menu;
+        id = item.id;
+      }
+      packetCollection.push(menu + ";" + id);
+    });
+    SOCKET.sendPacket(packetCollection);
   }
   /* handle item trigger */
   handleItemTriggered(itemData) {
