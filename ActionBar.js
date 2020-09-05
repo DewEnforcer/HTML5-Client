@@ -75,6 +75,9 @@ class ActionBar {
       slot.classList.add("slot_actionbar");
       slot.id = i - 1 + "_action_bar";
       slot.addEventListener("click", (ev) => this.handleSlotClick(ev));
+      slot.ondragover = (ev) => this.allowDrop(ev);
+      slot.ondrop = (ev) => this.dropItem(ev);
+      slot.ondragstart = (ev) => this.dragItem(ev);
       this.slots.push(slot);
       parent.appendChild(slot);
     }
@@ -108,6 +111,10 @@ class ActionBar {
     const slotID = this.actionBarKeyTransl[keyPress];
     if (slotID == this.selectedActionBarItem) return;
     this.selectedActionBarItem = slotID;
+    this.handleItemTriggered([
+      this.actionBarItems[slotID].menu,
+      this.actionBarItems[slotID].id,
+    ]);
     this.selectActionbarItem();
     this.selectItemSound.play();
   }
@@ -116,13 +123,17 @@ class ActionBar {
     const slotID = Number(e.currentTarget.id.split("_")[0]);
     if (slotID == this.selectedActionBarItem) return;
     this.selectedActionBarItem = slotID;
+    this.handleItemTriggered([
+      this.actionBarItems[slotID].menu,
+      this.actionBarItems[slotID].id,
+    ]);
     this.selectActionbarItem();
     this.selectItemSound.play();
   }
   openActionMenu() {
     if (!this.menuGen) this.genMenu();
     const box = document.querySelector(".action_bar_submenu_list");
-    box.style.display = "flex"; //TODO add fadein fadeout effect,hover effects, add packet commands for the actionbar trigger
+    box.style.display = "flex"; //TODO add fadein fadeout effect,hover effects
     this.subMenuBox.style.display = "flex";
     this.genSubMenu();
   }
@@ -166,9 +177,13 @@ class ActionBar {
       //switch to another subfunction
       const newItem = document.createElement("div");
       newItem.classList.add("item_submenu");
+      newItem.draggable = true;
+      newItem.addEventListener("click", (ev) => this.handleSlotClick(ev));
+      newItem.ondragstart = (ev) => this.dragItem(ev);
       const itemName = `${this.subMenuKeys[this.selectedSubmenu]}_${item.name}`;
       newItem.id = `item_submenu_${itemName}`;
       newItem.setAttribute("item_id", i);
+      newItem.setAttribute("item_info", `${this.selectedSubmenu}_${i}`); //menu, id
       if (item.hasBar) {
         const amountBar = document.createElement("div");
         amountBar.classList.add("item_submenu_amount_bar_box");
@@ -251,13 +266,18 @@ class ActionBar {
     const id = Number(ev.currentTarget.attributes.item_id.value);
     if (id == this.subMenusSelectedItems[this.selectedSubmenu]) return;
     this.subMenusSelectedItems[this.selectedSubmenu] = id;
+    this.handleItemTriggered([this.selectedSubmenu, id]);
     this.selectSubMenuItem();
     this.selectItemSound.play();
   }
   popularizeSlotBar() {
     this.actionBarItems.forEach((item, i) => {
+      this.slots[i].innerHTML = ""; //clear the slot of previous item
+      this.slots[i].draggable = false;
       if ("id" in item !== true) return;
       const itemName = `${this.subMenuKeys[item.menu]}_${item.name}`;
+      this.slots[i].setAttribute("item_info", `${item.menu}_${item.id}`); //menu, id
+      this.slots[i].draggable = true; //set only on slots with items
       if (item.hasBar) {
         const amountBar = document.createElement("div");
         amountBar.classList.add("item_actionbar_amount_bar_box");
@@ -276,4 +296,72 @@ class ActionBar {
     });
     this.selectActionbarItem();
   } //adds items on the slotbar
+  /* drag n drop */
+  checkSwitchStatus(originID) {
+    return originID.includes("action_bar");
+  }
+  allowDrop(ev) {
+    ev.preventDefault();
+  }
+  dragItem(ev) {
+    if (!this.menuOpen) return;
+    const draggedItemData = ev.path[1].attributes.item_info.value.split("_");
+    const elId = ev.path[1].id;
+    draggedItemData.push(elId);
+    ev.dataTransfer.setData("itemData", JSON.stringify(draggedItemData));
+  }
+  dropItem(ev) {
+    const itemData = JSON.parse(ev.dataTransfer.getData("itemData"));
+    let targetIndex = ev.target.id.split("_")[0];
+    if (targetIndex == "") targetIndex = ev.path[1].id.split("_")[0];
+    itemData.push(targetIndex);
+    if (this.checkSwitchStatus(itemData[2])) {
+      this.switchItems(itemData);
+    } else {
+      this.transferElement(itemData);
+    }
+    this.popularizeSlotBar();
+  }
+  switchItems(itemData) {
+    //here we can use actionbaritems since we know the change is coming from actionbar
+    const originIndex = itemData[2].split("_")[0];
+    const targetIndex = itemData[3];
+    const targetItem = this.actionBarItems[targetIndex];
+    const originItem = this.actionBarItems[originIndex];
+    this.actionBarItems[targetIndex] = originItem;
+    this.actionBarItems[originIndex] = targetItem;
+  }
+  transferElement(itemData) {
+    const itemMenu = itemData[0];
+    const itemID = itemData[1];
+    const originIndex = itemData[2].split("_")[0];
+    const targetIndex = itemData[3];
+    const transferedItem = {
+      ...SUB_MENU_ITEMS[itemMenu][itemID],
+      menu: itemMenu,
+    };
+    this.actionBarItems[originIndex] = {};
+    this.actionBarItems[targetIndex] = transferedItem;
+  }
+  /* handle item trigger */
+  handleItemTriggered(itemData) {
+    const menuPackets = [
+      "L",
+      "R",
+      "RL",
+      "EX",
+      "MIN",
+      "CPU",
+      "BN",
+      "TCH",
+      "SK",
+      "DF",
+    ];
+    const itemMenu = itemData[0];
+    const itemID = itemData[1];
+    const packetCollection = [ITEM_SELECT];
+    packetCollection.push(menuPackets[itemMenu]);
+    packetCollection.push(itemID);
+    SOCKET.sendPacket(packetCollection);
+  }
 }

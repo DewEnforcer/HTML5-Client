@@ -11,3 +11,4 @@ const STOP_ATTACK = "STPA";
 const CHANGE_LASER = "ASL";
 const RANDOM_MOV = "SHMRND";
 const REQUEST_PORTAL_JUMP = "RQPJ";
+const ITEM_SELECT = "BIS";
