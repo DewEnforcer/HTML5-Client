@@ -17,6 +17,8 @@ const STRUCTURE_BG = "#6D6D6D";
 const COLOR_ENEMY = "red";
 const COLOR_ALLY = "#7CFC00";
 const COLOR_HERO = "white";
+const COLOR_HAVOC = "#FF0000";
+const COLOR_HERCULES = "#328fcc";
 // UI
 let SUB_MENU_ITEMS;
 //
@@ -36,6 +38,12 @@ const elements = {
     { name: "HON", isBar: false, color: "white", icon: "iconHon" },
   ],
 };
+const controllers = [
+  { type: "logbox", x: 0, y: 78, icon: "log_" },
+  { type: "userinfo", x: 0, y: 0, icon: "user_" },
+  { type: "shipinfo", x: -20, y: 39, icon: "ship_" },
+  { type: "spacemap", x: 20, y: 39, icon: "minimap_" },
+];
 //
 const fonts = {
   1: { size: "20px", shadowC: 0, shadowBlur: 0, way: 1 },
@@ -147,7 +155,15 @@ const EXPLOSION_LAYER = [];
 const MESSAGE_LAYER = [];
 const LENSFLARE_LAYER = [];
 //
-let EVENT_MANAGER, MAIN, HERO, SOCKET, BG_LAYER, MINIMAP, PRELOADER, CAMERA;
+let EVENT_MANAGER,
+  MAIN,
+  HERO,
+  SOCKET,
+  BG_LAYER,
+  MINIMAP,
+  PRELOADER,
+  CAMERA,
+  UIcls;
 let halfScreenWidth;
 let halfScreenHeight;
 let screenWidth;
@@ -193,6 +209,7 @@ const initiatePostHero = () => {
   //initiates game objects after hero is init
   MINIMAP = new Minimap();
   BG_LAYER = new Background(HERO.mapID);
+  UIcls = new UI();
   setGamemapObjects();
   gameInit = true;
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);

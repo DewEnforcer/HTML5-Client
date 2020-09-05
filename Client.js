@@ -33,13 +33,13 @@ class Client {
     ).innerHTML = `<div class="log_header header"></div>`;
     document.querySelector(".logbox").appendChild(this.LOG);
     $(".userinfo_header").html(
-      `<div><img src="./spacemap/ui/iconuser.png"></div> <span>User</span>`
+      `<div><img src="./spacemap/ui/uiIcon/user_normal.png"></div> <span>User</span>`
     );
     $(".shipinfo_header").html(
-      `<div><img src="./spacemap/ui/iconship.png"></div> <span>Ship</span>`
+      `<div><img src="./spacemap/ui/uiIcon/ship_normal.png"></div> <span>Ship</span>`
     );
     $(".spacemap_header").html(
-      `<div><img src="./spacemap/ui/iconminimap.png"></div><span>Spacemap</span>`
+      `<div><img src="./spacemap/ui/uiIcon/minimap_normal.png"></div><span>Spacemap</span>`
     );
     this.MINIMAP_TEXT = document.createElement("div");
     this.MINIMAP_TEXT.classList.add("spacemap_coordinates_wrapper");
@@ -49,15 +49,13 @@ class Client {
     document.querySelector(".spacemap_main").appendChild(this.MINIMAP_C);
     this.MINIMAP_CTX = this.MINIMAP_C.getContext("2d");
     $(".log_header").html(
-      `<div><img src="./spacemap/ui/iconlog.png"></div><span>Log-Index</span>`
+      `<div><img src="./spacemap/ui/uiIcon/log_normal.png"></div><span>Log-Index</span>`
     );
     //TODO ADD ACTION BAR CLASS INIT
     this.uiLoaded = true;
     this.actionBar = new ActionBar();
     this.resizeCanvas();
     EVENT_MANAGER.initListeners();
-    this.generateInfoElements("shipinfo", "shipInfo", "ship_info");
-    this.generateInfoElements("userinfo", "userInfo", "user_info");
   }
   resizeCanvas() {
     this.CANVAS.width = window.innerWidth;
