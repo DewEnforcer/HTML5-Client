@@ -49,11 +49,14 @@ const drawName = (offsetX, username, faction, isHero, x, y, offsetY = 120) => {
   let color = COLOR_ENEMY;
   if (faction == HERO.ship.faction) color = COLOR_ALLY;
   if (isHero) color = COLOR_HERO;
+  ctx.shadowColor = "black";
+  ctx.shadowBlur = 4;
   ctx.textAlign = "left";
   ctx.font = USERNAME_FONT;
   ctx.fillStyle = color;
   ctx.fillText(username, x - offsetX, y + offsetY); //add proper offset
   ctx.fillStyle = "black";
+  ctx.shadowBlur = 0;
 };
 const drawRank = (rank, x, y, offsetY) => {
   const xMargin = 18; //16 + 2

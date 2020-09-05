@@ -92,10 +92,36 @@ class ActionBar {
     this.btnOpenMenu = document.createElement("img");
     this.btnOpenMenu.src =
       "./spacemap/ui/actionBar/actionMenuClosedInactive.png";
-    this.btnOpenMenu.classList.add("btn_actionbar");
+    this.btnOpenMenu.classList.add("btn_actionbar", "btn_actionbar_inactive");
     this.btnOpenMenu.id = "btn_open_action_menu";
+    this.btnOpenMenu.addEventListener("mouseover", () => {
+      this.handleBtnHover();
+    });
+    this.btnOpenMenu.addEventListener("mouseout", () => {
+      this.handleBtnHover(false);
+    });
     document.querySelector(".actionbar").appendChild(this.btnOpenMenu);
     this.btnOpenMenu.addEventListener("click", (ev) => this.handleOpenMenu(ev));
+  }
+  handleBtnHover(hover = true) {
+    this.btnOpenMenu.classList.remove(
+      "btn_actionbar_inactive",
+      "btn_actionbar_active"
+    );
+    if (hover) {
+      this.btnHoverStatus = "Active";
+      this.btnOpenMenu.classList.add("btn_actionbar_active");
+    } else {
+      this.btnHoverStatus = "Inactive";
+      this.btnOpenMenu.classList.add("btn_actionbar_inactive");
+    }
+    const openStatus = ["Closed", "Open"];
+    this.btnOpenMenu.src =
+      "./spacemap/ui/actionBar/actionMenu" +
+      openStatus[Number(this.menuOpen)] +
+      "" +
+      this.btnHoverStatus +
+      ".png";
   }
   handleOpenMenu(e) {
     e.preventDefault();
@@ -139,7 +165,7 @@ class ActionBar {
   openActionMenu() {
     if (!this.menuGen) this.genMenu();
     const box = document.querySelector(".action_bar_submenu_list");
-    box.style.display = "flex"; //TODO add fadein fadeout effect,hover effects
+    box.style.display = "flex";
     this.subMenuBox.style.display = "flex";
     MAIN.fadeIn(this.minOpacity, this.maxOpacity, this.fadeDuration, box, 0.1);
     MAIN.fadeIn(
