@@ -227,24 +227,34 @@ class Client {
     }, interval);
   }
   dragElement(elmnt, target) {
+    let pos1 = 0,
+      pos2 = 0,
+      pos3 = 0,
+      pos4 = 0;
     elmnt.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
-      //add mouse offset to prevent element moving to 0,0 of mouse, add position save to server
-      e = e || window.event;
       e.preventDefault();
+      pos3 = e.clientX;
+      pos4 = e.clientY;
       document.onmouseup = closeDragElement;
       document.onmousemove = elementDrag;
     }
 
     function elementDrag(e) {
-      target.style.top = e.clientY + "px";
-      target.style.left = e.clientX + "px";
+      e.preventDefault();
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      target.style.top = target.offsetTop - pos2 + "px";
+      target.style.left = target.offsetLeft - pos1 + "px";
     }
 
     function closeDragElement() {
       document.onmouseup = null;
       document.onmousemove = null;
+      UIcls.saveUiPos();
     }
   }
   pixelToView(px, isW = true) {

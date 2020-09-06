@@ -121,7 +121,9 @@ const manageFpsWindow = () => {
 const displayFPS = () => {
   if (!SHOW_FPS) return;
   let fps = Math.round(1000 / DELTA_TIME);
-  document.querySelector(".fps_display").innerHTML = `<span>FPS: ${fps}</span>`;
+  document.querySelector(
+    ".fps_display"
+  ).innerHTML = `<span>FPS: ${fps} | V${BUILD_VERSION}</span>`;
 };
 //game objects interactions
 const handlePortalJump = (data) => {

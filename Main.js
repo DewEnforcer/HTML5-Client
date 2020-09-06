@@ -1,4 +1,7 @@
+const BUILD_VERSION = "0.3.4";
+
 const HOST = "ws://localhost:8080";
+
 const TEXT_TRANSLATIONS = {
   welcome_log: "Welcome to LOGIS-Systems",
   ship_label: "Ship",

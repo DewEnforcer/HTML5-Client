@@ -159,4 +159,51 @@ class UI {
     this.openWindows[controllerIndex] = !this.openWindows[controllerIndex];
     this.setControllerStatus();
   }
+  /* UI pos handlers */
+  setUiPos(data) {
+    data = data.split("|");
+    data.forEach((uiPos, i) => {
+      uiPosParsed = uiPos.split(";");
+      if (uiPosParsed < 0) return;
+      const uiEL = document.querySelector("." + this.uiClasses[i]);
+      uiEL.style.left = uiPosParsed[0] + "px";
+      uiEL.style.top = uiPosParsed[1] + "px";
+    });
+  }
+  setUiStatus(data) {
+    data.split("|");
+    data.forEach((status, i) => {
+      let statusParsed = !!status;
+      this.openWindows[i] = statusParsed;
+    });
+    this.setControllerStatus();
+    this.setUiStatusGraphical();
+  }
+  setUiStatusGraphical() {
+    this.uiClasses.forEach((cls, i) => {
+      const target = document.querySelector("." + cls);
+      if (this.openWindows[i]) this.sizeUp(target, i);
+      else this.sizeDown(target, i);
+    });
+  }
+  saveUiPos() {
+    const packetCollection = [UI_POS_CHANGE];
+    this.uiClasses.forEach((cls) => {
+      const el = document.querySelector("." + cls);
+      if (el == null) {
+        packetCollection.push("-1;-1");
+        return;
+      }
+      const bounds = el.getBoundingClientRect();
+      packetCollection.push(Math.round(bounds.x) + ";" + Math.round(bounds.y));
+    });
+    SOCKET.sendPacket(packetCollection);
+  }
+  saveUiStatus() {
+    const packetCollection = [UI_STATE_CHANGE];
+    this.openWindows.forEach((status) => {
+      packetCollection.push(Number(status));
+    });
+    SOCKET.sendPacket(packetCollection);
+  }
 }
