@@ -12,8 +12,8 @@ class Laser {
       x: null,
       y: null,
     };
-    this.offsetX = 15.5;
-    this.offsetY = 40;
+    this.offsetX = 33;
+    this.offsetY = 33;
     this.pointOffsets = pointOffsets;
     this.angle = calcAngle(
       this.x - this.offsetX + this.pointOffsets.x,

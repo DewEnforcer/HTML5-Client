@@ -2,6 +2,8 @@ class Minimap {
   constructor() {
     this.sprite = new Image();
     this.sprite.src = null;
+    this.portalIconSprite = new Image();
+    this.portalIconSprite.src = `./spacemap/minimap/portal.png`;
     this.minimapNavigating = false;
     this.dotCoords = {
       x: null,
@@ -20,7 +22,7 @@ class Minimap {
     )}/${Math.round(HERO.ship.y / scaleDown)}</span>`;
   }
   minimapManager() {
-    const offset = 2.5;
+    const offset = 1;
     let minimapX = MAIN.MINIMAP_C.width * (HERO.ship.x / mapWidth);
     let minimapY = MAIN.MINIMAP_C.height * (HERO.ship.y / mapHeight);
     MAIN.MINIMAP_CTX.fillStyle = "black";
@@ -40,6 +42,7 @@ class Minimap {
       MAIN.MINIMAP_C.width,
       MAIN.MINIMAP_C.height
     );
+    MAIN.MINIMAP_CTX.lineWidth = 1;
     MAIN.MINIMAP_CTX.fillRect(
       2,
       2,
@@ -59,21 +62,21 @@ class Minimap {
     this.drawShips(offset);
     MAIN.MINIMAP_CTX.beginPath();
     MAIN.MINIMAP_CTX.moveTo(0, minimapY); //draw left to middle
-    MAIN.MINIMAP_CTX.lineTo(minimapX - offset, minimapY);
+    MAIN.MINIMAP_CTX.lineTo(minimapX, minimapY);
     MAIN.MINIMAP_CTX.stroke();
 
     MAIN.MINIMAP_CTX.beginPath();
-    MAIN.MINIMAP_CTX.moveTo(minimapX + offset, minimapY); //draw mid to right
+    MAIN.MINIMAP_CTX.moveTo(minimapX, minimapY); //draw mid to right
     MAIN.MINIMAP_CTX.lineTo(MAIN.MINIMAP_C.width, minimapY);
     MAIN.MINIMAP_CTX.stroke();
 
     MAIN.MINIMAP_CTX.beginPath();
     MAIN.MINIMAP_CTX.moveTo(minimapX, 0); //draw top to middle
-    MAIN.MINIMAP_CTX.lineTo(minimapX, minimapY - offset);
+    MAIN.MINIMAP_CTX.lineTo(minimapX, minimapY);
     MAIN.MINIMAP_CTX.stroke();
 
     MAIN.MINIMAP_CTX.beginPath();
-    MAIN.MINIMAP_CTX.moveTo(minimapX, minimapY + offset); //draw mid to bottom
+    MAIN.MINIMAP_CTX.moveTo(minimapX, minimapY); //draw mid to bottom
     MAIN.MINIMAP_CTX.lineTo(minimapX, MAIN.MINIMAP_C.height);
     MAIN.MINIMAP_CTX.stroke();
     this.setMinimapCoordinates();
@@ -93,7 +96,31 @@ class Minimap {
     MAIN.MINIMAP_CTX.moveTo(minimapX, minimapY); //move to hero ship
     MAIN.MINIMAP_CTX.lineTo(this.dotCoords.x, this.dotCoords.y); //draw to mid of the dest dot
     MAIN.MINIMAP_CTX.stroke();
-    this.drawDestDot();
+    this.drawDestCross();
+    //this.drawDestDot();
+  }
+  drawDestCross() {
+    const crossLen = 5;
+    MAIN.MINIMAP_CTX.strokeStyle = this.dotColor;
+    MAIN.MINIMAP_CTX.beginPath();
+    MAIN.MINIMAP_CTX.moveTo(this.dotCoords.x, this.dotCoords.y);
+    MAIN.MINIMAP_CTX.lineTo(this.dotCoords.x - crossLen, this.dotCoords.y);
+    MAIN.MINIMAP_CTX.stroke();
+
+    MAIN.MINIMAP_CTX.beginPath();
+    MAIN.MINIMAP_CTX.moveTo(this.dotCoords.x, this.dotCoords.y);
+    MAIN.MINIMAP_CTX.lineTo(this.dotCoords.x + crossLen, this.dotCoords.y);
+    MAIN.MINIMAP_CTX.stroke();
+
+    MAIN.MINIMAP_CTX.beginPath();
+    MAIN.MINIMAP_CTX.moveTo(this.dotCoords.x, this.dotCoords.y);
+    MAIN.MINIMAP_CTX.lineTo(this.dotCoords.x, this.dotCoords.y - crossLen);
+    MAIN.MINIMAP_CTX.stroke();
+
+    MAIN.MINIMAP_CTX.beginPath();
+    MAIN.MINIMAP_CTX.moveTo(this.dotCoords.x, this.dotCoords.y);
+    MAIN.MINIMAP_CTX.lineTo(this.dotCoords.x, this.dotCoords.y + crossLen);
+    MAIN.MINIMAP_CTX.stroke();
   }
   drawDestDot() {
     const MINIMAP_DOT_RAD = 7;
@@ -110,11 +137,11 @@ class Minimap {
   }
   drawShips(offset) {
     MAP_SHIPS.forEach((ship) => {
+      if (ship.isHero) return; //dont draw hero
       let minimapX = MAIN.MINIMAP_C.width * (ship.x / mapWidth);
       let minimapY = MAIN.MINIMAP_C.height * (ship.y / mapHeight);
       let color = COLOR_ENEMY;
-      if (ship.isHero) color = COLOR_HERO;
-      else if (ship.faction == HERO.ship.faction) color = COLOR_ALLY;
+      if (ship.faction == HERO.ship.faction) color = COLOR_ALLY;
       MAIN.MINIMAP_CTX.fillStyle = color;
       MAIN.MINIMAP_CTX.fillRect(
         minimapX - offset,
@@ -125,14 +152,12 @@ class Minimap {
     });
   }
   drawPortals() {
-    const offset = 4.5;
-    const iconSprite = new Image();
-    iconSprite.src = `./spacemap/minimap/portal.png`;
+    const offset = 5.5;
     MAP_PORTALS.forEach((portal) => {
       let minimapX = MAIN.MINIMAP_C.width * (portal.x / mapWidth);
       let minimapY = MAIN.MINIMAP_C.height * (portal.y / mapHeight);
       MAIN.MINIMAP_CTX.drawImage(
-        iconSprite,
+        this.portalIconSprite,
         minimapX - offset,
         minimapY - offset
       );
@@ -146,10 +171,8 @@ class Minimap {
       let minScaleY = minimapScaleY * p.minimapScale;
       let minimapX = MAIN.MINIMAP_C.width * (p.x / mapWidth) * p.z;
       let minimapY = MAIN.MINIMAP_C.height * (p.y / mapHeight) * p.z;
-      const iconSprite = new Image();
-      iconSprite.src = `${PATH_TO_PLANETS}/planet${p.planetID}.png`;
       MAIN.MINIMAP_CTX.drawImage(
-        iconSprite,
+        p.sprite,
         minimapX - p.offset.x * minScaleX,
         minimapY - p.offset.y * minScaleY,
         p.offset.x * 2 * minScaleX,
@@ -157,19 +180,6 @@ class Minimap {
       );
     });
   }
-  /* 
-          let width = p.offset.x * sizeScale;
-      let height = p.offset.y * sizeScale;
-      const iconSprite = new Image();
-      iconSprite.src = `${PATH_TO_PLANETS}/planet_${p.planetID}.png`;
-      MAIN.MINIMAP_CTX.drawImage(
-        iconSprite,
-        minimapX - (p.offset.x + p.offset.x * 8) * minimapScaleX,
-        minimapY - (p.offset.y + p.offset.y * 8) * minimapScaleY,
-        width * minimapScaleX,
-        height * minimapScaleY
-      );
-  */
   drawStations() {
     const minimapScaleX = MAIN.MINIMAP_C.width / mapWidth;
     const minimapScaleY = MAIN.MINIMAP_C.height / mapHeight;

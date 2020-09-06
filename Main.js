@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.3.4";
+const BUILD_VERSION = "0.3.5";
 
 const HOST = "ws://localhost:8080";
 
@@ -313,7 +313,7 @@ window.onload = () => {
   fetchEngineData();
   fetchLaserData();
   fetchActionbarData();
-  addFetchOffset();
+  //addFetchOffset();
   EVENT_MANAGER = new EventManager();
   MAIN = new Client();
   SOCKET = new Socket(HOST);
