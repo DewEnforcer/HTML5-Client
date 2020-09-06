@@ -81,8 +81,31 @@ const drawLeech = (width, height, x, y, seq) => {
   ctx.drawImage(sprite, x, y);
 };
 // TODO
-const drawFormation = () => {};
-const drawGateRings = () => {};
+const drawFormation = (formation, x, y) => {
+  const top = 30;
+  const marginX = 65;
+  const sprite = new Image();
+  sprite.src = `./spacemap/formations/${formation}.png`;
+  ctx.drawImage(sprite, x - marginX, y - top);
+};
+const drawGateRings = (numOfRings, x, y, offsetY) => {
+  const xMargin = 19;
+  const margin = 22;
+  x -= xMargin;
+  y += offsetY - margin;
+  const sprite = new Image();
+  let i = 1;
+  if (numOfRings > 6) {
+    sprite.src = `./spacemap/rings/crown.png`;
+    i = 7;
+  } else sprite.src = `./spacemap/rings/ring.png`;
+  for (i = i; i <= numOfRings; i++) {
+    if (i > 4 && i < 7) ctx.globalAlpha = 0.7;
+    const pos = gateRingOffsets[i - 1];
+    ctx.drawImage(sprite, x + pos.x, y + pos.y);
+    ctx.globalAlpha = 1;
+  }
+};
 const manageLogoutWindow = () => {
   if (HERO.isLogout) {
     document.querySelector(".logout_window").remove();

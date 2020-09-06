@@ -183,6 +183,13 @@ class Ship {
       this.faction,
       this.nickOffsetY
     );
+    drawGateRings(
+      7,
+      this.render.renderX + this.offset.x - this.nickOffset,
+      this.render.renderY,
+      this.nickOffsetY
+    );
+    drawFormation(0, this.render.renderX + this.offset.x, this.render.renderY);
     if (this.isHero || this.ID == HERO.ship.targetID) {
       displayShipStructure(
         this.HP,

@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.3.5";
+const BUILD_VERSION = "0.3.6";
 
 const HOST = "ws://localhost:8080";
 
@@ -16,6 +16,16 @@ const TEXT_TRANSLATIONS = {
   logout_cancel: "Logout has been canceled",
   logout_init: "Logging out, please standby!",
 };
+//
+gateRingOffsets = [
+  { x: 0, y: 0 },
+  { x: 5, y: 0 },
+  { x: 10, y: 0 },
+  { x: 5, y: -5 },
+  { x: 0, y: -5 },
+  { x: 10, y: -5 },
+  { x: 0, y: -6 }, //crown
+];
 //
 const displayDrones = false;
 const HP_COLOR = "#49BE40";
