@@ -24,7 +24,7 @@ const drawBounds = (ship) => {
 };
 const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   const width = 60;
-  const height = 4;
+  const height = 3;
   const top = y - 30;
   const margin = 7;
   const start = x - width / 2;
@@ -80,6 +80,9 @@ const drawLeech = (width, height, x, y, seq) => {
   sprite.src = `./spacemap/sfx/leech/${seq}.png`;
   ctx.drawImage(sprite, x, y);
 };
+// TODO
+const drawFormation = () => {};
+const drawGateRings = () => {};
 const manageLogoutWindow = () => {
   if (HERO.isLogout) {
     document.querySelector(".logout_window").remove();

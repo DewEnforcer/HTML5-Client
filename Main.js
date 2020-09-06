@@ -1,6 +1,10 @@
 const HOST = "ws://localhost:8080";
 const TEXT_TRANSLATIONS = {
-  welcome_log: "Welcome to LOGIS-SYSTEMS",
+  welcome_log: "Welcome to LOGIS-Systems",
+  ship_label: "Ship",
+  user_label: "User",
+  minimap_label: "Minimap",
+  log_label: "Log",
   attack: "Commencing attack!",
   no_range: "Out of range",
   end_attack: "Weapons offline",
@@ -39,7 +43,7 @@ const elements = {
   ],
 };
 const controllers = [
-  { type: "logbox", x: 0, y: 78, icon: "log_" },
+  { type: "log", x: 0, y: 78, icon: "log_" },
   { type: "userinfo", x: 0, y: 0, icon: "user_" },
   { type: "shipinfo", x: -20, y: 39, icon: "ship_" },
   { type: "spacemap", x: 20, y: 39, icon: "minimap_" },

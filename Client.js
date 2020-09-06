@@ -10,37 +10,58 @@ class Client {
     this.actionBar = null;
   }
   generateElements() {
+    this.clearDOM();
+    const els = [
+      {
+        cls: "shipinfo",
+        children: ["header", "main"],
+        icon: "ship",
+        txt: "ship_label",
+      },
+      {
+        cls: "userinfo",
+        children: ["header", "main"],
+        icon: "user",
+        txt: "user_label",
+      },
+      {
+        cls: "spacemap",
+        children: ["header", "main"],
+        icon: "minimap",
+        txt: "minimap_label",
+      },
+      {
+        cls: "log",
+        children: ["header", "main"],
+        icon: "log",
+        txt: "log_label",
+      },
+    ];
     if (this.uiLoaded) return;
     this.CANVAS = document.createElement("canvas");
     this.CANVAS.id = "gamemap";
     this.CANVAS.classList.add("canvas");
     ctx = this.CANVAS.getContext("2d");
-    document.body.innerHTML = `<div class="userinfo"></div><div class="shipinfo"></div><div class="actionbar"></div><div class="spacemap"></div><div class="logbox"></div>`; //<div class="btns_wrapper_right"></div>`;
     document.body.appendChild(this.CANVAS);
-    document.querySelector(
-      ".userinfo"
-    ).innerHTML = `<div class="userinfo_header header"></div><div class="userinfo_main main"></div>`;
-    document.querySelector(
-      ".shipinfo"
-    ).innerHTML = `<div class="shipinfo_header header"></div><div class="shipinfo_main main"></div>`;
-    document.querySelector(
-      ".spacemap"
-    ).innerHTML = `<div class="spacemap_header header"></div><div class="spacemap_main main"></div>`;
-    this.LOG = document.createElement("div");
-    this.LOG.classList.add("log_main", "main");
-    document.querySelector(
-      ".logbox"
-    ).innerHTML = `<div class="log_header header"></div>`;
-    document.querySelector(".logbox").appendChild(this.LOG);
-    $(".userinfo_header").html(
-      `<div><img src="./spacemap/ui/uiIcon/user_normal.png"></div> <span>User</span>`
-    );
-    $(".shipinfo_header").html(
-      `<div><img src="./spacemap/ui/uiIcon/ship_normal.png"></div> <span>Ship</span>`
-    );
-    $(".spacemap_header").html(
-      `<div><img src="./spacemap/ui/uiIcon/minimap_normal.png"></div><span>Spacemap</span>`
-    );
+    els.forEach((elUi) => {
+      const elDOM = document.createElement("div");
+      elDOM.classList.add(elUi.cls);
+      const children = [];
+      elUi.children.forEach((child, i) => {
+        children.push(document.createElement("div"));
+        children[i].classList.add(`${elUi.cls}_${child}`, `${child}`);
+      });
+      children[0].innerHTML = `<div><img src="./spacemap/ui/uiIcon/${
+        elUi.icon
+      }_normal.png"></div><span>${TEXT_TRANSLATIONS[elUi.txt]}</span>`;
+      for (let i = 0; i < children.length; i++) {
+        //rework in later patch
+        elDOM.appendChild(children[i]);
+      }
+      document.body.appendChild(elDOM);
+      this.dragElement(children[0], elDOM); //trigger, target
+    });
+    this.LOG = document.querySelector(".log_main");
     this.MINIMAP_TEXT = document.createElement("div");
     this.MINIMAP_TEXT.classList.add("spacemap_coordinates_wrapper");
     document.querySelector(".spacemap_main").appendChild(this.MINIMAP_TEXT);
@@ -48,14 +69,13 @@ class Client {
     this.MINIMAP_C.id = "minimap";
     document.querySelector(".spacemap_main").appendChild(this.MINIMAP_C);
     this.MINIMAP_CTX = this.MINIMAP_C.getContext("2d");
-    $(".log_header").html(
-      `<div><img src="./spacemap/ui/uiIcon/log_normal.png"></div><span>Log-Index</span>`
-    );
-    //TODO ADD ACTION BAR CLASS INIT
     this.uiLoaded = true;
     this.actionBar = new ActionBar();
     this.resizeCanvas();
     EVENT_MANAGER.initListeners();
+  }
+  clearDOM() {
+    document.body.innerHTML = "";
   }
   resizeCanvas() {
     this.CANVAS.width = window.innerWidth;
@@ -90,6 +110,11 @@ class Client {
     this.handleShipInfoData("SHD", HERO.ship.SHD, HERO.ship.maxSHD);
     this.handleShipInfoData("SPEED", HERO.speed, 0);
     this.handleShipInfoData("CFG", HERO.config, 0);
+    this.handleShipInfoData("EP", 100000);
+    this.handleShipInfoData("LVL", 1);
+    this.handleShipInfoData("HON", 100);
+    this.handleShipInfoData("CRED", 500000);
+    this.handleShipInfoData("URI", 5000);
   }
   generateInfoElements(className, jsonName, dir) {
     const target = document.querySelector("." + className + "_main");
@@ -149,33 +174,85 @@ class Client {
     ctx.fillRect(0, 0, this.CANVAS.width, this.CANVAS.height);
   }
   generateConn(msg) {
-    $(".server_connect").remove();
-    $("body").append(`<div class='server_connect'><p>${msg}</p></div>`);
+    const serverConnBox = document.querySelector(".server_connect");
+    if (serverConnBox != null) serverConnBox.remove();
+    document.body.innerHTML += `<div class='server_connect'><p>${msg}</p></div>`;
   }
-  fadeIn(minFade, maxFade, fadeDuration, el, fadeTick = 0.2) {
+  fadeIn(
+    minFade,
+    maxFade,
+    fadeDuration,
+    el,
+    fadeTick = 0.2,
+    setDisplay = false
+  ) {
     const fadePerTick = fadeTick;
     const interval = fadeDuration / ((maxFade - minFade) / fadePerTick);
     let opacity = minFade;
+    function callback() {
+      el.style.display = "flex";
+    }
     let intervalF = setInterval(() => {
       if (opacity >= maxFade) {
         clearInterval(intervalF);
+        if (setDisplay) callback();
         return;
       }
       opacity += fadePerTick;
       el.style.opacity = opacity;
     }, interval);
   }
-  fadeOut(minFade, maxFade, fadeDuration, el, fadeTick = 0.2) {
+  fadeOut(
+    minFade,
+    maxFade,
+    fadeDuration,
+    el,
+    fadeTick = 0.2,
+    setDisplay = false
+  ) {
     const fadePerTick = fadeTick;
     const interval = fadeDuration / ((maxFade - minFade) / fadePerTick);
     let opacity = maxFade;
+    function callback() {
+      el.style.display = "none";
+    }
     let intervalF = setInterval(() => {
       if (opacity <= minFade) {
         clearInterval(intervalF);
+        if (setDisplay) callback();
         return;
       }
       opacity -= fadePerTick;
       el.style.opacity = opacity;
     }, interval);
+  }
+  dragElement(elmnt, target) {
+    elmnt.onmousedown = dragMouseDown;
+
+    function dragMouseDown(e) {
+      //add mouse offset to prevent element moving to 0,0 of mouse, add position save to server
+      e = e || window.event;
+      e.preventDefault();
+      document.onmouseup = closeDragElement;
+      document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+      target.style.top = e.clientY + "px";
+      target.style.left = e.clientX + "px";
+    }
+
+    function closeDragElement() {
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+  }
+  pixelToView(px, isW = true) {
+    px = Number(px.split("p")[0]);
+    if (isW) {
+      return Math.round((px / screenWidth) * 100) + "vw";
+    } else {
+      return Math.round((px / screenHeight) * 100) + "vh";
+    }
   }
 }

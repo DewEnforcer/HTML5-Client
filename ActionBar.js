@@ -75,7 +75,9 @@ class ActionBar {
     this.setActionbarItems("0;0|0;1");
   }
   generateActionSlots() {
-    const parent = document.querySelector(".actionbar");
+    const parent = document.createElement("div");
+    parent.classList.add("actionbar");
+    document.body.appendChild(parent);
     for (var i = 1; i <= this.maxSlots; i++) {
       const slot = document.createElement("div");
       slot.classList.add("slot_actionbar");
