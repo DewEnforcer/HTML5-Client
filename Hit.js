@@ -1,8 +1,8 @@
 class Hit {
   constructor(x, y, value, isHeal = false) {
     this.id = getLaserID();
-    this.x = x + HIT_OFFSET.x;
-    this.y = y + HIT_OFFSET.y;
+    this.x = x + OFFSET_DATA.HIT_OFFSET.x;
+    this.y = y + OFFSET_DATA.HIT_OFFSET.y;
     this.value = value;
     this.color = isHeal ? "#49BE40" : "#ff0000";
     this.fontSize = 20;

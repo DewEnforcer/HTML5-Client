@@ -19,7 +19,7 @@ class Robot {
     this.armOffset = 14;
     this.offsetX = 23;
     this.offsetY = 23;
-    this.active = false;
+    this.active = true; //
     this.sound = new Sound(`./spacemap/audio/robots/robot.mp3`, true);
     this.soundPlaying = false;
     this.setRender();
@@ -53,12 +53,11 @@ class Robot {
     this.armSequence++;
     if (this.armSequence >= this.armAngles.length) this.armSequence = 0;
     this.armAngle = toRadians(this.armAngles[this.armSequence]);
-    console.log(this.armAngle);
   }
   setOffset() {
     let radAngle = toRadians(this.angle);
-    this.renderX -= BOT_OFFSET * Math.cos(radAngle);
-    this.renderY += BOT_OFFSET * Math.sin(radAngle);
+    this.renderX -= DEFAULTS.BOT_RADIUS * Math.cos(radAngle);
+    this.renderY += DEFAULTS.BOT_RADIUS * Math.sin(radAngle);
   }
   checkFrameActions() {
     this.frame++;

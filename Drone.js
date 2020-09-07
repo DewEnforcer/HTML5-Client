@@ -34,8 +34,8 @@ class Drone {
     this.setSimpleDrone();
   }
   setColor() {
-    if (this.design == 1) this.simpleColor = COLOR_HAVOC;
-    else if (this.design == 2) this.simpleColor = COLOR_HERCULES;
+    if (this.design == 1) this.simpleColor = COLORS.COLOR_HAVOC;
+    else if (this.design == 2) this.simpleColor = COLORS.COLOR_HERCULES;
   }
   getOwnerCenter() {
     this.ownerCenter.x = this.owner.x;
@@ -94,11 +94,11 @@ class Drone {
     this.x =
       this.owner.render.renderX +
       this.owner.offset.x +
-      DRONE_SIMPLE_MARGIN_X * this.position +
+      DEFAULTS.DRONE_SIMPLE_MARGIN_X * this.position +
       margin; //center
-    this.y = Math.round(this.owner.render.renderY + DRONE_SIMPLE_Y);
+    this.y = Math.round(this.owner.render.renderY + DEFAULTS.DRONE_SIMPLE_Y);
     ctx.fillStyle = this.simpleColor;
-    ctx.font = DRONE_SIMPLE_FONT;
+    ctx.font = DEFAULTS.DRONE_SIMPLE_FONT;
     ctx.fillText(
       this.simpleRepresentation,
       this.x - this.owner.droneSimpleOffset,

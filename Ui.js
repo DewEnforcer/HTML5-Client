@@ -17,7 +17,7 @@ class UI {
   }
   generateElementsUI(className, jsonName, dir) {
     const target = document.querySelector("." + className + "_main");
-    elements[jsonName].forEach((el) => {
+    UI_DATA.elements[jsonName].forEach((el) => {
       const wrapper = document.createElement("div");
       wrapper.classList.add(`${el.name}_wrapper`, "wrapper_main_" + className);
       if (el.icon != null) {
@@ -51,7 +51,7 @@ class UI {
   generateControlsUI() {
     const baseX = 25;
     const baseY = 400;
-    controllers.forEach((cntrl, i) => {
+    UI_DATA.controllers.forEach((cntrl, i) => {
       this.openWindows.push(true);
       this.windowAnimationDone.push(true);
       const el = document.createElement("button");

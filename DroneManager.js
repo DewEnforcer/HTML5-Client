@@ -11,7 +11,5 @@ class DroneManager {
       //DRONES_LAYER.push(new Drone(i, ship, drone[0], drone[1], drone[2]));
     });
     ship.droneSimpleOffset = getDroneOffset(ship.simpleDroneRepresentations);
-    console.log(ship.droneSimpleOffset);
-    console.log(ship.simpleDroneRepresentations);
   }
 }

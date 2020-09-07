@@ -9,6 +9,7 @@ class Engine {
     this.frame = 0;
     this.activateOnFrame = 2;
     this.engineSprite = new Image();
+    this.spriteOffset = OFFSET_DATA.ENGINE_OFFSETS[0];
     this.x = 0;
     this.y = 0;
     this.renderX = 0;
@@ -40,7 +41,11 @@ class Engine {
   draw() {
     ctx.translate(this.renderX, this.renderY);
     ctx.rotate(-this.angle);
-    ctx.drawImage(this.engineSprite, -engineOFFSET.x, -engineOFFSET.y);
+    ctx.drawImage(
+      this.engineSprite,
+      -this.spriteOffset.x,
+      -this.spriteOffset.y
+    );
     ctx.rotate(this.angle);
     ctx.translate(-this.renderX, -this.renderY);
   }

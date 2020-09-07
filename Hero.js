@@ -14,7 +14,8 @@ class Hero {
     maxHP,
     maxSHD,
     mapID,
-    config
+    config,
+    repairBot
   ) {
     this.isLogout = false;
     this.isJumping = false;
@@ -37,6 +38,7 @@ class Hero {
         shd,
         maxHP,
         maxSHD,
+        repairBot,
         true,
       ],
       false,

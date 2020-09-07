@@ -3,10 +3,10 @@ class MapMessage {
     this.ID = getLaserID();
     this.text = text;
     this.type = type; //1 = standard message, 2 = big message, 3 = map title
-    this.way = fonts[type].way;
-    this.font = `${fonts[type].size} sans-serif`;
-    this.shadowColor = fonts[type].shadowC;
-    this.shadowBlur = fonts[type].shadowBlur;
+    this.way = GAME_MSGS.msgFonts[type].way;
+    this.font = `${GAME_MSGS.msgFonts[type].size} sans-serif`;
+    this.shadowColor = GAME_MSGS.msgFonts[type].shadowC;
+    this.shadowBlur = GAME_MSGS.msgFonts[type].shadowBlur;
     this.x = halfScreenWidth - getTextOffset(this.font, this.text);
     this.y = 300;
     this.fadeOutTime = 5000;

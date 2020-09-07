@@ -27,7 +27,7 @@ function speedVelocity(shipSpeed, vectorAngle) {
   return velocity;
 }
 function getOffset(shipID) {
-  return SHIP_OFFSETS[shipID];
+  return OFFSET_DATA.SHIP_OFFSETS[shipID];
 }
 function getPortalOffset() {
   return { x: 100, y: 100 }; //change once more portal types appear

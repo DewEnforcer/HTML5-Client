@@ -118,7 +118,7 @@ class Client {
   }
   generateInfoElements(className, jsonName, dir) {
     const target = document.querySelector("." + className + "_main");
-    elements[jsonName].forEach((el) => {
+    UI_DATA.elements[jsonName].forEach((el) => {
       const wrapper = document.createElement("div");
       wrapper.classList.add(
         `${el.name}_wrapper`,

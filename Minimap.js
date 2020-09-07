@@ -17,7 +17,7 @@ class Minimap {
   }
   setMinimapCoordinates() {
     const scaleDown = 100;
-    MAIN.MINIMAP_TEXT.innerHTML = `<span>${mapNames[HERO.mapID]} ${Math.round(
+    MAIN.MINIMAP_TEXT.innerHTML = `<span>${mapName} ${Math.round(
       HERO.ship.x / scaleDown
     )}/${Math.round(HERO.ship.y / scaleDown)}</span>`;
   }
@@ -140,8 +140,8 @@ class Minimap {
       if (ship.isHero) return; //dont draw hero
       let minimapX = MAIN.MINIMAP_C.width * (ship.x / mapWidth);
       let minimapY = MAIN.MINIMAP_C.height * (ship.y / mapHeight);
-      let color = COLOR_ENEMY;
-      if (ship.faction == HERO.ship.faction) color = COLOR_ALLY;
+      let color = COLORS.COLOR_ENEMY;
+      if (ship.faction == HERO.ship.faction) color = COLORS.COLOR_ALLY;
       MAIN.MINIMAP_CTX.fillStyle = color;
       MAIN.MINIMAP_CTX.fillRect(
         minimapX - offset,

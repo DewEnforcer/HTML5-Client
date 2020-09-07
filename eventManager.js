@@ -1,9 +1,12 @@
 class EventManager {
   constructor() {
     this.isMouseDown = false;
-    document.querySelector(".btn_launch").addEventListener("click", () => {
-      SOCKET.initiateConnection();
-    });
+    document
+      .querySelector(".loading_bar_wrapper")
+      .addEventListener("click", () => {
+        if (!loadingStatus) return; //game isnt ready
+        SOCKET.initiateConnection();
+      });
     this.mouse = {
       x: null,
       y: null,

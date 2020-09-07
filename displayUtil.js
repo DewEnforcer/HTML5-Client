@@ -1,3 +1,5 @@
+const lockOnSprite = new Image();
+lockOnSprite.src = `./spacemap/ui/lockOn.png`;
 const getTextOffset = (font, txt) => {
   ctx.font = font;
   return Math.ceil(ctx.measureText(txt).width / 2);
@@ -32,15 +34,15 @@ const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   let shdPerc = (shd / shdStart) * width;
   ctx.strokeStyle = "black";
   ctx.strokeRect(start, top, width, height); //container border
-  ctx.fillStyle = STRUCTURE_BG;
+  ctx.fillStyle = COLORS.STRUCTURE_BG;
   ctx.fillRect(start, top, width, height); //bgcont
-  ctx.fillStyle = HP_COLOR;
+  ctx.fillStyle = COLORS.HP_COLOR;
   ctx.fillRect(start, top, hpPerc, height); //hp
   if (shdPerc > 0) {
     ctx.strokeRect(start, top + margin, width, height); //container
-    ctx.fillStyle = STRUCTURE_BG;
+    ctx.fillStyle = COLORS.STRUCTURE_BG;
     ctx.fillRect(start, top + margin, width, height); //bgcont
-    ctx.fillStyle = SHD_COLOR;
+    ctx.fillStyle = COLORS.SHD_COLOR;
     ctx.fillRect(start, top + margin, shdPerc, height); //shd
   }
   ctx.fillStyle = "black";
@@ -49,20 +51,20 @@ const drawName = (offsetX, username, faction, isHero, x, y, offsetY = 120) => {
   x -= offsetX;
   y += offsetY;
   y = Math.round(y);
-  let color = COLOR_ENEMY;
-  if (faction == HERO.ship.faction) color = COLOR_ALLY;
-  if (isHero) color = COLOR_HERO;
+  let color = COLORS.COLOR_ENEMY;
+  if (faction == HERO.ship.faction) color = COLORS.COLOR_ALLY;
+  if (isHero) color = COLORS.COLOR_HERO;
   ctx.shadowColor = "black";
   ctx.shadowBlur = 4;
   ctx.textAlign = "left";
-  ctx.font = USERNAME_FONT;
+  ctx.font = DEFAULTS.USERNAME_FONT;
   ctx.fillStyle = color;
   ctx.fillText(username, x, y); //add proper offset
   ctx.fillStyle = "black";
   ctx.shadowBlur = 0;
 };
 const getDroneOffset = (drnString) => {
-  return getTextOffset(DRONE_SIMPLE_FONT, drnString);
+  return getTextOffset(DEFAULTS.DRONE_SIMPLE_FONT, drnString);
 };
 const drawRank = (rank, x, y, offsetY) => {
   const xMargin = 18; //16 + 2
@@ -107,7 +109,7 @@ const drawGateRings = (numOfRings, x, y, offsetY) => {
   } else sprite.src = `./spacemap/rings/ring.png`;
   for (i = i; i <= numOfRings; i++) {
     if (i > 4 && i < 7) ctx.globalAlpha = 0.7;
-    const pos = gateRingOffsets[i - 1];
+    const pos = OFFSET_DATA.GATE_RING_OFFSETS[i - 1];
     ctx.drawImage(sprite, x + pos.x, y + pos.y);
     ctx.globalAlpha = 1;
   }
@@ -187,7 +189,7 @@ const getPortalById = (id) => {
   return portal;
 };
 const getLockOffset = (id) => {
-  return LOCK_OFFSETS[id];
+  return OFFSET_DATA.LOCK_OFFSETS[id];
 };
 const lockTarget = () => {
   if (HERO.ship.targetID === 0) return;
@@ -196,7 +198,11 @@ const lockTarget = () => {
   const targetRndrX = ship.render.renderX;
   const targetRndrY = ship.render.renderY;
   const offset = getLockOffset(ship.shipID);
-  ctx.drawImage(lockOnSprite, targetRndrX + offset.x, targetRndrY + offset.y);
+  ctx.drawImage(
+    lockOnSprite,
+    targetRndrX + offset.x - DEFAULTS.LOCKON_RING,
+    targetRndrY + offset.y
+  );
 };
 const checkCollision = () => {
   let dist = null;

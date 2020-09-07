@@ -11,12 +11,12 @@ class Ship {
     shd,
     maxHP,
     maxSHD,
-    robotType,
+    robotType = 1,
     isHero = false
   ) {
     this.isHero = isHero;
     this.shipID = shipID;
-    this.ship = ships[shipID];
+    this.ship = SHIP_NAMES[shipID];
     this.name = username;
     this.x = Number(x);
     this.y = Number(y);
@@ -34,8 +34,8 @@ class Ship {
     this.isFly = false;
     this.isHover = true;
     this.offset = getOffset(shipID);
-    this.nickOffset = getTextOffset(USERNAME_FONT, this.name);
-    this.nickOffsetY = SHIP_OFFSETS[shipID].nickY;
+    this.nickOffset = getTextOffset(DEFAULTS.USERNAME_FONT, this.name);
+    this.nickOffsetY = this.offset.nickY + DEFAULTS.NICK_Y;
     this.sprite = new Image();
     this.pointingAngle = 0;
     this.rotationCalc = 360 / Models[shipID][1];
