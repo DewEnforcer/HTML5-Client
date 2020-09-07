@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.3.6";
+const BUILD_VERSION = "0.3.7";
 
 const HOST = "ws://localhost:8080";
 
@@ -27,7 +27,6 @@ gateRingOffsets = [
   { x: 0, y: -6 }, //crown
 ];
 //
-const displayDrones = false;
 const HP_COLOR = "#49BE40";
 const SHD_COLOR = "#338FCC";
 const STRUCTURE_BG = "#6D6D6D";
@@ -125,6 +124,7 @@ let DRONE_POSITIONS = null;
 const DRONE_DISTANCE = 100;
 const DRONE_SIMPLE_Y = -5;
 const DRONE_SIMPLE_MARGIN_X = 3;
+const DRONE_SIMPLE_FONT = "12px Arial";
 //
 const clickRange = 100;
 const mapWidth = 21000;
@@ -180,7 +180,8 @@ let EVENT_MANAGER,
   MINIMAP,
   PRELOADER,
   CAMERA,
-  UIcls;
+  UIcls,
+  SETTINGS;
 let halfScreenWidth;
 let halfScreenHeight;
 let screenWidth;
@@ -227,6 +228,7 @@ const initiatePostHero = () => {
   MINIMAP = new Minimap();
   BG_LAYER = new Background(HERO.mapID);
   UIcls = new UI();
+  SETTINGS = new Settings();
   setGamemapObjects();
   gameInit = true;
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);

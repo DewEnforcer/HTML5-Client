@@ -66,6 +66,10 @@ class Ship {
     this.leechDisplay = false;
     this.leechFrame = 0;
     this.onFrameLeechChange = 3;
+    //
+    this.drones = [];
+    this.simpleDroneRepresentations = "";
+    this.droneSimpleOffset = null;
   }
   setTarget(target) {
     this.targetID = target;
@@ -135,6 +139,7 @@ class Ship {
     }
   }
   hover() {
+    if (!SETTINGS.hoverShips) return;
     this.isHover = true;
     const hoverSpeed = 0.05;
     this.speed.x = 0;
@@ -203,6 +208,9 @@ class Ship {
     this.sprite.src = this.sequence;
     ctx.drawImage(this.sprite, this.render.renderX, this.render.renderY);
   }
+  updateDrones() {
+    this.drones.forEach((drn) => drn.update());
+  }
   update() {
     if (this.isFly) {
       if (this.isHover) {
@@ -216,6 +224,7 @@ class Ship {
     if (!this.isFly) this.hover(); //have to put it here, else it would get reset by render pos method
     this.draw();
     this.engine.update();
+    this.updateDrones();
     if (this.leechOn) {
       this.controlLeech();
     }

@@ -46,6 +46,9 @@ const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   ctx.fillStyle = "black";
 };
 const drawName = (offsetX, username, faction, isHero, x, y, offsetY = 120) => {
+  x -= offsetX;
+  y += offsetY;
+  y = Math.round(y);
   let color = COLOR_ENEMY;
   if (faction == HERO.ship.faction) color = COLOR_ALLY;
   if (isHero) color = COLOR_HERO;
@@ -54,9 +57,12 @@ const drawName = (offsetX, username, faction, isHero, x, y, offsetY = 120) => {
   ctx.textAlign = "left";
   ctx.font = USERNAME_FONT;
   ctx.fillStyle = color;
-  ctx.fillText(username, x - offsetX, y + offsetY); //add proper offset
+  ctx.fillText(username, x, y); //add proper offset
   ctx.fillStyle = "black";
   ctx.shadowBlur = 0;
+};
+const getDroneOffset = (drnString) => {
+  return getTextOffset(DRONE_SIMPLE_FONT, drnString);
 };
 const drawRank = (rank, x, y, offsetY) => {
   const xMargin = 18; //16 + 2

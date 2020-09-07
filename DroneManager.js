@@ -4,13 +4,14 @@ class DroneManager {
     data.splice(0, 2);
     let ship = getShipById(data[0]);
     data.splice(0, 1);
-    let drones = [];
-    //parse the data
-    data.forEach((element) => {
-      drones.push(element.split(";"));
+    data.forEach((droneRaw, i) => {
+      const drone = droneRaw.split(";");
+      const drObj = new Drone(i, ship, drone[0], drone[1], drone[2]);
+      ship.drones.push(drObj);
+      //DRONES_LAYER.push(new Drone(i, ship, drone[0], drone[1], drone[2]));
     });
-    drones.forEach((drone, i) => {
-      DRONES_LAYER.push(new Drone(i, ship, drone[0], drone[1], drone[2]));
-    });
+    ship.droneSimpleOffset = getDroneOffset(ship.simpleDroneRepresentations);
+    console.log(ship.droneSimpleOffset);
+    console.log(ship.simpleDroneRepresentations);
   }
 }
