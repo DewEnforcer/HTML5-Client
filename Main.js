@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.3.7";
+const BUILD_VERSION = "0.3.8";
 
 const HOST = "ws://localhost:8080";
 
@@ -97,7 +97,7 @@ const LOCK_OFFSETS = {
 //
 const USERNAME_FONT = "bold 16px sans-serif";
 const REFRESH_TIME = 100;
-const LASER_SPEED = 3000;
+const LASER_SPEED = 1100;
 const MISSILE_SPEED = 1000;
 const MAX_MISSILE_FLY_TIME = 5000;
 const HIT_OFFSET = {

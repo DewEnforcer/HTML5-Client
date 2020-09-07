@@ -1,14 +1,5 @@
 class Laser {
-  constructor(
-    x,
-    y,
-    pointOffsets,
-    targetX,
-    targetY,
-    targetOfX,
-    targetOfY,
-    laserID
-  ) {
+  constructor(x, y, pointOffsets, targetX, targetY, laserID) {
     this.ID = getLaserID();
     this.dest = {
       //random offset makes it look more "realistic"
@@ -20,10 +11,6 @@ class Laser {
     this.speed = {
       x: null,
       y: null,
-    };
-    this.targetOff = {
-      x: targetOfX,
-      y: targetOfY,
     };
     this.offsetX = 39;
     this.offsetY = 39;
@@ -46,11 +33,9 @@ class Laser {
       x: this.renderX,
       y: this.renderY,
     };
-    this.maxSpeedPerFrame = null;
   }
   setSpeed() {
     this.speed = speedVelocity(LASER_SPEED, this.angle);
-    this.maxSpeedPerFrame = Math.abs(this.speed.x) + Math.abs(this.speed.y);
     let timeToX = Math.abs(this.x - this.dest.x) / Math.abs(this.speed.x);
     let timeToY = Math.abs(this.y - this.dest.y) / Math.abs(this.speed.y);
     console.log(timeToX, timeToY);
@@ -72,14 +57,7 @@ class Laser {
     this.x += this.speed.x / DELTA_TIME;
     this.y += this.speed.y / DELTA_TIME;
     this.timeTo -= DELTA_TIME;
-    let distanceFromTarget =
-      getDistance(this.x, this.y, this.dest.x, this.dest.y) -
-      this.maxSpeedPerFrame / DELTA_TIME;
-    if (
-      (distanceFromTarget > 0 && distanceFromTarget < this.targetOff.x) ||
-      (distanceFromTarget < 0 && distanceFromTarget > this.targetOff.x)
-    )
-      this.terminate();
+    if (Math.round(this.timeTo) <= 0) this.terminate();
   }
   changeRenderPos() {
     this.renderX =

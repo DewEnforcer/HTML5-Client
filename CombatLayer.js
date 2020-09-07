@@ -59,6 +59,8 @@ class CombatLayer {
             offset,
             target.x,
             target.y,
+            target.offset.x,
+            target.offset.y,
             laserID
           )
         );
