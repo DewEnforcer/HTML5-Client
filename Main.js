@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.3.8";
+const BUILD_VERSION = "0.3.9";
 
 const HOST = "ws://localhost:8080";
 
@@ -26,6 +26,8 @@ gateRingOffsets = [
   { x: 10, y: -5 },
   { x: 0, y: -6 }, //crown
 ];
+//
+const BOT_OFFSET = 50;
 //
 const HP_COLOR = "#49BE40";
 const SHD_COLOR = "#338FCC";
@@ -98,6 +100,7 @@ const LOCK_OFFSETS = {
 const USERNAME_FONT = "bold 16px sans-serif";
 const REFRESH_TIME = 100;
 const LASER_SPEED = 1100;
+const ELA_SPEED = 500;
 const MISSILE_SPEED = 1000;
 const MAX_MISSILE_FLY_TIME = 5000;
 const HIT_OFFSET = {
@@ -254,7 +257,7 @@ const setGamemapObjects = () => {
   MAP_OBJECTS_LIST[HERO.mapID].lensflares.forEach((lens) => {
     LENSFLARE_LAYER.push(new LensFlare(lens.id, lens.x, lens.y, lens.z));
   });
-  MESSAGE_LAYER.push(new MapMessage("MAP 1-1", 3));
+  MESSAGE_LAYER.push(new MapMessage(`MAP ${mapNames[HERO.mapID]}`, 3));
 };
 const cleanupGameobjects = () => {
   MAP_PLANETS.splice(0, MAP_PLANETS.length);

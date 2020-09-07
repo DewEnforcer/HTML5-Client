@@ -11,6 +11,7 @@ class Ship {
     shd,
     maxHP,
     maxSHD,
+    robotType,
     isHero = false
   ) {
     this.isHero = isHero;
@@ -70,6 +71,9 @@ class Ship {
     this.drones = [];
     this.simpleDroneRepresentations = "";
     this.droneSimpleOffset = null;
+    //
+    this.robotType = robotType;
+    this.robot = new Robot(this, robotType);
   }
   setTarget(target) {
     this.targetID = target;
@@ -225,6 +229,7 @@ class Ship {
     this.draw();
     this.engine.update();
     this.updateDrones();
+    this.robot.update();
     if (this.leechOn) {
       this.controlLeech();
     }

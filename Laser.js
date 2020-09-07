@@ -35,7 +35,6 @@ class Laser {
       this.dest.y
     );
     this.timeTo = 0;
-    this.setSpeed();
     this.end = false;
     this.sprite = new Image();
     this.sprite.src = `./spacemap/lasers/laser${laserID}.png`;
@@ -47,9 +46,12 @@ class Laser {
       y: this.renderY,
     };
     this.maxSpeedPerFrame = null;
+    this.baseSpeed = LASER_SPEED;
+    if (laserID == -1) this.baseSpeed = ELA_SPEED;
+    this.setSpeed();
   }
   setSpeed() {
-    this.speed = speedVelocity(LASER_SPEED, this.angle);
+    this.speed = speedVelocity(this.baseSpeed, this.angle);
     this.maxSpeedPerFrame = Math.abs(this.speed.x) + Math.abs(this.speed.y);
     let timeToX = Math.abs(this.x - this.dest.x) / Math.abs(this.speed.x);
     let timeToY = Math.abs(this.y - this.dest.y) / Math.abs(this.speed.y);

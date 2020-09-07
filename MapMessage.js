@@ -18,6 +18,7 @@ class MapMessage {
       y: 0,
     };
     this.setFade();
+    this.end = false;
   }
   setFade() {
     const speeds = [
@@ -31,7 +32,8 @@ class MapMessage {
   }
   setAlpha() {
     if (this.fadeOutTime > this.fadeAlphaTime) return;
-    this.alpha -= this.fadeAlpha;
+    this.alpha -= this.fadeAlpha * DELTA_TIME;
+    if (this.alpha < 0) this.alpha = 0;
   }
   draw() {
     ctx.fillStyle = "white";
@@ -52,8 +54,10 @@ class MapMessage {
         return true;
       }
     });
+    this.end = true;
   }
   update() {
+    if (this.end) return;
     if (!isNaN(DELTA_TIME)) this.fadeOutTime -= DELTA_TIME;
     this.draw();
     if (this.fadeOutTime <= 0) this.terminate();
