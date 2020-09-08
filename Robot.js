@@ -19,7 +19,7 @@ class Robot {
     this.armOffset = 14;
     this.offsetX = 23;
     this.offsetY = 23;
-    this.active = true; //
+    this.active = false; //
     this.sound = new Sound(`./spacemap/audio/robots/robot.mp3`, true);
     this.soundPlaying = false;
     this.setRender();

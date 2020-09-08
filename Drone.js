@@ -53,6 +53,7 @@ class Drone {
     ctx.fillRect(x - 2.5, y - 2.5, 5, 5);
     ctx.fillStyle = "black";
     ctx.drawImage(this.sprite, this.renderX, this.renderY);
+    ctx.globalAlpha = 1;
   }
   rotateSelf() {
     this.angle = this.owner.pointingAngle;

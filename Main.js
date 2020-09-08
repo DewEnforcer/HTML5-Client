@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.4.0";
+const BUILD_VERSION = "0.4.1";
 const CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
@@ -43,6 +43,7 @@ let DELTA_TIME = new Date() * 1;
 let LAST_UPDATE = 0;
 let gameInit = false;
 let mapName = "";
+const CLOAK_ALPHA = 0.5;
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;

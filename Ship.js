@@ -55,6 +55,8 @@ class Ship {
       renderY: null,
     };
     //
+    this.isCloaked = true;
+    //
     this.laserClass = getLaserClass(shipID);
     //
     this.engineClass = 10;
@@ -209,6 +211,13 @@ class Ship {
         this.render.renderY
       );
     }
+    if (this.isCloaked) {
+      if (this.isHero) {
+        ctx.globalAlpha = CLOAK_ALPHA;
+      } else {
+        return;
+      }
+    }
     this.sprite.src = this.sequence;
     ctx.drawImage(this.sprite, this.render.renderX, this.render.renderY);
   }
@@ -216,6 +225,7 @@ class Ship {
     this.drones.forEach((drn) => drn.update());
   }
   update() {
+    ctx.globalAlpha = CLOAK_ALPHA;
     if (this.isFly) {
       if (this.isHover) {
         //ship state has changed from hover to flying one
@@ -226,9 +236,12 @@ class Ship {
     }
     this.changeRenderPos();
     if (!this.isFly) this.hover(); //have to put it here, else it would get reset by render pos method
+    if (this.isCloaked && !this.isHero) {
+      ctx.globalAlpha = 1;
+      return;
+    }
     this.draw();
     this.engine.update();
-    this.updateDrones();
     this.robot.update();
     if (this.leechOn) {
       this.controlLeech();
@@ -247,5 +260,7 @@ class Ship {
         this.leechSeq
       );
     }
+    this.updateDrones();
+    ctx.globalAlpha = 1;
   }
 }
