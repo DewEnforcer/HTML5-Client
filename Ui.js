@@ -8,12 +8,32 @@ class UI {
     this.sizeMinX = "38px";
     this.sizeMinY = "30px";
     this.effectDuration = 300;
+    this.settingsIndex = 4;
     this.init();
   }
   init() {
     this.generateElementsUI("shipinfo", "shipInfo", "ship_info");
     this.generateElementsUI("userinfo", "userInfo", "user_info");
     this.generateControlsUI();
+    this.genNonUiBtns();
+  }
+  genNonUiBtns() {
+    UI_DATA.nonUiControllers.forEach((cntrl, i) => {
+      const el = document.createElement("button");
+      el.setAttribute("index", i);
+      el.setAttribute("select", "false");
+      el.setAttribute("for", cntrl.type);
+      el.classList.add("btn_controller_mini");
+      let xTotal = cntrl.x;
+      let yTotal = cntrl.y;
+      el.style.left = xTotal + "px";
+      el.style.top = yTotal + "px";
+      const icon = document.createElement("img");
+      icon.src = `./spacemap/ui/uiIcon/${cntrl.icon}normal.png`;
+      el.appendChild(icon);
+      el.addEventListener("click", (ev) => this.handleNonUIControllerClick(ev));
+      document.body.appendChild(el);
+    });
   }
   generateElementsUI(className, jsonName, dir) {
     const target = document.querySelector("." + className + "_main");
@@ -58,8 +78,14 @@ class UI {
       el.setAttribute("for", cntrl.type);
       el.setAttribute("index", i);
       el.classList.add("btn_controller_mini");
-      el.style.left = baseX + cntrl.x + "px";
-      el.style.top = baseY + cntrl.y + "px";
+      let xTotal = cntrl.x;
+      let yTotal = cntrl.y;
+      if (cntrl.useDefVal) {
+        xTotal += baseX;
+        yTotal += baseY;
+      }
+      el.style.left = xTotal + "px";
+      el.style.top = yTotal + "px";
       this.uiClasses.push(cntrl.type);
       const icon = document.createElement("img");
       icon.src = `./spacemap/ui/uiIcon/${cntrl.icon}normal.png`;
@@ -70,6 +96,7 @@ class UI {
     });
     this.getUiSizes();
     this.setControllerStatus();
+    this.controllers[this.settingsIndex].click(); //closes settings on init
   }
   getUiSizes() {
     this.UiSizes = [];
@@ -143,6 +170,7 @@ class UI {
   /* handlers */
   handleControllerClick(ev) {
     ev.preventDefault();
+    console.log(ev);
     const controller = ev.currentTarget;
     const controllerIndex = controller.getAttribute("index");
     if (!this.windowAnimationDone[controllerIndex]) return; //prevent animation spam
@@ -155,9 +183,35 @@ class UI {
       } else {
         this.sizeUp(target, controllerIndex);
       } //is open
+      this.openWindows[controllerIndex] = !this.openWindows[controllerIndex];
+      this.setControllerStatus();
     }
-    this.openWindows[controllerIndex] = !this.openWindows[controllerIndex];
-    this.setControllerStatus();
+  }
+  handleNonUIControllerClick(ev) {
+    ev.preventDefault();
+    const contrl = ev.currentTarget;
+    const action = contrl.getAttribute("for");
+    let isSelect = contrl.getAttribute("select") == "true";
+    if (isSelect) {
+      contrl.classList.remove("btn_controller_mini_open");
+    } else {
+      contrl.classList.add("btn_controller_mini_open");
+    }
+    isSelect = !isSelect;
+    contrl.setAttribute("select", isSelect.toString());
+    switch (action) {
+      case "logout":
+        EVENT_MANAGER.handleLogoutRequest();
+        break;
+      case "help":
+        alert("Figure it out yourself lol");
+        break;
+      case "fullscreen":
+        MAIN.reqFullScreen();
+        break;
+      default:
+        break;
+    }
   }
   /* UI pos handlers */
   setUiPos(data) {

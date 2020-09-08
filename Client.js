@@ -8,15 +8,16 @@ class Client {
     this.uiLoaded = false;
     this.shipInfoStatus = {};
     this.actionBar = null;
+    this.isFullscreen = false;
   }
   generateElements() {
     this.clearDOM();
     const els = [
       {
-        cls: "shipinfo",
+        cls: "log",
         children: ["header", "main"],
-        icon: "ship",
-        txt: "ship_label",
+        icon: "log",
+        txt: "log_label",
       },
       {
         cls: "userinfo",
@@ -25,16 +26,22 @@ class Client {
         txt: "user_label",
       },
       {
+        cls: "shipinfo",
+        children: ["header", "main"],
+        icon: "ship",
+        txt: "ship_label",
+      },
+      {
         cls: "spacemap",
         children: ["header", "main"],
         icon: "minimap",
         txt: "minimap_label",
       },
       {
-        cls: "log",
+        cls: "settings",
         children: ["header", "main"],
-        icon: "log",
-        txt: "log_label",
+        icon: "settings",
+        txt: "settings_label",
       },
     ];
     if (this.uiLoaded) return;
@@ -43,7 +50,7 @@ class Client {
     this.CANVAS.classList.add("canvas");
     ctx = this.CANVAS.getContext("2d");
     document.body.appendChild(this.CANVAS);
-    els.forEach((elUi) => {
+    els.forEach((elUi, i) => {
       const elDOM = document.createElement("div");
       elDOM.classList.add(elUi.cls);
       const children = [];
@@ -51,14 +58,20 @@ class Client {
         children.push(document.createElement("div"));
         children[i].classList.add(`${elUi.cls}_${child}`, `${child}`);
       });
-      children[0].innerHTML = `<div><img src="./spacemap/ui/uiIcon/${
-        elUi.icon
-      }_normal.png"></div><span>${TEXT_TRANSLATIONS[elUi.txt]}</span>`;
+      const icon = document.createElement("img");
+      icon.src = `./spacemap/ui/uiIcon/${elUi.icon}_normal.png`;
+      icon.setAttribute("for", UI_DATA.controllers[i].type);
+      icon.setAttribute("index", i);
+      icon.addEventListener("click", (ev) => UIcls.handleControllerClick(ev));
+      children[0].innerHTML = `<div class="${elUi.icon}_icon_div"></div><span>${
+        TEXT_TRANSLATIONS[elUi.txt]
+      }</span>`;
       for (let i = 0; i < children.length; i++) {
         //rework in later patch
         elDOM.appendChild(children[i]);
       }
       document.body.appendChild(elDOM);
+      document.querySelector("." + elUi.icon + "_icon_div").appendChild(icon);
       this.dragElement(children[0], elDOM); //trigger, target
     });
     this.LOG = document.querySelector(".log_main");
@@ -98,6 +111,15 @@ class Client {
     let offsetY = height * offset;
     this.MINIMAP_C.width = width - offsetX;
     this.MINIMAP_C.height = height - offsetY;
+  }
+  reqFullScreen() {
+    if (!this.isFullscreen) {
+      this.isFullscreen = true;
+      document.body.requestFullscreen();
+    } else {
+      this.isFullscreen = false;
+      document.exitFullscreen();
+    }
   }
   initHero(data) {
     this.generateElements();
@@ -160,7 +182,6 @@ class Client {
       visualBar.style.width = (value / maxValue) * 100 + "%";
     }
   }
-  generateUserInfoElements() {}
   writeToLog(msg, isTranslate = false) {
     if (isTranslate) {
       msg = TEXT_TRANSLATIONS[msg];
@@ -264,5 +285,38 @@ class Client {
     } else {
       return Math.round((px / screenHeight) * 100) + "vh";
     }
+  }
+  createBox(cls, id = "") {
+    const box = document.createElement("div");
+    if (typeof cls == "object") {
+      cls.forEach((cl) => {
+        box.classList.add(cl);
+      });
+    } else {
+      box.classList.add(cls);
+    }
+    box.id = id;
+    return box;
+  }
+  createCheckBox(cls, id, checked = false) {
+    const checker = document.createElement("input");
+    checker.type = "checkbox";
+    checker.checked = checked;
+    checker.classList.add(cls);
+    checker.id = id;
+    return checker;
+  }
+  createSelectBox(cls, id, options) {
+    const select = document.createElement("select");
+    select.classList.add(cls);
+    select.id = id;
+    select.value = options[0];
+    options.forEach((opt) => {
+      const optEL = document.createElement("option");
+      optEL.value = opt;
+      optEL.innerText = capitalizeString(opt);
+      select.appendChild(optEL);
+    });
+    return select;
   }
 }

@@ -55,7 +55,7 @@ class Ship {
       renderY: null,
     };
     //
-    this.isCloaked = true;
+    this.isCloaked = false;
     //
     this.laserClass = getLaserClass(shipID);
     //

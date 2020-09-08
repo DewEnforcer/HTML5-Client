@@ -14,6 +14,9 @@ function calcAngle(x, y, destX, destY) {
 function returnVectorLen(x, y) {
   return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 }
+function capitalizeString(str) {
+  return str[0].toUpperCase() + str.slice(1, str.length);
+}
 function getDistance(x, y, targetx, targety) {
   let distanceX = targetx - x;
   let distanceY = targety - y;

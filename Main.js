@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.4.1";
+const BUILD_VERSION = "0.4.2";
 const CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
@@ -26,6 +26,7 @@ const BTN_LOGOUT = "l";
 const BTN_PORT = "j";
 const BTN_SHIP = "q";
 const BTN_RNDMOV = "=";
+const BTN_FULLSCREEN = "f11";
 const BTN_SWITCH = ["+", "ě", "š", "č", "ř", "ž", "ý", "á", "í", "é"];
 //game vars not fetched
 const REFRESH_TIME = 100;
@@ -87,6 +88,7 @@ const initiatePostHero = () => {
   BG_LAYER = new Background(HERO.mapID);
   UIcls = new UI();
   SETTINGS = new Settings();
+  SETTINGS.genUi();
   setGamemapObjects();
   gameInit = true;
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);
