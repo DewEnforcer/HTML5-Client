@@ -1,14 +1,20 @@
 class Hit {
   constructor(x, y, value, isHeal = false) {
+    this.settingMenu = MENU_INTERFACE;
+    this.settingIndex = 1;
     this.id = getLaserID();
-    this.x = x + OFFSET_DATA.HIT_OFFSET.x;
-    this.y = y + OFFSET_DATA.HIT_OFFSET.y;
-    this.value = value;
-    this.color = isHeal ? "#49BE40" : "#ff0000";
-    this.fontSize = 20;
-    this.seq = 1;
-    this.MAX_SEQUENCE = 700;
-    this.font = "bold " + this.fontSize + "px sans-serif";
+    if (!SETTINGS.settingsArr[this.settingMenu][this.settingIndex]) {
+      this.terminate();
+    } else {
+      this.x = x + OFFSET_DATA.HIT_OFFSET.x;
+      this.y = y + OFFSET_DATA.HIT_OFFSET.y;
+      this.value = value;
+      this.color = isHeal ? "#49BE40" : "#ff0000";
+      this.fontSize = 20;
+      this.seq = 1;
+      this.MAX_SEQUENCE = 700;
+      this.font = "bold " + this.fontSize + "px sans-serif";
+    }
   }
   terminate() {
     HIT_LAYER.some((hit, i) => {

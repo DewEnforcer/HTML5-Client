@@ -16,6 +16,7 @@ class UI {
     this.generateElementsUI("userinfo", "userInfo", "user_info");
     this.generateControlsUI();
     this.genNonUiBtns();
+    this.setWindowBgs();
   }
   genNonUiBtns() {
     UI_DATA.nonUiControllers.forEach((cntrl, i) => {
@@ -170,7 +171,6 @@ class UI {
   /* handlers */
   handleControllerClick(ev) {
     ev.preventDefault();
-    console.log(ev);
     const controller = ev.currentTarget;
     const controllerIndex = controller.getAttribute("index");
     if (!this.windowAnimationDone[controllerIndex]) return; //prevent animation spam
@@ -213,6 +213,26 @@ class UI {
         break;
     }
   }
+  changeUiBgs(status) {
+    const bodyClass = "body_active";
+    const headerActive = "header_active";
+    let rgba = "rgba(22,38,47,";
+    let alpha = 0;
+    if (status) alpha = 0.5;
+    rgba += alpha + ")";
+    this.uiClasses.forEach((cls) => {
+      const elBody = document.querySelector("." + cls);
+      const elHead = document.querySelector("." + cls + "_header");
+      if (status) {
+        elBody.classList.add(bodyClass);
+        elHead.classList.add(headerActive);
+      } else {
+        elBody.classList.remove(bodyClass);
+        elHead.classList.remove(headerActive);
+      }
+    });
+    //select all elements and change their bg alpha
+  }
   /* UI pos handlers */
   setUiPos(data) {
     data = data.split("|");
@@ -238,6 +258,14 @@ class UI {
       const target = document.querySelector("." + cls);
       if (this.openWindows[i]) this.sizeUp(target, i);
       else this.sizeDown(target, i);
+    });
+  }
+  setWindowBgs() {
+    const bgClass = "";
+    this.uiClasses.forEach((cls, i) => {
+      const el = document.querySelector("." + cls);
+      console.log(cls);
+      //if (this.settingsArr[MENU_INTERFACE][5]) el.classList.add("");
     });
   }
   saveUiPos() {

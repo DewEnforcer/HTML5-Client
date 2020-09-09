@@ -10,6 +10,8 @@ class Minimap {
       y: null,
     };
     this.dotColor = "#2C87BF";
+    this.settingMenu = MENU_INTERFACE;
+    this.settingIndex = 3;
     this.changeBackground();
   }
   changeBackground() {
@@ -49,13 +51,15 @@ class Minimap {
       MAIN.MINIMAP_C.width - 4,
       MAIN.MINIMAP_C.height - 4
     );
-    MAIN.MINIMAP_CTX.drawImage(
-      this.sprite,
-      0,
-      0,
-      MAIN.MINIMAP_C.width,
-      MAIN.MINIMAP_C.height
-    );
+    if (SETTINGS.settingsArr[this.settingMenu][this.settingIndex]) {
+      MAIN.MINIMAP_CTX.drawImage(
+        this.sprite,
+        0,
+        0,
+        MAIN.MINIMAP_C.width,
+        MAIN.MINIMAP_C.height
+      );
+    }
     this.drawPlanets();
     this.drawStations();
     this.drawPortals();
@@ -164,6 +168,7 @@ class Minimap {
     });
   }
   drawPlanets() {
+    if (!SETTINGS.settingsArr[MENU_GRAPHICS][1]) return;
     const minimapScaleX = MAIN.MINIMAP_C.width / mapWidth;
     const minimapScaleY = MAIN.MINIMAP_C.height / mapHeight;
     MAP_PLANETS.forEach((p) => {

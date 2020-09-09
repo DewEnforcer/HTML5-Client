@@ -28,6 +28,8 @@ class Drone {
     };
     this.sprite = new Image();
     this.sprite.src = null;
+    this.settingMenu = MENU_INTERFACE;
+    this.settingIndex = 2;
     this.getOwnerCenter();
     this.setSequence();
     this.setColor();
@@ -109,6 +111,7 @@ class Drone {
   }
   update() {
     if (!SETTINGS.displayDrones) {
+      //CHANGE TO REAL SETTING REFERENCE
       this.drawSimpleDrone();
       return;
     }

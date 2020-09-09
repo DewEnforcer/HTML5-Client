@@ -25,34 +25,67 @@ class Settings {
     this.menuContents = [
       [
         {
-          name: "Backgrounds",
+          name: "bg",
           isCheck: false,
           options: ["off", "on"],
         },
         {
-          name: "Space-Objects",
+          name: "space_object",
           isCheck: false,
           options: ["off", "on"],
         },
         {
-          name: "Nebulas",
+          name: "nebula",
           isCheck: false,
           options: ["off", "on"],
         },
         {
-          name: "Stars",
+          name: "star",
           isCheck: false,
           options: ["off", "good", "high"],
         },
         {
-          name: "Explosions",
+          name: "explosion",
           isCheck: false,
           options: ["off", "average", "good", "high"],
         },
         {
-          name: "Engines",
+          name: "engine",
           isCheck: false,
           options: ["low", "high"],
+        },
+      ],
+      [],
+      [
+        {
+          name: "show_nick",
+          isCheck: true,
+          options: ["off", "on"],
+        },
+        {
+          name: "hit_display",
+          isCheck: true,
+          options: [],
+        },
+        {
+          name: "drone_display",
+          isCheck: true,
+          options: [],
+        },
+        {
+          name: "minimap_bg",
+          isCheck: true,
+          options: [],
+        },
+        {
+          name: "ship_hover",
+          isCheck: true,
+          options: [],
+        },
+        {
+          name: "window_bg",
+          isCheck: true,
+          options: [],
         },
       ],
     ];
@@ -60,6 +93,7 @@ class Settings {
     this.wrapperMenu = null;
     this.menuOpen = 0;
     this.setSettings();
+    UIcls.changeUiBgs(this.settingsArr[MENU_INTERFACE][5]);
   }
   setSettings(data = null) {
     if (data == null) {
@@ -78,8 +112,12 @@ class Settings {
     this.menuContents.forEach((set, i) => {
       allSettings.push([]);
       set.forEach((actualSetting) => {
-        let opts = actualSetting.options;
-        allSettings[i].push(this.qualityToNum[opts[opts.length - 1]]); //sets all to max details
+        if (!actualSetting.isCheck) {
+          let opts = actualSetting.options;
+          allSettings[i].push(this.qualityToNum[opts[opts.length - 1]]); //sets all to max details
+        } else {
+          allSettings[i].push(true);
+        }
       });
     });
     return allSettings;
@@ -131,11 +169,14 @@ class Settings {
         `${option.name}_wrapper_main`,
         `${option.isCheck ? "check" : "option"}_wrapper_main`,
       ]);
-      wrap.innerHTML = `<span cls="setting_opt_title">${option.name}</span>`;
+      wrap.innerHTML = `<span cls="setting_opt_title">${
+        TEXT_TRANSLATIONS[option.name + "_sett"]
+      }</span>`;
       if (option.isCheck) {
-        const checker = MAIN.createCheckerBox(
+        const checker = MAIN.createCheckBox(
           "settings_checkbox",
-          `checkbox_${this.menuOpen}_${i}`
+          `checkbox_${this.menuOpen}_${i}`,
+          this.settingsArr[this.menuOpen][i]
         );
         checker.setAttribute("checker", "true");
         checker.addEventListener("change", (ev) =>
@@ -143,7 +184,6 @@ class Settings {
         );
         wrap.appendChild(checker);
       } else {
-        console.log(this.settingsArr[this.menuOpen][i]);
         const select = MAIN.createSelectBox(
           "settings_select",
           `select_${this.menuOpen}_${i}`,
@@ -180,6 +220,8 @@ class Settings {
       settingVal = this.qualityToNum[ev.currentTarget.value];
     else settingVal = ev.currentTarget.checked;
     this.settingsArr[settingParams[1]][settingParams[2]] = settingVal;
-    console.log(this.settingsArr);
+    if (settingParams[1] == MENU_INTERFACE && settingParams[2] == 5) {
+      UIcls.changeUiBgs(settingVal);
+    }
   }
 }

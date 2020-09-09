@@ -48,6 +48,7 @@ const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   ctx.fillStyle = "black";
 };
 const drawName = (offsetX, username, faction, isHero, x, y, offsetY = 120) => {
+  if (!SETTINGS.settingsArr[MENU_INTERFACE][0]) username = "Unidentified";
   x -= offsetX;
   y += offsetY;
   y = Math.round(y);

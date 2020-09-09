@@ -145,8 +145,8 @@ class Ship {
     }
   }
   hover() {
-    if (!SETTINGS.hoverShips) return;
     this.isHover = true;
+    if (!SETTINGS.settingsArr[MENU_INTERFACE][4]) return;
     const hoverSpeed = 0.05;
     this.speed.x = 0;
     this.speed.y = 0;

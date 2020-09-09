@@ -17,6 +17,18 @@
     "gameplay": "Gameplay",
     "interface": "Interface",
     "sound": "Sound",
-    "keyboard": "Keyboard"
+    "keyboard": "Keyboard",
+    "bg_sett": "Backgrounds",
+    "space_object_sett": "Space-Objects",
+    "nebula_sett": "Nebulas",
+    "star_sett": "Stars",
+    "explosion_sett": "Explosions",
+    "engine_sett": "Engine",
+    "show_nick_sett": "Display real usernames",
+    "hit_display_sett": "Display hits",
+    "drone_display_sett": "Show drones",
+    "minimap_bg_sett": "Show minimap background",
+    "ship_hover_sett": "Hovering ships",
+    "window_bg_sett": "Show window background"
   }
 }
