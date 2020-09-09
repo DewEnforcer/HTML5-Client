@@ -16,6 +16,8 @@ class Engine {
     this.renderY = 0;
     this.positionOffset = null;
     this.angle = 0;
+    this.settingMenu = MENU_GRAPHICS;
+    this.settingIndex = 5;
     this.setPosOffset();
     this.changePos();
     this.setAngle();
@@ -60,6 +62,7 @@ class Engine {
     this.setSpriteSeq();
   }
   createSmoke() {
+    if (SETTINGS.settingsArr[this.settingMenu][this.settingIndex] != 4) return;
     this.smoke.push(new Smoke(this.x, this.y, "engineSmoke", this));
   }
   update() {

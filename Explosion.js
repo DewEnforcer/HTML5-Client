@@ -1,5 +1,5 @@
 class Explosion {
-  constructor(x, y, type) {
+  constructor(x, y, type, qualLevel = 1) {
     this.ID = getLaserID();
     let randomOffset = 50;
     this.x = x + getRandomNumber(-randomOffset, randomOffset);
@@ -11,11 +11,17 @@ class Explosion {
     this.activateOn = 2;
     this.seq = 0;
     this.maxSeq = 20;
-    this.setSprite();
-    this.sound = new Sound(
-      `./spacemap/audio/explosions/rocketExplosion${this.type}.mp3`
-    );
-    this.sound.play();
+    this.settingMenu = MENU_GRAPHICS;
+    this.settingIndex = 4;
+    if (SETTINGS.settingsArr[this.settingMenu][this.settingIndex] != qualLevel)
+      this.terminate();
+    else {
+      this.setSprite();
+      this.sound = new Sound(
+        `./spacemap/audio/explosions/rocketExplosion${this.type}.mp3`
+      );
+      this.sound.play();
+    }
   }
   setSprite() {
     this.sprite.src = `./spacemap/pyroEffects/rocketExplosion${this.type}/${this.seq}.png`;

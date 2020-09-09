@@ -21,6 +21,8 @@ class LensFlare {
     };
     this.display = false;
     this.lensesAmount = lenses;
+    this.settingMenu = MENU_GRAPHICS;
+    this.settingIndex = 3;
     this.setSprite();
     this.changeRenderPos();
     this.generateLenses();
@@ -40,7 +42,10 @@ class LensFlare {
     this.updateLenses();
   }
   updateLenses() {
-    this.lenses.forEach((lens) => (lens.display = this.display));
+    let display = this.display;
+    if (SETTINGS.settingsArr[this.settingMenu][this.settingIndex] != 4)
+      display = false;
+    this.lenses.forEach((lens) => (lens.display = display));
   }
   generateLenses() {
     for (let i = 1; i <= this.lensesAmount; i++) {
@@ -84,6 +89,7 @@ class LensFlare {
     ctx.translate(-this.renderX, -this.renderY);
   }
   update() {
+    if (!SETTINGS.settingsArr[this.settingMenu][this.settingIndex]) return;
     this.setFrame();
     this.setSequence();
     this.changeRenderPos();

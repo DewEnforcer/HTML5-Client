@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.4.3";
+const BUILD_VERSION = "0.4.4";
 const CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
@@ -45,6 +45,11 @@ let LAST_UPDATE = 0;
 let gameInit = false;
 let mapName = "";
 const CLOAK_ALPHA = 0.5;
+const MENU_GRAPHICS = 0;
+const MENU_GAMEPLAY = 1;
+const MENU_INTERFACE = 2;
+const MENU_SOUND = 3;
+const MENU_KEYBOARD = 4;
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;
@@ -84,11 +89,11 @@ let ctx;
 //MAIN FUNCTIONS
 const initiatePostHero = () => {
   PRELOADER.preload();
-  MINIMAP = new Minimap();
-  BG_LAYER = new Background(HERO.mapID);
   UIcls = new UI();
   SETTINGS = new Settings();
   SETTINGS.genUi();
+  MINIMAP = new Minimap();
+  BG_LAYER = new Background(HERO.mapID);
   setGamemapObjects();
   gameInit = true;
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);

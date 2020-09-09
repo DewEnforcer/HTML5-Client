@@ -10,6 +10,8 @@ class Planet {
     this.sprite = new Image();
     this.sprite.src = `${PATH_TO_PLANETS}/planet${this.planetID}.png`;
     this.offset = getPlanetOffset(planetID);
+    this.settingMenu = MENU_GRAPHICS;
+    this.settingIndex = 1;
   }
   draw() {
     ctx.drawImage(
@@ -19,6 +21,7 @@ class Planet {
     );
   }
   update() {
+    if (!SETTINGS.settingsArr[this.settingMenu][this.settingIndex]) return;
     this.renderX = this.x - CAMERA.followX / this.z + halfScreenWidth; //count real distance to render one to the center
     this.renderY = this.y - CAMERA.followY / this.z + halfScreenHeight; //count real distance to render one to the center
     this.draw();

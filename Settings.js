@@ -6,12 +6,14 @@ class Settings {
     this.bgQuality = 4;
     this.explosionQuality = 4;
     this.UI_GEN = false;
+    this.settingsArr = [];
     this.qualityToNum = {
-      none: 0,
       low: 1,
       average: 2,
       good: 3,
       high: 4,
+      off: false,
+      on: true,
     };
     this.subSections = [
       "display",
@@ -23,14 +25,29 @@ class Settings {
     this.menuContents = [
       [
         {
-          name: "Background",
+          name: "Backgrounds",
           isCheck: false,
-          options: ["none", "average", "good", "high"],
+          options: ["off", "on"],
+        },
+        {
+          name: "Space-Objects",
+          isCheck: false,
+          options: ["off", "on"],
+        },
+        {
+          name: "Nebulas",
+          isCheck: false,
+          options: ["off", "on"],
+        },
+        {
+          name: "Stars",
+          isCheck: false,
+          options: ["off", "good", "high"],
         },
         {
           name: "Explosions",
           isCheck: false,
-          options: ["none", "average", "good", "high"],
+          options: ["off", "average", "good", "high"],
         },
         {
           name: "Engines",
@@ -42,6 +59,30 @@ class Settings {
     this.settingsBox = null;
     this.wrapperMenu = null;
     this.menuOpen = 0;
+    this.setSettings();
+  }
+  setSettings(data = null) {
+    if (data == null) {
+      data = this.resetSettings();
+    }
+    data.forEach((setSection, i) => {
+      this.settingsArr.push([]);
+      setSection.forEach((setting, k) => {
+        const subSecArr = this.settingsArr[i];
+        subSecArr.push(setting);
+      });
+    });
+  }
+  resetSettings() {
+    const allSettings = [];
+    this.menuContents.forEach((set, i) => {
+      allSettings.push([]);
+      set.forEach((actualSetting) => {
+        let opts = actualSetting.options;
+        allSettings[i].push(this.qualityToNum[opts[opts.length - 1]]); //sets all to max details
+      });
+    });
+    return allSettings;
   }
   getSettingsBox() {
     this.settingsBox = document.querySelector(".settings_main");
@@ -102,10 +143,12 @@ class Settings {
         );
         wrap.appendChild(checker);
       } else {
+        console.log(this.settingsArr[this.menuOpen][i]);
         const select = MAIN.createSelectBox(
           "settings_select",
           `select_${this.menuOpen}_${i}`,
-          option.options
+          option.options,
+          this.getValToKey(this.settingsArr[this.menuOpen][i])
         );
         select.setAttribute("checker", "false");
         select.addEventListener("change", (ev) => this.handleSettingChange(ev));
@@ -113,6 +156,13 @@ class Settings {
       }
       this.wrapperMenu.appendChild(wrap);
     });
+  }
+  getValToKey(val) {
+    for (let key in this.qualityToNum) {
+      const element = this.qualityToNum[key];
+      if (element === val) return key;
+    }
+    return null;
   }
   // handlers
   handleSubmenuOpen(ev) {
@@ -129,14 +179,7 @@ class Settings {
     if (settingParams[0] == "select")
       settingVal = this.qualityToNum[ev.currentTarget.value];
     else settingVal = ev.currentTarget.checked;
-    switch (settingParams[1]) {
-      case 0:
-        this.changeDisplaySettings(settingParams[2]);
-        break;
-
-      default:
-        break;
-    }
+    this.settingsArr[settingParams[1]][settingParams[2]] = settingVal;
+    console.log(this.settingsArr);
   }
-  changeDisplaySettings(id) {}
 }

@@ -306,17 +306,17 @@ class Client {
     checker.id = id;
     return checker;
   }
-  createSelectBox(cls, id, options) {
+  createSelectBox(cls, id, options, value) {
     const select = document.createElement("select");
     select.classList.add(cls);
     select.id = id;
-    select.value = options[0];
     options.forEach((opt) => {
       const optEL = document.createElement("option");
       optEL.value = opt;
       optEL.innerText = capitalizeString(opt);
       select.appendChild(optEL);
     });
+    select.value = value;
     return select;
   }
 }
