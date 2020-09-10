@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.4.6";
+const BUILD_VERSION = "0.4.7";
 const CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
@@ -70,6 +70,7 @@ const DRONES_LAYER = [];
 const EXPLOSION_LAYER = [];
 const MESSAGE_LAYER = [];
 const LENSFLARE_LAYER = [];
+const NEBULA_LAYER = [];
 // class vars/context
 let EVENT_MANAGER,
   MAIN,
@@ -118,11 +119,16 @@ const setGamemapObjects = () => {
   MAP_OBJECTS_LIST[HERO.mapID].lensflares.forEach((lens) => {
     LENSFLARE_LAYER.push(new LensFlare(lens.id, lens.x, lens.y, lens.z));
   });
+  MAP_OBJECTS_LIST[HERO.mapID].nebulas.forEach((neb) => {
+    NEBULA_LAYER.push(new Nebula(neb.x, neb.y, neb.z, neb.type, neb.id));
+  });
   mapName = MAP_OBJECTS_LIST[HERO.mapID].name;
   if (typeof mapName === "undefined") mapName = "Unknown";
   MESSAGE_LAYER.push(new MapMessage(`MAP ${mapName}`, 3));
 };
 const cleanupGameobjects = () => {
+  LENSFLARE_LAYER.splice(0, LENSFLARE_LAYER.length);
+  NEBULA_LAYER.splice(0, NEBULA_LAYER.length);
   MAP_PLANETS.splice(0, MAP_PLANETS.length);
   MAP_PORTALS.splice(0, MAP_PORTALS.length);
   MAP_STATIONS.splice(0, MAP_STATIONS.length);
@@ -130,7 +136,6 @@ const cleanupGameobjects = () => {
   DRONES_LAYER.splice(0, DRONES_LAYER.length);
   LASER_LAYER.splice(0, LASER_LAYER.length);
   ROCKET_LAYER.splice(0, ROCKET_LAYER.length);
-  LENSFLARE_LAYER.splice(0, LENSFLARE_LAYER.length);
   EXPLOSION_LAYER.splice(0, EXPLOSION_LAYER.length);
 };
 const drawGame = (timestamp) => {
@@ -143,6 +148,7 @@ const drawGame = (timestamp) => {
   BG_LAYER.update();
   HERO.processDest();
   LENSFLARE_LAYER.forEach((lens) => lens.update());
+  NEBULA_LAYER.forEach((neb) => neb.update());
   MAP_PLANETS.forEach((planet) => planet.update());
   MAP_PORTALS.forEach((portal) => portal.update());
   MAP_STATIONS.forEach((sta) => sta.update());

@@ -32,6 +32,7 @@
         "id": 0
       }
     ],
+    "nebulas": [{ "x": 0, "y": 0, "z": 9, "id": 0, "type": "red_asteroids" }],
     "stations": [
       { "x": 1000, "y": 1000, "z": 1, "rotation": 0, "type": "Mmo", "id": 1 }
     ]
@@ -48,6 +49,7 @@
       }
     ],
     "lensflares": [],
+    "nebulas": [],
     "stations": [
       { "x": 19600, "y": 11900, "z": 1, "rotation": 0, "type": "Vru", "id": 1 }
     ]
@@ -64,6 +66,7 @@
       }
     ],
     "lensflares": [],
+    "nebulas": [],
     "stations": [
       { "x": 19800, "y": 1000, "z": 1, "rotation": 0, "type": "Eic", "id": 1 }
     ]
@@ -116,6 +119,7 @@
       }
     ],
     "lensflares": [],
+    "nebulas": [],
     "stations": []
   }
 }

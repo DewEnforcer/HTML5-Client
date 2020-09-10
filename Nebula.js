@@ -1,5 +1,5 @@
 class Nebula {
-  constructor(x, y, z, type) {
+  constructor(x, y, z, type, id) {
     this.x = x;
     this.y = y;
     this.renderX = x;
@@ -7,7 +7,7 @@ class Nebula {
     this.z = z;
     this.type = type;
     this.sprite = new Image();
-    this.sprite.src = `./spacemap/nebulas/${type}.png`;
+    this.sprite.src = `./spacemap/nebulas/${type}/${id}.png`;
     this.settingMenu = MENU_GRAPHICS;
     this.settingIndex = 2;
   }

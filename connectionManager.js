@@ -5,13 +5,29 @@ class Socket {
     this.connected = false;
   }
   initiateConnection() {
-    this.socket = new WebSocket(this.CONNECT_TARGET);
-    MAIN.generateConn("Connecting...");
+    this.initSocket();
+    MAIN.generateConn();
+    MAIN.changeConnStatus(true);
     this.initiateSocketListeners();
+  }
+  initSocket() {
+    this.socket = new WebSocket(this.CONNECT_TARGET);
+  }
+  handleConnBtn(ev) {
+    ev.preventDefault();
+    const data = ev.currentTarget.id.split("_");
+    console.log(data);
+    if (data[1] == 1) {
+      terminateGame();
+    } else {
+      this.initiateConnection();
+      //try connection again;
+    }
   }
   handleDisconnected() {
     this.connected = false;
-    MAIN.generateConn("Connection failed");
+    MAIN.generateConn();
+    MAIN.changeConnStatus(false);
   }
   sendPacket(data) {
     this.socket.send(this.packetCompiler(data));

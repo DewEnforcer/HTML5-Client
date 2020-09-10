@@ -194,10 +194,47 @@ class Client {
     ctx.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
     ctx.fillRect(0, 0, this.CANVAS.width, this.CANVAS.height);
   }
-  generateConn(msg) {
-    const serverConnBox = document.querySelector(".server_connect");
-    if (serverConnBox != null) serverConnBox.remove();
-    document.body.innerHTML += `<div class='server_connect'><p>${msg}</p></div>`;
+  generateConn() {
+    const prevBox = document.querySelector(".server_connect");
+    if (prevBox != null) prevBox.remove();
+    const serverConnBox = this.createBox("server_connect");
+    const header = this.createBox([
+      "server_connect_header",
+      "header",
+      "header_active",
+    ]);
+    const body = this.createBox(["server_connect_main"]);
+    serverConnBox.appendChild(header);
+    serverConnBox.appendChild(body);
+    const headerIcon = `<img src="./spacemap/ui/uiIcon/lost_connection_normal.png">`;
+    header.innerHTML += "<div>" + headerIcon + "</div>";
+    header.innerHTML += `<span>${TEXT_TRANSLATIONS["connection_label"]}</span>`;
+    const icon = document.createElement("img");
+    icon.classList.add("server_connect_icon");
+    body.appendChild(icon);
+    body.appendChild(this.createBox("server_connect_txt"));
+    document.body.appendChild(serverConnBox);
+  }
+  changeConnStatus(status) {
+    const index = status ? 1 : 0;
+    const bnts = [["try_again", "cancel"], []];
+    let statusString = "active";
+    if (!status) {
+      statusString = "inactive";
+    }
+    document.querySelector(".server_connect_icon").src =
+      "./spacemap/ui/connection/" + statusString + ".png";
+    document.querySelector(".server_connect_txt").innerHTML =
+      TEXT_TRANSLATIONS["conn_" + statusString] +
+      `<div class="server_connect_btn_box"></div>`;
+    bnts[index].forEach((cls, i) => {
+      const btn = document.createElement("button");
+      btn.classList.add("btn_server_conn");
+      btn.innerText = TEXT_TRANSLATIONS[cls];
+      btn.id = `${index}_${i}`;
+      btn.addEventListener("click", (ev) => SOCKET.handleConnBtn(ev));
+      document.querySelector(".server_connect_btn_box").appendChild(btn);
+    });
   }
   fadeIn(
     minFade,

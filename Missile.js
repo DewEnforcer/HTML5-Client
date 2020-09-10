@@ -1,15 +1,20 @@
 class Missile {
-  constructor(x, y, target, missileType, missileSmoke) {
+  constructor(x, y, target, missileType, missileSmoke, isSeeker = false) {
     this.ID = getLaserID();
+    this.isSeeker = isSeeker;
     this.x = x;
     this.y = y;
     this.renderX = x;
     this.renderY = y;
+    this.destX = 0;
+    this.destY = 0;
     this.target = target;
     this.flyTime = 0;
     this.baseSpeed = MISSILE_SPEED;
     this.speed = { x: 0, y: 0 };
     this.angle = 0;
+    this.targetAngle = 0;
+    this.anglePerFrame = 0;
     this.sprite = new Image();
     this.sprite.src = `./spacemap/rockets/rocket${missileType}.png`;
     this.smoke = [];
@@ -17,22 +22,50 @@ class Missile {
     this.smokeOnFrame = 2;
     this.frame = 0;
     this.missileSmoke = missileSmoke;
-    this.spriteOffset = MISSILE_OFFSETS[missileType];
+    this.spriteOffset = OFFSET_DATA.MISSILE_OFFSETS[missileType];
     this.timeTo = 0;
+    this.travelToOffset = false;
+    this.setTargetCoords();
+  }
+  setTargetCoords(force = false) {
+    const ranOffset = 300;
+    if (this.isSeeker && !force) {
+      this.destX = this.target.x + getRandomNumber(-ranOffset, ranOffset);
+      this.destY = this.target.y + getRandomNumber(-ranOffset, ranOffset);
+      this.travelToOffset = true;
+    } else {
+      this.destX = this.target.x;
+      this.destY = this.target.y;
+    }
     this.setSpeed();
   }
   setSpeed() {
-    let distanceX = this.target.x - this.x;
-    let distanceY = this.target.y - this.y;
+    this.flyTime = 0;
+    let distanceX = this.destX - this.x;
+    let distanceY = this.destY - this.y;
     this.timeTo =
-      (getDistance(this.x, this.y, this.target.x, this.target.y) /
-        this.baseSpeed) *
+      (getDistance(this.x, this.y, this.destX, this.destY) / this.baseSpeed) *
       1000;
     this.speed.x = distanceX / this.timeTo;
     this.speed.y = distanceY / this.timeTo;
   }
+  smoothRotate() {
+    if (!this.isSeeker) return;
+    this.angle += this.anglePerFrame;
+    if (this.angle > this.targetAngle) {
+      this.angle = this.targetAngle;
+    }
+  }
   rotate() {
-    this.angle = calcAngle(this.x, this.y, this.target.x, this.target.y);
+    const maxTol = toRadians(10);
+    const animationFrameTime = 2000 / DELTA_TIME;
+    const ang = calcAngle(this.x, this.y, this.destX, this.destY);
+    if (ang > maxTol) {
+      this.anglePerFrame = ang / animationFrameTime;
+      this.targetAngle = ang;
+    } else {
+      this.angle = ang;
+    }
   }
   changePos() {
     this.x += this.speed.x * DELTA_TIME;
@@ -57,6 +90,11 @@ class Missile {
     );
   }
   terminate() {
+    if (this.travelToOffset) {
+      this.travelToOffset = false;
+      this.setTargetCoords(true);
+      return;
+    }
     ROCKET_LAYER.some((rocket, i) => {
       if (rocket.ID == this.ID) {
         ROCKET_LAYER.splice(i, 1);
@@ -85,6 +123,7 @@ class Missile {
     this.flyTime += DELTA_TIME;
     this.followTarget();
     this.rotate();
+    this.smoothRotate();
     this.changePos();
     this.changeRenderPos();
     this.draw();

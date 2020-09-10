@@ -6,6 +6,7 @@
     "minimap_label": "Minimap",
     "log_label": "Log",
     "settings_label": "Settings",
+    "connection_label": "Connection information",
     "attack": "Commencing attack!",
     "no_range": "Out of range",
     "end_attack": "Weapons offline",
@@ -29,6 +30,10 @@
     "drone_display_sett": "Show drones",
     "minimap_bg_sett": "Show minimap background",
     "ship_hover_sett": "Hovering ships",
-    "window_bg_sett": "Show window background"
+    "window_bg_sett": "Show window background",
+    "conn_active": "Connecting... <br><br> Please stand-by",
+    "conn_inactive": "Connection has been lost<br><br>This could have been caused by our servers being down, or your connection being unstable, please try again!",
+    "try_again": "Retry",
+    "cancel": "Cancel"
   }
 }
