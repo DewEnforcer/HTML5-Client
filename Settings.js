@@ -1,5 +1,6 @@
 class Settings {
   constructor() {
+    this.STORAGE_KEY = "SETTINGS_VAL_KEY";
     this.hoverShips = false;
     this.minimapBG = true;
     this.displayDrones = false;
@@ -94,18 +95,6 @@ class Settings {
     this.menuOpen = 0;
     this.setSettings();
     UIcls.changeUiBgs(this.settingsArr[MENU_INTERFACE][5]);
-  }
-  setSettings(data = null) {
-    if (data == null) {
-      data = this.resetSettings();
-    }
-    data.forEach((setSection, i) => {
-      this.settingsArr.push([]);
-      setSection.forEach((setting, k) => {
-        const subSecArr = this.settingsArr[i];
-        subSecArr.push(setting);
-      });
-    });
   }
   resetSettings() {
     const allSettings = [];
@@ -223,5 +212,22 @@ class Settings {
     if (settingParams[1] == MENU_INTERFACE && settingParams[2] == 5) {
       UIcls.changeUiBgs(settingVal);
     }
+  }
+  /* set save */
+  setSettings() {
+    let data = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
+    if (data == null) {
+      data = this.resetSettings();
+    }
+    data.forEach((setSection, i) => {
+      this.settingsArr.push([]);
+      setSection.forEach((setting, k) => {
+        const subSecArr = this.settingsArr[i];
+        subSecArr.push(setting);
+      });
+    });
+  }
+  saveSettings() {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.settingsArr));
   }
 }
