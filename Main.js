@@ -1,5 +1,5 @@
-const BUILD_VERSION = "0.4.8";
-const CURRENT_LANGUAGE = "en";
+const BUILD_VERSION = "0.4.9";
+let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
 let loadingStatus = false;
@@ -50,6 +50,10 @@ const MENU_GAMEPLAY = 1;
 const MENU_INTERFACE = 2;
 const MENU_SOUND = 3;
 const MENU_KEYBOARD = 4;
+const langNameToKey = {
+  English: "en",
+  Česky: "cz",
+};
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;
@@ -97,10 +101,11 @@ const initiatePostHero = () => {
   BG_LAYER = new Background(HERO.mapID);
   setGamemapObjects();
   gameInit = true;
+  MAIN.translateGame(true);
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);
   welcome.play();
-  drawGame();
   MAIN.writeToLog("welcome_log", true);
+  drawGame();
 };
 const setGamemapObjects = () => {
   MAP_OBJECTS_LIST[HERO.mapID].planets.forEach((planet) => {
@@ -123,8 +128,11 @@ const setGamemapObjects = () => {
     NEBULA_LAYER.push(new Nebula(neb.x, neb.y, neb.z, neb.type, neb.id));
   });
   mapName = MAP_OBJECTS_LIST[HERO.mapID].name;
-  if (typeof mapName === "undefined") mapName = "Unknown";
-  MESSAGE_LAYER.push(new MapMessage(`MAP ${mapName}`, 3));
+  if (typeof mapName === "undefined")
+    mapName = TEXT_TRANSLATIONS["unknown_map"];
+  MESSAGE_LAYER.push(
+    new MapMessage(`${TEXT_TRANSLATIONS["map_name_title"]} ${mapName}`, 3)
+  );
 };
 const cleanupGameobjects = () => {
   LENSFLARE_LAYER.splice(0, LENSFLARE_LAYER.length);
@@ -192,6 +200,8 @@ const playFlySound = () => {
   }, 250);
 };
 const manageLoadingBar = () => {
+  const loadingBarReal = document.querySelector(".loading_bar_real");
+  if (loadingBarReal == null) return;
   const width = (progress / maxProgress) * 100 + "%";
   document.querySelector(".loading_bar_real").style.width = width;
   if (progress >= maxProgress) {

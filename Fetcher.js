@@ -29,13 +29,14 @@ class Fetcher {
         manageLoadingBar();
       });
   }
-  static fetchTranslations() {
+  static fetchTranslations(callback = null) {
     fetch("./js/client/texts.json")
       .then((res) => res.json())
       .then((data) => {
         TEXT_TRANSLATIONS = data[CURRENT_LANGUAGE];
         progress++;
         manageLoadingBar();
+        if (callback != null) callback();
       });
   }
   static fetchMapObjects() {

@@ -55,6 +55,11 @@ class Settings {
           isCheck: false,
           options: ["low", "high"],
         },
+        {
+          name: "language",
+          isCheck: false,
+          options: ["English", "Česky"],
+        },
       ],
       [],
       [
@@ -131,10 +136,10 @@ class Settings {
     //gen submenu
     this.subSections.forEach((subSec, i) => {
       const btn = MAIN.createBox(
-        [subSec, "settings_submenu_btn"],
+        [subSec, "settings_submenu_btn", "translate_txt"],
         `submenu_btn_${i}`
       );
-      btn.innerText = TEXT_TRANSLATIONS[subSec];
+      btn.setAttribute("transl_key", subSec);
       btn.addEventListener("click", (ev) => this.handleSubmenuOpen(ev));
       wrapperSubmenu.appendChild(btn);
     });
@@ -158,9 +163,9 @@ class Settings {
         `${option.name}_wrapper_main`,
         `${option.isCheck ? "check" : "option"}_wrapper_main`,
       ]);
-      wrap.innerHTML = `<span cls="setting_opt_title">${
-        TEXT_TRANSLATIONS[option.name + "_sett"]
-      }</span>`;
+      wrap.innerHTML = `<span class="setting_opt_title translate_txt" transl_key="${
+        option.name
+      }_sett">${TEXT_TRANSLATIONS[option.name + "_sett"]}</span>`; //translate in real time, translating the whole game would be a waste of resources
       if (option.isCheck) {
         const checker = MAIN.createCheckBox(
           "settings_checkbox",
@@ -191,7 +196,21 @@ class Settings {
       const element = this.qualityToNum[key];
       if (element === val) return key;
     }
-    return null;
+    return val;
+  }
+  manageLoadingState(loading = true) {
+    const opacityBoxCls = "settings_opct_box";
+    const loaderCls = "loader_vis";
+    if (loading) {
+      this.settingsBox.appendChild(MAIN.createBox(opacityBoxCls));
+      const icon = document.createElement("img");
+      icon.classList.add(loaderCls);
+      icon.src = "./image/graphics/loading.gif";
+      this.settingsBox.appendChild(icon);
+    } else {
+      document.querySelector("." + loaderCls).remove();
+      document.querySelector("." + opacityBoxCls).remove();
+    }
   }
   // handlers
   handleSubmenuOpen(ev) {
@@ -205,13 +224,20 @@ class Settings {
     ev.preventDefault();
     let settingVal;
     const settingParams = ev.currentTarget.id.split("_");
-    if (settingParams[0] == "select")
-      settingVal = this.qualityToNum[ev.currentTarget.value];
-    else settingVal = ev.currentTarget.checked;
+    if (settingParams[0] == "select") {
+      if (ev.currentTarget.value in this.qualityToNum) {
+        settingVal = this.qualityToNum[ev.currentTarget.value];
+      } else {
+        settingVal = ev.currentTarget.value;
+      }
+    } else settingVal = ev.currentTarget.checked;
     this.settingsArr[settingParams[1]][settingParams[2]] = settingVal;
     if (settingParams[1] == MENU_INTERFACE && settingParams[2] == 5) {
       UIcls.changeUiBgs(settingVal);
+    } else if (settingParams[1] == MENU_GRAPHICS && settingParams[2] == 6) {
+      MAIN.setNewLanguage(settingVal);
     }
+    this.saveSettings();
   }
   /* set save */
   setSettings() {

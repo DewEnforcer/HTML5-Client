@@ -63,9 +63,7 @@ class Client {
       icon.setAttribute("for", UI_DATA.controllers[i].type);
       icon.setAttribute("index", i);
       icon.addEventListener("click", (ev) => UIcls.handleControllerClick(ev));
-      children[0].innerHTML = `<div class="${elUi.icon}_icon_div"></div><span>${
-        TEXT_TRANSLATIONS[elUi.txt]
-      }</span>`;
+      children[0].innerHTML = `<div class="${elUi.icon}_icon_div"></div><span class="translate_txt" transl_key="${elUi.txt}"></span>`;
       for (let i = 0; i < children.length; i++) {
         //rework in later patch
         elDOM.appendChild(children[i]);
@@ -193,6 +191,25 @@ class Client {
   cleanup() {
     ctx.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
     ctx.fillRect(0, 0, this.CANVAS.width, this.CANVAS.height);
+  }
+  setNewLanguage(newLang) {
+    if (newLang in langNameToKey !== true) return;
+    const newLangKey = langNameToKey[newLang];
+    if (newLangKey != CURRENT_LANGUAGE) CURRENT_LANGUAGE = newLangKey;
+    SETTINGS.manageLoadingState();
+    Fetcher.fetchTranslations(this.translateGame);
+  }
+  translateGame(isInit = false) {
+    document.querySelectorAll(".translate_txt").forEach((el) => {
+      const key = el.getAttribute("transl_key");
+      if (key in TEXT_TRANSLATIONS !== true) {
+        el.innerText = key;
+        return;
+      }
+      el.innerText = TEXT_TRANSLATIONS[key];
+    });
+    if (isInit) return;
+    SETTINGS.manageLoadingState(false);
   }
   generateConn() {
     const prevBox = document.querySelector(".server_connect");

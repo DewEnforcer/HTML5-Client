@@ -264,7 +264,6 @@ class UI {
     const bgClass = "";
     this.uiClasses.forEach((cls, i) => {
       const el = document.querySelector("." + cls);
-      console.log(cls);
       //if (this.settingsArr[MENU_INTERFACE][5]) el.classList.add("");
     });
   }
