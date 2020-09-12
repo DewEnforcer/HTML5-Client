@@ -91,7 +91,7 @@ class EventManager {
     if (HERO.lockedControls) return;
     this.isMouseDown = true;
     HERO.ship.isFly = true;
-    //this.initInterval();
+    this.initInterval();
   }
   handleInfoVisualChange(ev) {
     //handle changes between text and visual info
@@ -112,7 +112,7 @@ class EventManager {
     MAIN.shipInfoStatus[section] = !MAIN.shipInfoStatus[section];
   }
   handleMouseUp() {
-    //this.stopInterval();
+    this.stopInterval();
     this.isMouseDown = false;
   }
   initListeners() {

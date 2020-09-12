@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.5.0";
+const BUILD_VERSION = "0.5.1";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
@@ -154,7 +154,6 @@ const drawGame = (timestamp) => {
   requestAnimationFrame(drawGame);
   MAIN.cleanup();
   BG_LAYER.update();
-  HERO.processDest();
   LENSFLARE_LAYER.forEach((lens) => lens.update());
   NEBULA_LAYER.forEach((neb) => neb.update());
   MAP_PLANETS.forEach((planet) => planet.update());
