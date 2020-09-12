@@ -112,8 +112,10 @@ class EventManager {
     MAIN.shipInfoStatus[section] = !MAIN.shipInfoStatus[section];
   }
   handleMouseUp() {
-    this.stopInterval();
-    this.isMouseDown = false;
+    if (this.isMouseDown) {
+      this.stopInterval();
+      this.isMouseDown = false;
+    }
   }
   initListeners() {
     //game listeners
@@ -125,7 +127,7 @@ class EventManager {
     );
     //window.addEventListener("mousedown", () => this.handleMouseDown());
     MAIN.CANVAS.addEventListener("mousedown", () => this.handleMouseDown());
-    MAIN.CANVAS.addEventListener("mouseup", () => this.handleMouseUp());
+    document.body.addEventListener("mouseup", () => this.handleMouseUp());
     MAIN.MINIMAP_C.addEventListener("mousedown", (ev) => MINIMAP.leadHero(ev));
     window.addEventListener("resize", () => {
       MAIN.resizeCanvas();

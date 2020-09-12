@@ -9,6 +9,8 @@ class UI {
     this.sizeMinY = "30px";
     this.effectDuration = 300;
     this.settingsIndex = 4;
+    this.DATA_KEY_POS = "UI_POS_KEY";
+    this.DATA_KEY_STATUS = "UI_STATUS_KEY";
     this.init();
   }
   init() {
@@ -16,7 +18,6 @@ class UI {
     this.generateElementsUI("userinfo", "userInfo", "user_info");
     this.generateControlsUI();
     this.genNonUiBtns();
-    this.setWindowBgs();
   }
   genNonUiBtns() {
     UI_DATA.nonUiControllers.forEach((cntrl, i) => {
@@ -96,7 +97,8 @@ class UI {
       document.body.appendChild(el);
     });
     this.getUiSizes();
-    this.setControllerStatus();
+    this.setUiPos(true);
+    this.setUiStatus(true);
     this.controllers[this.settingsIndex].click(); //closes settings on init
   }
   getUiSizes() {
@@ -122,7 +124,7 @@ class UI {
     });
   }
   // UI effect
-  sizeDown(el, index) {
+  sizeDown(el, index, time = 500) {
     const textHeader = el.children[0].children[1];
     const UiBody = el.children[1];
     const elRes = el.getBoundingClientRect();
@@ -141,16 +143,16 @@ class UI {
       fill: "forwards",
     });
     setTimeout(() => {
-      MAIN.fadeOut(0, 1, 500, el, 0.1, true);
+      MAIN.fadeOut(0, 1, time, el, 0.1, true);
       this.windowAnimationDone[index] = true;
     }, this.effectDuration * 2);
   }
-  sizeUp(el, index) {
+  sizeUp(el, index, time = 500) {
     const textHeader = el.children[0].children[1];
     const UiBody = el.children[1];
     //first scale down horizontally, then vertically
     el.style.display = "flex";
-    MAIN.fadeIn(0, 1, 500, el, 0.1);
+    MAIN.fadeIn(0, 1, time, el, 0.1);
     setTimeout(() => {
       el.animate([{ width: 0 }, { width: this.UiSizes[index].w }], {
         duration: this.effectDuration,
@@ -166,7 +168,7 @@ class UI {
         MAIN.fadeIn(0, 1, 150, textHeader);
         this.windowAnimationDone[index] = true;
       }, this.effectDuration * 2);
-    }, 500);
+    }, time);
   }
   /* handlers */
   handleControllerClick(ev) {
@@ -185,6 +187,7 @@ class UI {
       } //is open
       this.openWindows[controllerIndex] = !this.openWindows[controllerIndex];
       this.setControllerStatus();
+      this.saveUiStatus();
     }
   }
   handleNonUIControllerClick(ev) {
@@ -234,57 +237,47 @@ class UI {
     //select all elements and change their bg alpha
   }
   /* UI pos handlers */
-  setUiPos(data) {
-    data = data.split("|");
+  setUiPos(isInit = false) {
+    const data = JSON.parse(localStorage.getItem(this.DATA_KEY_POS));
+    if (data == null) return;
     data.forEach((uiPos, i) => {
-      uiPosParsed = uiPos.split(";");
-      if (uiPosParsed < 0) return;
+      if (uiPos < 0) return;
       const uiEL = document.querySelector("." + this.uiClasses[i]);
-      uiEL.style.left = uiPosParsed[0] + "px";
-      uiEL.style.top = uiPosParsed[1] + "px";
+      uiEL.style.left = uiPos[0] + "px";
+      uiEL.style.top = uiPos[1] + "px";
     });
   }
-  setUiStatus(data) {
-    data.split("|");
-    data.forEach((status, i) => {
-      let statusParsed = !!status;
-      this.openWindows[i] = statusParsed;
-    });
+  setUiStatus(isInit = false) {
+    const data = localStorage.getItem(this.DATA_KEY_STATUS);
+    if (data == null) return;
+    this.openWindows = JSON.parse(data);
     this.setControllerStatus();
     this.setUiStatusGraphical();
+  }
+  saveUiPos() {
+    const data = [];
+    this.uiClasses.forEach((cls) => {
+      const el = document.querySelector("." + cls);
+      if (el == null) {
+        data.push([-1, -1]);
+        return;
+      }
+      const bounds = el.getBoundingClientRect();
+      data.push([Math.round(bounds.x), Math.round(bounds.y)]);
+    });
+    localStorage.setItem(this.DATA_KEY_POS, JSON.stringify(data));
+  }
+  saveUiStatus() {
+    localStorage.setItem(
+      this.DATA_KEY_STATUS,
+      JSON.stringify(this.openWindows)
+    );
   }
   setUiStatusGraphical() {
     this.uiClasses.forEach((cls, i) => {
       const target = document.querySelector("." + cls);
-      if (this.openWindows[i]) this.sizeUp(target, i);
-      else this.sizeDown(target, i);
+      if (this.openWindows[i]) this.sizeUp(target, i, 0);
+      else this.sizeDown(target, i, 0);
     });
-  }
-  setWindowBgs() {
-    const bgClass = "";
-    this.uiClasses.forEach((cls, i) => {
-      const el = document.querySelector("." + cls);
-      //if (this.settingsArr[MENU_INTERFACE][5]) el.classList.add("");
-    });
-  }
-  saveUiPos() {
-    const packetCollection = [UI_POS_CHANGE];
-    this.uiClasses.forEach((cls) => {
-      const el = document.querySelector("." + cls);
-      if (el == null) {
-        packetCollection.push("-1;-1");
-        return;
-      }
-      const bounds = el.getBoundingClientRect();
-      packetCollection.push(Math.round(bounds.x) + ";" + Math.round(bounds.y));
-    });
-    SOCKET.sendPacket(packetCollection);
-  }
-  saveUiStatus() {
-    const packetCollection = [UI_STATE_CHANGE];
-    this.openWindows.forEach((status) => {
-      packetCollection.push(Number(status));
-    });
-    SOCKET.sendPacket(packetCollection);
   }
 }

@@ -5,6 +5,7 @@ class DroneManager {
     let ship = getShipById(data[0]);
     data.splice(0, 1);
     data.forEach((droneRaw, i) => {
+      //if (i > 1) return;
       const drone = droneRaw.split(";");
       const drObj = new Drone(i, ship, drone[0], drone[1], drone[2]);
       ship.drones.push(drObj);

@@ -128,7 +128,6 @@ class Ship {
     const currAngle = this.sequenceNum * this.rotationCalc; //add the rotation incr speed depending on distance between ship and distance
     const goalAngle = toDegs(this.pointingAngle);
     let plusDist, minusDist;
-    console.log(currAngle, goalAngle);
     if (currAngle < goalAngle) {
       plusDist = goalAngle - currAngle;
       minusDist = 360 - plusDist;

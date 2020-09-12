@@ -428,6 +428,7 @@ class ActionBar {
     ];
     const itemMenu = itemData[0];
     const itemID = itemData[1];
+    if (typeof itemMenu == "undefined" || typeof itemID == "undefined") return; //empty slot
     const packetCollection = [ITEM_SELECT];
     packetCollection.push(menuPackets[itemMenu]);
     packetCollection.push(itemID);
