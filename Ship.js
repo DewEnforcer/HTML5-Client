@@ -39,8 +39,12 @@ class Ship {
     this.sprite = new Image();
     this.pointingAngle = 0;
     this.rotationCalc = 360 / Models[shipID][1];
+    this.rotationIncr = 0;
+    this.maxRotation = Models[shipID][1];
     this.sequenceNum = 0;
+    this.sequenceNumEnd = 0;
     this.sequence = this.setSequence(0);
+    this.setSmooth = false;
     this.isAttacking = false;
     this.targetID = 0;
     this.salvoPhase = 1;
@@ -55,7 +59,7 @@ class Ship {
       renderY: null,
     };
     //
-    this.isCloaked = true;
+    this.isCloaked = false;
     //
     this.laserClass = getLaserClass(shipID);
     //
@@ -88,6 +92,7 @@ class Ship {
     if (this.isHero) CAMERA.update();
   }
   setDestination(x, y, time) {
+    this.setSmooth = true;
     this.destX = x;
     this.destY = y;
     this.timeTo = time;
@@ -119,10 +124,44 @@ class Ship {
     this.pointingAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
     this.sequence = this.setSequence();
   }
+  setSmoothRotation() {
+    const currAngle = this.sequenceNum * this.rotationCalc; //add the rotation incr speed depending on distance between ship and distance
+    const goalAngle = toDegs(this.pointingAngle);
+    let plusDist, minusDist;
+    console.log(currAngle, goalAngle);
+    if (currAngle < goalAngle) {
+      plusDist = goalAngle - currAngle;
+      minusDist = 360 - plusDist;
+    } else {
+      minusDist = goalAngle - currAngle;
+      plusDist = 360 + minusDist;
+    }
+    if (Math.abs(plusDist) > Math.abs(minusDist)) {
+      this.rotationIncr = -1;
+    } else {
+      this.rotationIncr = 1;
+    }
+    this.setSmooth = false;
+  }
+  rotateToSeq() {
+    this.sequenceNum += this.rotationIncr;
+    if (this.sequenceNum < 0) this.sequenceNum = this.maxRotation;
+    else if (this.sequenceNum > this.maxRotation) this.sequenceNum = 0;
+    if (this.sequenceNum == this.sequenceNumEnd) {
+      this.rotationIncr = 0;
+    }
+  }
   setSequence() {
-    this.sequenceNum = Math.round(
-      toDegs(this.pointingAngle) / this.rotationCalc
-    );
+    if (this.setSmooth) {
+      const newNumEnd = Math.round(
+        toDegs(this.pointingAngle) / this.rotationCalc
+      );
+      if (this.sequenceNumEnd != newNumEnd) {
+        this.sequenceNumEnd = newNumEnd;
+        this.setSmoothRotation();
+      }
+    }
+    this.rotateToSeq();
     return `./spacemap/ships/${this.ship}/${this.sequenceNum}.png`;
   }
   controlLeech() {

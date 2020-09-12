@@ -58,7 +58,7 @@ class Settings {
         {
           name: "language",
           isCheck: false,
-          options: ["English", "Česky"],
+          options: ["Česky", "English"],
         },
       ],
       [],
@@ -108,7 +108,9 @@ class Settings {
       set.forEach((actualSetting) => {
         if (!actualSetting.isCheck) {
           let opts = actualSetting.options;
-          allSettings[i].push(this.qualityToNum[opts[opts.length - 1]]); //sets all to max details
+          let val = this.qualityToNum[opts[opts.length - 1]];
+          if (typeof val === "undefined") val = opts[opts.length - 1];
+          allSettings[i].push(val); //sets all to max details
         } else {
           allSettings[i].push(true);
         }

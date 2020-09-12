@@ -6,6 +6,7 @@ class Drone {
       x: null,
       y: null,
     };
+    this.groupAngle = 0;
     this.x = 0;
     this.y = 0;
     this.renderX = 0;
@@ -18,8 +19,11 @@ class Drone {
     this.angleDroneShip = 0;
     this.angleCalc = 360 / 32; //change;
     this.position = position;
-    this.offset = DRONE_POSITIONS[position + 1];
-    this.baseOffset = DRONE_POSITIONS[position + 1];
+    let offsetsData = DRONE_POSITIONS[position + 1];
+    this.offsetX = offsetsData.x;
+    this.offsetY = offsetsData.y;
+    this.baseOffsetX = offsetsData.x;
+    this.baseOffsetY = offsetsData.y;
     this.simpleRepresentation = this.type[0].toUpperCase();
     this.simpleColor = "white";
     this.spriteOffset = {
@@ -30,18 +34,30 @@ class Drone {
     this.sprite.src = null;
     this.settingMenu = MENU_INTERFACE;
     this.settingIndex = 2;
+    this.setGroup();
     this.getOwnerCenter();
     this.setSequence();
     this.setColor();
     this.setSimpleDrone();
+  }
+  setGroup() {
+    const groups = [
+      [0, 1, 2, 3],
+      [4, 6, 8],
+      [5, 7, 9],
+    ];
+    const grpAngles = [90, 180, 0];
+    groups.forEach((grp, i) => {
+      if (grp.includes(this.position)) this.groupAngle = grpAngles[i];
+    });
   }
   setColor() {
     if (this.design == 1) this.simpleColor = COLORS.COLOR_HAVOC;
     else if (this.design == 2) this.simpleColor = COLORS.COLOR_HERCULES;
   }
   getOwnerCenter() {
-    this.ownerCenter.x = this.owner.x;
-    this.ownerCenter.y = this.owner.y;
+    this.ownerCenter.x = this.owner.x; //; + this.offset.x;
+    this.ownerCenter.y = this.owner.y; //; + this.offset.y;
   }
   setSequence() {
     this.sprite.src = `./spacemap/drones/${this.type}/${this.lvl}/${Math.round(
@@ -49,12 +65,11 @@ class Drone {
     )}.png`;
   }
   draw() {
-    ctx.fillStyle = "red";
-    let x = this.owner.x - CAMERA.followX + halfScreenWidth;
-    let y = this.owner.y - CAMERA.followY + halfScreenHeight;
-    ctx.fillRect(x - 2.5, y - 2.5, 5, 5);
-    ctx.fillStyle = "black";
-    ctx.drawImage(this.sprite, this.renderX, this.renderY);
+    ctx.drawImage(
+      this.sprite,
+      this.renderX + this.offsetX,
+      this.renderY + this.offsetY
+    );
     ctx.globalAlpha = 1;
   }
   rotateSelf() {
@@ -81,11 +96,11 @@ class Drone {
   }
   rotateAround() {
     // TODO fix the offset bug
-    this.angle -= toRadians(90);
-    const cos = Math.cos(this.angle);
-    const sin = Math.sin(this.angle);
-    this.x -= (DRONE_DISTANCE + this.offset.x) * cos; //; + this.offset.x;
-    this.y += (DRONE_DISTANCE + this.offset.y) * sin; //; + this.offset.y;
+    this.offsetX = this.baseOffsetX * Math.cos(this.angle);
+    this.offsetY = this.baseOffsetY * Math.sin(this.angle);
+    this.angle -= toRadians(this.groupAngle);
+    this.x -= DEFAULTS.DRONE_DISTANCE * Math.cos(this.angle); //; + this.offset.x;
+    this.y += DEFAULTS.DRONE_DISTANCE * Math.sin(this.angle); //; + this.offset.y;
   }
   setSimpleDrone() {
     this.owner.simpleDroneRepresentations += this.simpleRepresentation;
@@ -110,8 +125,7 @@ class Drone {
     ctx.fillStyle = "black";
   }
   update() {
-    if (!SETTINGS.displayDrones) {
-      //CHANGE TO REAL SETTING REFERENCE
+    if (!SETTINGS.settingsArr[this.settingMenu][this.settingIndex]) {
       this.drawSimpleDrone();
       return;
     }
