@@ -13,13 +13,19 @@ class EventManager {
     };
     this.mouseInterval = null;
   }
-  handleLogoutRequest() {
+  handleLogoutRequest(btnCancel = false) {
+    if (btnCancel) {
+      document.querySelector("#non_ui_cntrl_logout").click();
+      return;
+    }
     if (HERO.isLogout) {
+      console.log("here too");
       manageLogoutWindow();
       HERO.setLogout();
       SOCKET.sendPacket([REQUEST_LOGOUT_STOP]);
       return;
     }
+    console.log("here");
     manageLogoutWindow();
     HERO.setLogout();
     SOCKET.sendPacket([REQUEST_LOGOUT]);

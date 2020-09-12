@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.5.2";
+const BUILD_VERSION = "0.5.3";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
@@ -178,6 +178,7 @@ const resetGamemap = () => {
   setGamemapObjects();
 };
 const terminateGame = () => {
+  return;
   END = true;
   window.close();
 };

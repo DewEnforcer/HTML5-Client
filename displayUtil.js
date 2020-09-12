@@ -122,11 +122,22 @@ const manageLogoutWindow = () => {
   } else {
     MAIN.writeToLog("logout_init", true);
     let window = document.createElement("div");
-    window.classList.add("logout_window", true);
-    window.innerHTML = `<span>Logging out in:</span><span id="logout_countdown">${
-      LOGOUT_TIME / 1000
-    }</span>`;
+    window.classList.add("logout_window", "body_active");
+    window.innerHTML = `<div class="header header_active"><div><img src="./spacemap/ui/uiIcon/logout_normal.png"></div><span>${
+      TEXT_TRANSLATIONS.logout_label
+    }</span></div><div class="main logout_main"><span class="translate_txt" transl_key="logout_txt_top">${
+      TEXT_TRANSLATIONS.logout_txt_top
+    }</span><span id="logout_countdown">${LOGOUT_TIME / 1000}</span><span>${
+      TEXT_TRANSLATIONS.logout_txt_bottom
+    }</span></div>`;
+    const btn = document.createElement("button");
+    btn.innerText = TEXT_TRANSLATIONS.cancel;
+    btn.classList.add("logout_btn");
+    btn.addEventListener("click", (ev) =>
+      EVENT_MANAGER.handleLogoutRequest(true)
+    );
     document.body.appendChild(window);
+    document.querySelector(".logout_main").appendChild(btn);
     initLogoutCountdown();
   }
 };

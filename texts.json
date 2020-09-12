@@ -7,6 +7,7 @@
     "log_label": "Log",
     "settings_label": "Settings",
     "connection_label": "Connection information",
+    "logout_label": "Logout",
     "attack": "Commencing attack!",
     "no_range": "Out of range",
     "end_attack": "Weapons offline",
@@ -37,7 +38,9 @@
     "try_again": "Retry",
     "cancel": "Cancel",
     "unknown_map": "Unknown",
-    "map_name_title": "MAP"
+    "map_name_title": "MAP",
+    "logout_txt_top": "You will be logged out in:",
+    "logout_txt_bottom": "seconds"
   },
   "cz": {
     "welcome_log": "Vítej v LOGIS-Systems",
@@ -47,6 +50,7 @@
     "log_label": "Log",
     "settings_label": "Nastavení",
     "connection_label": "Informace o připojení",
+    "logout_label": "Logout",
     "attack": "Zahajuji útok!",
     "no_range": "Mimo dosah",
     "end_attack": "Zbraně vypnuty",
@@ -77,6 +81,8 @@
     "try_again": "Opakovat",
     "cancel": "Zrušit",
     "unknown_map": "Neznámá",
-    "map_name_title": "MAPA"
+    "map_name_title": "MAPA",
+    "logout_txt_top": "Tvá loď bude odhlášena za:",
+    "logout_txt_bottom": "sekund"
   }
 }

@@ -26,6 +26,7 @@ class UI {
       el.setAttribute("select", "false");
       el.setAttribute("for", cntrl.type);
       el.classList.add("btn_controller_mini");
+      el.id = "non_ui_cntrl_" + cntrl.type;
       let xTotal = cntrl.x;
       let yTotal = cntrl.y;
       el.style.left = xTotal + "px";
@@ -191,6 +192,7 @@ class UI {
     }
   }
   handleNonUIControllerClick(ev) {
+    console.log(ev);
     ev.preventDefault();
     const contrl = ev.currentTarget;
     const action = contrl.getAttribute("for");
