@@ -209,7 +209,7 @@ class UI {
         EVENT_MANAGER.handleLogoutRequest();
         break;
       case "help":
-        alert("Figure it out yourself lol");
+        //alert("Figure it out yourself lol");
         break;
       case "fullscreen":
         MAIN.reqFullScreen();

@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.5.3";
+const BUILD_VERSION = "0.5.4";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
@@ -103,6 +103,8 @@ const initiatePostHero = () => {
   gameInit = true;
   MAIN.translateGame(true);
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);
+  const voice = new Sound(`./spacemap/audio/start/voiceReady.mp3`);
+  voice.play();
   welcome.play();
   MAIN.writeToLog("welcome_log", true);
   drawGame();
@@ -178,7 +180,6 @@ const resetGamemap = () => {
   setGamemapObjects();
 };
 const terminateGame = () => {
-  return;
   END = true;
   window.close();
 };

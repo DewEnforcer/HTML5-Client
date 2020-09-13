@@ -75,9 +75,11 @@ class Hero {
   processDestMinimap({ x, y }) {
     let destX = Math.round(x);
     let destY = Math.round(y);
-    let time =
-      (getDistance(this.ship.x, this.ship.y, destX, destY) / this.speed) * 1000;
+    let time = Math.round(
+      (getDistance(this.ship.x, this.ship.y, destX, destY) / this.speed) * 1000
+    );
     this.ship.setDestination(destX, destY, time);
+    SOCKET.sendPacket([MOV_DATA, destX, destY, time]);
   }
   processDest() {
     if (!EVENT_MANAGER.isMouseDown) return;
@@ -85,8 +87,10 @@ class Hero {
     let dest = convertToMapCoords(EVENT_MANAGER.mouse);
     let destX = Math.round(dest.x);
     let destY = Math.round(dest.y);
-    let time =
-      (getDistance(this.ship.x, this.ship.y, destX, destY) / this.speed) * 1000;
+    let time = Math.round(
+      (getDistance(this.ship.x, this.ship.y, destX, destY) / this.speed) * 1000
+    );
     this.ship.setDestination(destX, destY, time);
+    SOCKET.sendPacket([MOV_DATA, destX, destY, time]);
   }
 }

@@ -174,11 +174,13 @@ const handlePortalJump = (data) => {
   const portal = getPortalById(data[0]);
   if (portal == null) return;
   const sound = new Sound(`./spacemap/audio/portal/portalJump.mp3`);
+  const voice = new Sound(`./spacemap/audio/portal/voicePortalJump.mp3`);
+  voice.play();
   sound.play();
   portal.activate();
 };
 const handlePortalRange = () => {
-  writeToLog(TEXT_TRANSLATIONS.port_away, true);
+  MAIN.writeToLog(TEXT_TRANSLATIONS.port_away);
 };
 const getShipById = (id) => {
   let ship = null;

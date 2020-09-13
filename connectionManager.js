@@ -34,6 +34,7 @@ class Socket {
   }
   DataHandler({ data }) {
     data = data.split("|");
+    console.log(data);
     switch (data[1]) {
       case HERO_INIT:
         MAIN.initHero(data);
@@ -75,6 +76,9 @@ class Socket {
       case PORTAL_REQUEST_ACTIVATE:
         handlePortalJump(data);
         break;
+      case PORTAL_REQUEST_FAIL:
+        handlePortalRange();
+        break;
       case CHANGE_MAP:
         HERO.changeMap(data[2]);
         break;
@@ -92,7 +96,7 @@ class Socket {
   }
   initiateSocketListeners() {
     this.socket.addEventListener("open", () => {
-      this.sendPacket([CONNECTION_DATA, sessionID]);
+      this.sendPacket([CONNECTION_DATA, userID, sessionID, GAME_HASH]);
       this.connected = true;
     });
     this.socket.addEventListener("error", this.handleDisconnected);

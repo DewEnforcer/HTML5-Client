@@ -33,5 +33,8 @@ class ShipManager {
     data = trimData(data);
     const ship = getShipById(data[0]);
     ship.teleport(Number(data[1]), Number(data[2]));
+    if (ship.isHero) {
+      MINIMAP.minimapNavigating = false;
+    }
   }
 }
