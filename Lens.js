@@ -49,7 +49,6 @@ class Lens {
       this.spread.y -
       CAMERA.followY / this.star.z +
       halfScreenHeight; //count real distance to render one to the center
-    //console.log(this.renderX, this.renderY);
   }
   draw() {
     if (!this.display) return;

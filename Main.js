@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.5.6";
+const BUILD_VERSION = "0.5.7";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data

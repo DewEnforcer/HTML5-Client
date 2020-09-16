@@ -1,8 +1,8 @@
 class LensFlare {
   constructor(id, x, y, z, lenses = 5) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
+    this.x = Number(x);
+    this.y = Number(y);
+    this.z = Number(z);
     this.id = id;
     this.sprite = new Image();
     this.sprite.src = null;
@@ -43,14 +43,16 @@ class LensFlare {
   }
   updateLenses() {
     let display = this.display;
-    if (SETTINGS.settingsArr[this.settingMenu][this.settingIndex] != 4)
+    if (SETTINGS.settingsArr[this.settingMenu][this.settingIndex] != 4) {
       display = false;
+    }
     this.lenses.forEach((lens) => (lens.display = display));
   }
   generateLenses() {
     for (let i = 1; i <= this.lensesAmount; i++) {
       this.lenses.push(new Lens(this, i));
     }
+    console.log(this.lenses);
   }
   resetSequence() {
     this.seq = 0;

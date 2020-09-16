@@ -88,6 +88,13 @@ class Socket {
         break;
       case USER_DATA_SEPERATE:
         HERO.handleNewData(data);
+        break;
+      case LOG_MESSAGE:
+        MAIN.writeToLog(data[2], true);
+        break;
+      case REPAIR_BOT_STATUS:
+        HERO.setRepairBot(data[2]);
+        break;
       default:
         break;
     }

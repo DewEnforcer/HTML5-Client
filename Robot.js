@@ -32,8 +32,13 @@ class Robot {
     this.frame = 0;
   }
   isActive() {
-    if (this.active && !this.soundPlaying) this.sound.play();
-    else if (this.soundPlaying) this.sound.stop();
+    if (this.active && !this.soundPlaying) {
+      this.sound.play();
+      this.soundPlaying = true;
+    } else if (!this.active && this.soundPlaying) {
+      this.sound.stop();
+      this.soundPlaying = false;
+    }
   }
   setRender() {
     this.renderX = this.owner.render.renderX + this.owner.offset.x;

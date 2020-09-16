@@ -131,25 +131,24 @@ class ActionBar {
   }
   handleSlotChangeKeyboard(keyPress) {
     const slotID = BTN_SWITCH.indexOf(keyPress);
-    console.log(slotID);
-    if (slotID == this.selectedActionBarItem) return;
-    this.selectedActionBarItem = slotID;
     this.handleItemTriggered([
       this.actionBarItems[slotID].menu,
       this.actionBarItems[slotID].id,
     ]);
+    if (slotID == this.selectedActionBarItem) return;
+    this.selectedActionBarItem = slotID;
     this.selectActionbarItem();
     this.selectItemSound.play();
   }
   handleSlotClick(e) {
     e.preventDefault();
     const slotID = Number(e.currentTarget.id.split("_")[0]);
-    if (slotID == this.selectedActionBarItem) return;
-    this.selectedActionBarItem = slotID;
     this.handleItemTriggered([
       this.actionBarItems[slotID].menu,
       this.actionBarItems[slotID].id,
     ]);
+    if (slotID == this.selectedActionBarItem) return;
+    this.selectedActionBarItem = slotID;
     this.selectActionbarItem();
     this.selectItemSound.play();
   }
@@ -306,9 +305,9 @@ class ActionBar {
   handleSubMenuItemSelect(ev) {
     ev.preventDefault();
     const id = Number(ev.currentTarget.attributes.item_id.value);
+    this.handleItemTriggered([this.selectedSubmenu, id]);
     if (id == this.subMenusSelectedItems[this.selectedSubmenu]) return;
     this.subMenusSelectedItems[this.selectedSubmenu] = id;
-    this.handleItemTriggered([this.selectedSubmenu, id]);
     this.selectSubMenuItem();
     this.selectItemSound.play();
   }

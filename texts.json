@@ -41,7 +41,8 @@
     "map_name_title": "MAP",
     "logout_txt_top": "You will be logged out in:",
     "logout_txt_bottom": "seconds",
-    "config_cd": "Warning: Configuration can only be changed every 5 seconds."
+    "config_cd": "Warning: Configuration can only be changed every 5 seconds.",
+    "repair_error_battle": "Cannot activate repair bot while in battle!"
   },
   "cz": {
     "welcome_log": "Vítej v LOGIS-Systems",
@@ -71,7 +72,7 @@
     "explosion_sett": "Exploze",
     "engine_sett": "Pohon",
     "language_sett": "Jazyk",
-    "show_nick_sett": "Zobraz reaálné přezdívky",
+    "show_nick_sett": "Zobraz reálné přezdívky",
     "hit_display_sett": "Zobraz trefy",
     "drone_display_sett": "Zobraz letouny",
     "minimap_bg_sett": "Zobraz pozadí minimapy",
@@ -85,6 +86,7 @@
     "map_name_title": "MAPA",
     "logout_txt_top": "Tvá loď bude odhlášena za:",
     "logout_txt_bottom": "sekund",
-    "config_cd": "Upozornění! Změna konfigurace je možná jen každých pět sekund."
+    "config_cd": "Upozornění! Změna konfigurace je možná jen každých pět sekund.",
+    "repair_error_battle": "Opravovací robot nemůže být aktivován v boji!"
   }
 }

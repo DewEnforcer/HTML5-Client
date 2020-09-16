@@ -55,6 +55,9 @@ class Hero {
     this.isLogout = !this.isLogout;
     this.lockedControls = this.isLogout;
   }
+  setRepairBot(bool) {
+    this.ship.robot.active = !!Number(bool);
+  }
   requestTarget(target) {
     if (target != this.ship.ID) SOCKET.sendPacket([REQUEST_TARGET, target]);
   }
