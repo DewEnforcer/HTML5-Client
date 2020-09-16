@@ -7,14 +7,21 @@ class Background {
     this.renderY = null;
     this.sprite = new Image();
     this.sprite.src = `${PATH_TO_BG}/background${this.mapID}.jpg`;
-    this.relativeX = mapWidth / 2100;
-    this.relativeY = mapHeight / 1310;
+    this.relativeX = 10;
+    this.relativeY = 10;
     this.settingMenu = MENU_GRAPHICS;
     this.settingIndex = 0;
+    this.setCoords();
+  }
+  setCoords() {
+    this.x = ((mapScale - 1) * realMapWidth) / 4 / 10;
+    this.y = ((mapScale - 1) * realMapHeight) / 4 / 10;
+    console.log(this.x, this.y);
   }
   setNewMap() {
     this.mapID = HERO.mapID;
     this.sprite.src = `${PATH_TO_BG}/background${this.mapID}.jpg`;
+    this.setCoords();
   }
   draw() {
     ctx.drawImage(this.sprite, this.renderX, this.renderY);

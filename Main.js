@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.5.7";
+const BUILD_VERSION = "0.5.8";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
@@ -36,6 +36,7 @@ const MAX_MISSILE_FLY_TIME = 5000;
 const clickRange = 100;
 const mapWidth = 21000;
 const mapHeight = 13000;
+let realMapWidth, realMapHeight, mapScale;
 const LOGOUT_TIME = 5000;
 let END = false;
 let SHOW_FPS = false;
@@ -97,8 +98,8 @@ const initiatePostHero = () => {
   SETTINGS = new Settings();
   SETTINGS.genUi();
   MINIMAP = new Minimap();
-  BG_LAYER = new Background(HERO.mapID);
   setGamemapObjects();
+  BG_LAYER = new Background(HERO.mapID);
   gameInit = true;
   MAIN.translateGame(true);
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);
@@ -109,26 +110,35 @@ const initiatePostHero = () => {
   drawGame();
 };
 const setGamemapObjects = () => {
-  MAP_OBJECTS_LIST[HERO.mapID].planets.forEach((planet) => {
+  let multiplier = 1;
+  const mapObjectList = MAP_OBJECTS_LIST[HERO.mapID];
+  if ("scale" in mapObjectList === true) {
+    multiplier = mapObjectList.scale;
+  }
+  mapScale = multiplier;
+  console.log(mapScale);
+  realMapWidth = mapWidth * multiplier;
+  realMapHeight = mapHeight * multiplier;
+  mapObjectList.planets.forEach((planet) => {
     MAP_PLANETS.push(
       new Planet(planet.id, planet.x, planet.y, planet.z, planet.mScale)
     );
   });
-  MAP_OBJECTS_LIST[HERO.mapID].portals.forEach((portal) => {
+  mapObjectList.portals.forEach((portal) => {
     MAP_PORTALS.push(new Portal(portal.x, portal.y, portal.id));
   });
-  MAP_OBJECTS_LIST[HERO.mapID].stations.forEach((sta) => {
+  mapObjectList.stations.forEach((sta) => {
     MAP_STATIONS.push(
       new Station(sta.x, sta.y, sta.z, sta.rotation, sta.type, sta.id)
     );
   });
-  MAP_OBJECTS_LIST[HERO.mapID].lensflares.forEach((lens) => {
+  mapObjectList.lensflares.forEach((lens) => {
     LENSFLARE_LAYER.push(new LensFlare(lens.id, lens.x, lens.y, lens.z));
   });
-  MAP_OBJECTS_LIST[HERO.mapID].nebulas.forEach((neb) => {
+  mapObjectList.nebulas.forEach((neb) => {
     NEBULA_LAYER.push(new Nebula(neb.x, neb.y, neb.z, neb.type, neb.id));
   });
-  mapName = MAP_OBJECTS_LIST[HERO.mapID].name;
+  mapName = mapObjectList.name;
   if (typeof mapName === "undefined")
     mapName = TEXT_TRANSLATIONS["unknown_map"];
   MESSAGE_LAYER.push(
@@ -173,10 +183,10 @@ const drawGame = (timestamp) => {
 const resetGamemap = () => {
   const sound = new Sound(`./spacemap/audio/portal/mapChange.mp3`);
   cleanupGameobjects();
+  setGamemapObjects();
   sound.play();
   MINIMAP.changeBackground();
   BG_LAYER.setNewMap();
-  setGamemapObjects();
 };
 const terminateGame = () => {
   END = true;

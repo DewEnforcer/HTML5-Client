@@ -25,8 +25,8 @@ class Minimap {
   }
   minimapManager() {
     const offset = 1;
-    let minimapX = MAIN.MINIMAP_C.width * (HERO.ship.x / mapWidth);
-    let minimapY = MAIN.MINIMAP_C.height * (HERO.ship.y / mapHeight);
+    let minimapX = MAIN.MINIMAP_C.width * (HERO.ship.x / realMapWidth);
+    let minimapY = MAIN.MINIMAP_C.height * (HERO.ship.y / realMapHeight);
     MAIN.MINIMAP_CTX.fillStyle = "black";
     MAIN.MINIMAP_CTX.strokeStyle = "grey";
     MAIN.MINIMAP_CTX.lineWidth = 2;
@@ -89,8 +89,8 @@ class Minimap {
   leadHero(ev) {
     let coords = EVENT_MANAGER.getCursorPosition(MAIN.MINIMAP_C, ev);
     this.dotCoords = { ...coords };
-    coords.x = Math.round((coords.x / MAIN.MINIMAP_C.width) * mapWidth);
-    coords.y = Math.round((coords.y / MAIN.MINIMAP_C.height) * mapHeight);
+    coords.x = Math.round((coords.x / MAIN.MINIMAP_C.width) * realMapWidth);
+    coords.y = Math.round((coords.y / MAIN.MINIMAP_C.height) * realMapHeight);
     HERO.processDestMinimap(coords);
     this.minimapNavigating = true;
   }
@@ -142,8 +142,8 @@ class Minimap {
   drawShips(offset) {
     MAP_SHIPS.forEach((ship) => {
       if (ship.isHero) return; //dont draw hero
-      let minimapX = MAIN.MINIMAP_C.width * (ship.x / mapWidth);
-      let minimapY = MAIN.MINIMAP_C.height * (ship.y / mapHeight);
+      let minimapX = MAIN.MINIMAP_C.width * (ship.x / realMapWidth);
+      let minimapY = MAIN.MINIMAP_C.height * (ship.y / realMapHeight);
       let color = COLORS.COLOR_ENEMY;
       if (ship.faction == HERO.ship.faction) color = COLORS.COLOR_ALLY;
       MAIN.MINIMAP_CTX.fillStyle = color;
@@ -158,8 +158,8 @@ class Minimap {
   drawPortals() {
     const offset = 5.5;
     MAP_PORTALS.forEach((portal) => {
-      let minimapX = MAIN.MINIMAP_C.width * (portal.x / mapWidth);
-      let minimapY = MAIN.MINIMAP_C.height * (portal.y / mapHeight);
+      let minimapX = MAIN.MINIMAP_C.width * (portal.x / realMapWidth);
+      let minimapY = MAIN.MINIMAP_C.height * (portal.y / realMapHeight);
       MAIN.MINIMAP_CTX.drawImage(
         this.portalIconSprite,
         minimapX - offset,
@@ -169,13 +169,13 @@ class Minimap {
   }
   drawPlanets() {
     if (!SETTINGS.settingsArr[MENU_GRAPHICS][1]) return;
-    const minimapScaleX = MAIN.MINIMAP_C.width / mapWidth;
-    const minimapScaleY = MAIN.MINIMAP_C.height / mapHeight;
+    const minimapScaleX = MAIN.MINIMAP_C.width / realMapWidth;
+    const minimapScaleY = MAIN.MINIMAP_C.height / realMapHeight;
     MAP_PLANETS.forEach((p) => {
       let minScaleX = minimapScaleX * p.minimapScale;
       let minScaleY = minimapScaleY * p.minimapScale;
-      let minimapX = MAIN.MINIMAP_C.width * (p.x / mapWidth) * p.z;
-      let minimapY = MAIN.MINIMAP_C.height * (p.y / mapHeight) * p.z;
+      let minimapX = MAIN.MINIMAP_C.width * (p.x / realMapWidth) * p.z;
+      let minimapY = MAIN.MINIMAP_C.height * (p.y / realMapHeight) * p.z;
       MAIN.MINIMAP_CTX.drawImage(
         p.sprite,
         minimapX - p.offset.x * minScaleX,
@@ -186,11 +186,11 @@ class Minimap {
     });
   }
   drawStations() {
-    const minimapScaleX = MAIN.MINIMAP_C.width / mapWidth;
-    const minimapScaleY = MAIN.MINIMAP_C.height / mapHeight;
+    const minimapScaleX = MAIN.MINIMAP_C.width / realMapWidth;
+    const minimapScaleY = MAIN.MINIMAP_C.height / realMapHeight;
     MAP_STATIONS.forEach((sta) => {
-      let minimapX = MAIN.MINIMAP_C.width * (sta.x / mapWidth) * sta.z;
-      let minimapY = MAIN.MINIMAP_C.height * (sta.y / mapHeight) * sta.z;
+      let minimapX = MAIN.MINIMAP_C.width * (sta.x / realMapWidth) * sta.z;
+      let minimapY = MAIN.MINIMAP_C.height * (sta.y / realMapHeight) * sta.z;
       MAIN.MINIMAP_CTX.drawImage(
         sta.sprite,
         minimapX - sta.offset.x * minimapScaleX,
