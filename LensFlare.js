@@ -10,15 +10,12 @@ class LensFlare {
     this.seq = 0;
     this.frame = 0;
     this.activateOn = 4;
-    this.maxSeq = 14;
+    this.maxSeq = id > 0 ? 0 : 14;
     this.angle = 0;
     this.maxAngle = 360;
     this.renderX = x;
     this.renderY = y;
-    this.offset = {
-      x: 200,
-      y: 200,
-    };
+    this.offset = OFFSET_DATA.LENS_OFFSETS[this.id];
     this.display = false;
     this.lensesAmount = lenses;
     this.settingMenu = MENU_GRAPHICS;
@@ -68,6 +65,7 @@ class LensFlare {
     }
   }
   setSequence() {
+    if (this.maxSeq == 0) return;
     this.seq++;
     if (this.seq > this.maxSeq) this.resetSequence();
     this.setSprite();

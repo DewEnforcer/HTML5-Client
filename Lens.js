@@ -2,7 +2,7 @@ class Lens {
   constructor(star, lensPos) {
     this.lensPos = lensPos;
     this.sprite = new Image();
-    this.sprite.src = `./spacemap/lensflares/lensflare${star.id}/lenses/${lensPos}.png`;
+    this.sprite.src = `./spacemap/lensflares/lensflare${star.id}/lens/${lensPos}.png`;
     this.ID = getLaserID();
     this.star = star;
     this.renderX = 0;

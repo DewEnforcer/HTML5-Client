@@ -26,6 +26,7 @@ class Fetcher {
         progress++;
         OFFSET_DATA = data.offsets;
         progress++;
+        LENS_AMOUNTS = data.lensNumber;
         manageLoadingBar();
       });
   }

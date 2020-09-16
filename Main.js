@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.5.8";
+const BUILD_VERSION = "0.5.9";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
@@ -18,6 +18,7 @@ let SUB_MENU_ITEMS;
 let SHIPS_ENGINES = null;
 let LASER_POS = null;
 let MAP_OBJECTS_LIST = null;
+let LENS_AMOUNTS = null;
 let DRONE_POSITIONS;
 // btns
 const BTN_FPS = 102;
@@ -133,7 +134,9 @@ const setGamemapObjects = () => {
     );
   });
   mapObjectList.lensflares.forEach((lens) => {
-    LENSFLARE_LAYER.push(new LensFlare(lens.id, lens.x, lens.y, lens.z));
+    LENSFLARE_LAYER.push(
+      new LensFlare(lens.id, lens.x, lens.y, lens.z, LENS_AMOUNTS[lens.id])
+    );
   });
   mapObjectList.nebulas.forEach((neb) => {
     NEBULA_LAYER.push(new Nebula(neb.x, neb.y, neb.z, neb.type, neb.id));

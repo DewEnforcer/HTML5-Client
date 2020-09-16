@@ -2,7 +2,7 @@ class Engine {
   constructor(enginePoint) {
     this.enginePoint = enginePoint;
     this.smoke = [];
-    this.maxSmokes = 20;
+    this.maxSmokes = 10;
     this.fadeOutFrame = 11;
     this.startFrame = 0;
     this.seq = 0;
