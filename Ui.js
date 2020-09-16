@@ -108,7 +108,6 @@ class UI {
     this.getUiSizes();
     this.setUiPos(true);
     this.setUiStatus(true);
-    this.controllers[this.settingsIndex].click(); //closes settings on init
   }
   getUiSizes() {
     this.UiSizes = [];
