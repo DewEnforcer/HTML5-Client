@@ -16,6 +16,16 @@ class ShipManager {
     ship.SHD = Number(data[2]);
     ship.maxHP = Number(data[3]);
     ship.maxSHD = Number(data[4]);
+    MAIN.updateHeroStats();
+  }
+  static removeShip(data) {
+    data = trimData(data);
+    MAP_SHIPS.some((ship, i) => {
+      if (ship.ID == data[0]) {
+        MAP_SHIPS.splice(i, 1);
+        return true;
+      }
+    });
   }
   static moveShip(data) {
     data = trimData(data);

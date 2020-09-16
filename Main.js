@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.5.4";
+const BUILD_VERSION = "0.5.5";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
@@ -20,14 +20,13 @@ let LASER_POS = null;
 let MAP_OBJECTS_LIST = null;
 let DRONE_POSITIONS;
 // btns
-const BTN_FPS = "f";
-const BTN_ATTACK = " ";
-const BTN_LOGOUT = "l";
-const BTN_PORT = "j";
-const BTN_SHIP = "q";
-const BTN_RNDMOV = "=";
-const BTN_FULLSCREEN = "f11";
-const BTN_SWITCH = ["+", "ě", "š", "č", "ř", "ž", "ý", "á", "í", "é"];
+const BTN_FPS = 102;
+const BTN_ATTACK = 32;
+const BTN_LOGOUT = 108;
+const BTN_PORT = 106;
+const BTN_FULLSCREEN = 122;
+const BTN_SWITCH = [43, 283, 353, 269, 345, 382, 253, 225, 237, 233];
+const BTN_CONFIG = 99;
 //game vars not fetched
 const REFRESH_TIME = 100;
 const LASER_SPEED = 1100;

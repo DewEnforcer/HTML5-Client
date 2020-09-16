@@ -15,3 +15,4 @@ const ITEM_SELECT = "BIS";
 const ACTIONBAR_CHANGE = "ACBC";
 const UI_POS_CHANGE = "UIPC";
 const UI_STATE_CHANGE = "UISC";
+const CONFIG_CHANGE = "CFGC";

@@ -38,6 +38,8 @@ class CombatLayer {
     ship = getShipById(data[0]);
     target = getShipById(data[1]);
     ship.setTarget(target.ID);
+    ship.deactivateLasers = Date.now() + 5000;
+    ship.startAttack();
     laserID = data[2];
     ship.isAttacking = true;
     const laserBlast = new Sound(`./spacemap/audio/lasers/laser${laserID}.mp3`);

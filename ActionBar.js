@@ -24,18 +24,6 @@ class ActionBar {
     ];
     this.SUB_MENU_AMOUNT = 10;
     this.actionBarItems = [];
-    this.actionBarKeyTransl = {
-      "+": 0,
-      ě: 1,
-      š: 2,
-      č: 3,
-      ř: 4,
-      ž: 5,
-      ý: 6,
-      á: 7,
-      í: 8,
-      é: 9,
-    };
     this.selectedActionBarItem = 0;
     this.selectItemSound = new Sound(
       `./spacemap/audio/ui/selectItem.mp3`,
@@ -142,7 +130,8 @@ class ActionBar {
     this.menuOpen = !this.menuOpen;
   }
   handleSlotChangeKeyboard(keyPress) {
-    const slotID = this.actionBarKeyTransl[keyPress];
+    const slotID = BTN_SWITCH.indexOf(keyPress);
+    console.log(slotID);
     if (slotID == this.selectedActionBarItem) return;
     this.selectedActionBarItem = slotID;
     this.handleItemTriggered([

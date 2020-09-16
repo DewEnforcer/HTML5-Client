@@ -11,10 +11,12 @@ class Ship {
     shd,
     maxHP,
     maxSHD,
-    robotType = 1,
+    robotType = 0,
+    isNpc = 0,
     isHero = false
   ) {
     this.isHero = isHero;
+    this.isNpc = Boolean(Number(isNpc));
     this.shipID = shipID;
     this.ship = SHIP_NAMES[shipID];
     this.name = username;
@@ -61,6 +63,7 @@ class Ship {
     //
     this.isCloaked = false;
     //
+    this.deactivateLasers = 0;
     this.laserClass = getLaserClass(shipID);
     //
     this.engineClass = 10;
@@ -83,7 +86,6 @@ class Ship {
   }
   setTarget(target) {
     this.targetID = target;
-    if (this.isAttacking) this.rotate();
   }
   teleport(x, y) {
     this.isFly = false;
@@ -151,7 +153,7 @@ class Ship {
     }
   }
   setSequence() {
-    if (this.setSmooth) {
+    if (this.setSmooth || this.isAttacking) {
       const newNumEnd = Math.round(
         toDegs(this.pointingAngle) / this.rotationCalc
       );
@@ -194,6 +196,10 @@ class Ship {
   resetHover() {
     this.isHover = false;
   }
+  resetAttackState() {
+    if (this.isHero) return;
+    if (this.deactivateLasers <= Date.now()) this.stopAttack();
+  }
   stopFlying() {
     this.isFly = false;
   }
@@ -220,25 +226,31 @@ class Ship {
       this.render.renderY,
       this.nickOffsetY
     );
-    drawRank(
-      this.rank,
-      this.render.renderX + this.offset.x - this.nickOffset,
-      this.render.renderY,
-      this.nickOffsetY
-    );
-    drawFaction(
-      this.render.renderX + this.offset.x + this.nickOffset,
-      this.render.renderY,
-      this.faction,
-      this.nickOffsetY
-    );
-    drawGateRings(
-      7,
-      this.render.renderX + this.offset.x - this.nickOffset,
-      this.render.renderY,
-      this.nickOffsetY
-    );
-    drawFormation(0, this.render.renderX + this.offset.x, this.render.renderY);
+    if (!this.isNpc) {
+      drawRank(
+        this.rank,
+        this.render.renderX + this.offset.x - this.nickOffset,
+        this.render.renderY,
+        this.nickOffsetY
+      );
+      drawFaction(
+        this.render.renderX + this.offset.x + this.nickOffset,
+        this.render.renderY,
+        this.faction,
+        this.nickOffsetY
+      );
+      drawGateRings(
+        7,
+        this.render.renderX + this.offset.x - this.nickOffset,
+        this.render.renderY,
+        this.nickOffsetY
+      );
+      drawFormation(
+        0,
+        this.render.renderX + this.offset.x,
+        this.render.renderY
+      );
+    }
     if (this.isHero || this.ID == HERO.ship.targetID) {
       displayShipStructure(
         this.HP,
@@ -264,12 +276,13 @@ class Ship {
     this.drones.forEach((drn) => drn.update());
   }
   update() {
+    this.resetAttackState();
+    if (this.isFly || this.isAttacking) this.rotate();
     if (this.isFly) {
       if (this.isHover) {
         //ship state has changed from hover to flying one
         this.resetHover();
       }
-      this.rotate();
       this.changePos();
     }
     this.changeRenderPos();

@@ -43,8 +43,8 @@ class UI {
     UI_DATA.elements[jsonName].forEach((el) => {
       const wrapper = document.createElement("div");
       wrapper.classList.add(`${el.name}_wrapper`, "wrapper_main_" + className);
+      const icon = document.createElement("img");
       if (el.icon != null) {
-        const icon = document.createElement("img");
         icon.src = `./spacemap/ui/${dir}/${el.icon}.png`;
         icon.id = `${el.name}_icon`;
         icon.classList.add("icon_info");
@@ -69,6 +69,14 @@ class UI {
         ) => EVENT_MANAGER.handleInfoVisualChange(ev));
       }
       target.appendChild(wrapper);
+      //add event listeners
+      switch (el.name) {
+        case "CFG":
+          icon.addEventListener("click", () => {
+            HERO.changeConfigRequest();
+          });
+          break;
+      }
     });
   }
   generateControlsUI() {

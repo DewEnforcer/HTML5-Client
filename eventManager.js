@@ -30,9 +30,9 @@ class EventManager {
     HERO.setLogout();
     SOCKET.sendPacket([REQUEST_LOGOUT]);
   }
-  handleKeyPress({ key }) {
+  handleKeyPress({ key, keyCode }) {
     if (!gameInit) return;
-    switch (key) {
+    switch (keyCode) {
       case BTN_FPS:
         manageFpsWindow();
         break;
@@ -42,18 +42,14 @@ class EventManager {
       case BTN_PORT:
         requestPortalJump();
         break;
-      case BTN_SHIP:
-        SOCKET.sendPacket([TEST_SHIP]);
-        break;
       case BTN_ATTACK:
         HERO.handleAttackState();
         break;
-      case BTN_RNDMOV:
-        SOCKET.sendPacket([RANDOM_MOV]);
-        break;
+      case BTN_CONFIG:
+        HERO.changeConfigRequest();
       default:
-        if (BTN_SWITCH.includes(key))
-          MAIN.actionBar.handleSlotChangeKeyboard(key);
+        if (BTN_SWITCH.includes(keyCode))
+          MAIN.actionBar.handleSlotChangeKeyboard(keyCode);
         break;
     }
   }
@@ -85,6 +81,7 @@ class EventManager {
     this.checkHover();
   }
   initInterval() {
+    HERO.processDest();
     this.mouseInterval = setInterval(() => {
       HERO.processDest();
     }, 75);

@@ -126,15 +126,13 @@ class Client {
     CAMERA = new Camera(HERO.ship);
     initiatePostHero();
     //init values
+    this.updateHeroStats();
+  }
+  updateHeroStats() {
     this.handleShipInfoData("HP", HERO.ship.HP, HERO.ship.maxHP);
     this.handleShipInfoData("SHD", HERO.ship.SHD, HERO.ship.maxSHD);
     this.handleShipInfoData("SPEED", HERO.speed, 0);
     this.handleShipInfoData("CFG", HERO.config, 0);
-    this.handleShipInfoData("EP", 100000);
-    this.handleShipInfoData("LVL", 1);
-    this.handleShipInfoData("HON", 100);
-    this.handleShipInfoData("CRED", 500000);
-    this.handleShipInfoData("URI", 5000);
   }
   generateInfoElements(className, jsonName, dir) {
     const target = document.querySelector("." + className + "_main");
@@ -144,8 +142,8 @@ class Client {
         `${el.name}_wrapper`,
         "wrapper_main_" + className + ""
       );
+      const icon = document.createElement("img");
       if (el.icon != null) {
-        const icon = document.createElement("img");
         icon.src = `./spacemap/ui/${dir}/${el.icon}.png`;
         icon.id = `${el.name}_icon`;
         icon.classList.add("icon_info");
@@ -170,6 +168,14 @@ class Client {
         ) => EVENT_MANAGER.handleInfoVisualChange(ev));
       }
       target.appendChild(wrapper);
+      //add event listeners
+      switch (el.name) {
+        case "CFG":
+          icon.addEventListener("click", () => {
+            HERO.changeConfigRequest();
+          });
+          break;
+      }
     });
   }
   handleShipInfoData(section, value, maxValue = 0) {

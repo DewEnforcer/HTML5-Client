@@ -4,6 +4,8 @@ class DroneManager {
     data.splice(0, 2);
     let ship = getShipById(data[0]);
     data.splice(0, 1);
+    ship.simpleDroneRepresentations = "";
+    ship.drones.splice(0, ship.drones.length);
     data.forEach((droneRaw, i) => {
       //if (i > 1) return;
       const drone = droneRaw.split(";");

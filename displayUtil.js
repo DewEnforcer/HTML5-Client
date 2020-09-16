@@ -68,6 +68,7 @@ const getDroneOffset = (drnString) => {
   return getTextOffset(DEFAULTS.DRONE_SIMPLE_FONT, drnString);
 };
 const drawRank = (rank, x, y, offsetY) => {
+  if (rank < 0) return;
   const xMargin = 18; //16 + 2
   const marginTOP = 14; //accounts for rank height
   let rankSprite = new Image();
@@ -75,6 +76,7 @@ const drawRank = (rank, x, y, offsetY) => {
   ctx.drawImage(rankSprite, x - xMargin, y + offsetY - marginTOP);
 };
 const drawFaction = (x, y, faction, offsetY) => {
+  if (faction == 0) return;
   const xMargin = 2;
   const marginTOP = 12; //accounts for faction height
   let factionSprite = new Image();

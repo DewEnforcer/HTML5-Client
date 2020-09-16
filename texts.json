@@ -40,7 +40,8 @@
     "unknown_map": "Unknown",
     "map_name_title": "MAP",
     "logout_txt_top": "You will be logged out in:",
-    "logout_txt_bottom": "seconds"
+    "logout_txt_bottom": "seconds",
+    "config_cd": "Warning: Configuration can only be changed every 5 seconds."
   },
   "cz": {
     "welcome_log": "Vítej v LOGIS-Systems",
@@ -83,6 +84,7 @@
     "unknown_map": "Neznámá",
     "map_name_title": "MAPA",
     "logout_txt_top": "Tvá loď bude odhlášena za:",
-    "logout_txt_bottom": "sekund"
+    "logout_txt_bottom": "sekund",
+    "config_cd": "Upozornění! Změna konfigurace je možná jen každých pět sekund."
   }
 }

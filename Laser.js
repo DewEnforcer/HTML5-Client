@@ -53,9 +53,6 @@ class Laser {
   setSpeed() {
     this.speed = speedVelocity(this.baseSpeed, this.angle);
     this.maxSpeedPerFrame = Math.abs(this.speed.x) + Math.abs(this.speed.y);
-    let timeToX = Math.abs(this.x - this.dest.x) / Math.abs(this.speed.x);
-    let timeToY = Math.abs(this.y - this.dest.y) / Math.abs(this.speed.y);
-    console.log(timeToX, timeToY);
   }
   terminate() {
     this.end = true;

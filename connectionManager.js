@@ -16,7 +16,6 @@ class Socket {
   handleConnBtn(ev) {
     ev.preventDefault();
     const data = ev.currentTarget.id.split("_");
-    console.log(data);
     if (data[1] == 1) {
       terminateGame();
     } else {
@@ -34,7 +33,6 @@ class Socket {
   }
   DataHandler({ data }) {
     data = data.split("|");
-    console.log(data);
     switch (data[1]) {
       case HERO_INIT:
         MAIN.initHero(data);
@@ -44,6 +42,9 @@ class Socket {
         break;
       case SHIP_SPAWN:
         ShipManager.createShip(data);
+        break;
+      case SHIP_DESPAWN:
+        ShipManager.removeShip(data);
         break;
       case TARGET_INFO:
         //add update ship stats etc
@@ -82,6 +83,11 @@ class Socket {
       case CHANGE_MAP:
         HERO.changeMap(data[2]);
         break;
+      case CONFIG_CHANGE_SERVER:
+        HERO.changeConfig(data[2]);
+        break;
+      case USER_DATA_SEPERATE:
+        HERO.handleNewData(data);
       default:
         break;
     }

@@ -39,6 +39,7 @@ class Hero {
         maxHP,
         maxSHD,
         repairBot,
+        0,
         true,
       ],
       false,
@@ -61,6 +62,18 @@ class Hero {
     SOCKET.sendPacket([CHANGE_LASER, laserID]);
     this.laserID = laserID;
   }
+  changeConfigRequest() {
+    const newCFG = this.config == 1 ? 2 : 1;
+    SOCKET.sendPacket([CONFIG_CHANGE, newCFG]);
+  }
+  changeConfig(isSuccess) {
+    if (isSuccess == 0) {
+      MAIN.writeToLog(TEXT_TRANSLATIONS.config_cd);
+      return;
+    }
+    this.config = this.config == 1 ? 2 : 1;
+    MAIN.handleShipInfoData("CFG", this.config, 0);
+  }
   handleAttackState() {
     if (this.ship.isAttacking) {
       SOCKET.sendPacket([STOP_ATTACK]);
@@ -71,6 +84,18 @@ class Hero {
       MAIN.writeToLog("attack", true);
       this.ship.startAttack();
     }
+  }
+  handleNewData(data) {
+    data = trimData(data);
+    data.forEach((newData) => {
+      newData = newData.split(";");
+      if (newData[0] == "SPEED") this.speed = newData[1];
+      MAIN.handleShipInfoData(
+        newData[0],
+        Number(newData[1]),
+        Number(newData[2])
+      );
+    });
   }
   processDestMinimap({ x, y }) {
     let destX = Math.round(x);
