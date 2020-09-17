@@ -57,15 +57,7 @@ class Missile {
     }
   }
   rotate() {
-    const maxTol = toRadians(10);
-    const animationFrameTime = 2000 / DELTA_TIME;
-    const ang = calcAngle(this.x, this.y, this.destX, this.destY);
-    if (ang > maxTol) {
-      this.anglePerFrame = ang / animationFrameTime;
-      this.targetAngle = ang;
-    } else {
-      this.angle = ang;
-    }
+    this.angle = calcAngle(this.x, this.y, this.destX, this.destY);
   }
   changePos() {
     this.x += this.speed.x * DELTA_TIME;
@@ -90,11 +82,6 @@ class Missile {
     );
   }
   terminate() {
-    if (this.travelToOffset) {
-      this.travelToOffset = false;
-      this.setTargetCoords(true);
-      return;
-    }
     ROCKET_LAYER.some((rocket, i) => {
       if (rocket.ID == this.ID) {
         ROCKET_LAYER.splice(i, 1);
@@ -123,7 +110,7 @@ class Missile {
     this.flyTime += DELTA_TIME;
     this.followTarget();
     this.rotate();
-    this.smoothRotate();
+    //this.smoothRotate();
     this.changePos();
     this.changeRenderPos();
     this.draw();

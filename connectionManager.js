@@ -95,6 +95,9 @@ class Socket {
       case REPAIR_BOT_STATUS:
         HERO.setRepairBot(data[2]);
         break;
+      case SET_ACTIONBAR_ITEMS:
+        MAIN.actionBar.setActionbarItems(data);
+        break;
       default:
         break;
     }

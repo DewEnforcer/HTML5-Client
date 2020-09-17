@@ -47,6 +47,9 @@ class EventManager {
         break;
       case BTN_CONFIG:
         HERO.changeConfigRequest();
+        break;
+      case BTN_ACTIONBAR_SUBMENU:
+        MAIN.actionBar.btnOpenMenu.click();
       default:
         if (BTN_SWITCH.includes(keyCode))
           MAIN.actionBar.handleSlotChangeKeyboard(keyCode);

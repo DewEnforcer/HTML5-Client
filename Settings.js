@@ -61,7 +61,13 @@ class Settings {
           options: ["Česky", "English"],
         },
       ],
-      [],
+      [
+        {
+          name: "actionbar_attack",
+          isCheck: true,
+          options: [],
+        },
+      ],
       [
         {
           name: "show_nick",

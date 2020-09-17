@@ -45,7 +45,7 @@ class CombatLayer {
     const laserBlast = new Sound(`./spacemap/audio/lasers/laser${laserID}.mp3`);
     let isRapidSalvo = false;
     let salvos = 1;
-    if (laserID == 2) isRapidSalvo = true;
+    if (laserID == 5) isRapidSalvo = true;
     if (isRapidSalvo)
       salvos = LASER_DATA.LASER_SALVO_POINTS[ship.laserClass].length;
     let i = 0;

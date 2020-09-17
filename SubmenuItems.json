@@ -46,42 +46,42 @@
   "1": [
     {
       "name": "r-310",
-      "id": 0,
-      "hasBar": true,
-      "isSelectable": true,
-      "hasAmount": true
-    },
-    {
-      "name": "plt-2026",
       "id": 1,
       "hasBar": true,
       "isSelectable": true,
       "hasAmount": true
     },
     {
-      "name": "plt-2021",
+      "name": "plt-2026",
       "id": 2,
       "hasBar": true,
       "isSelectable": true,
       "hasAmount": true
     },
     {
-      "name": "plt-3030",
+      "name": "plt-2021",
       "id": 3,
       "hasBar": true,
       "isSelectable": true,
       "hasAmount": true
     },
     {
-      "name": "pld-8",
+      "name": "plt-3030",
       "id": 4,
       "hasBar": true,
       "isSelectable": true,
       "hasAmount": true
     },
     {
+      "name": "pld-8",
+      "id": 5,
+      "hasBar": true,
+      "isSelectable": true,
+      "hasAmount": true
+    },
+    {
       "name": "dcr-250",
-      "id": 4,
+      "id": 6,
       "hasBar": true,
       "isSelectable": true,
       "hasAmount": true
@@ -90,35 +90,35 @@
   "2": [
     {
       "name": "eco-10",
-      "id": 0,
-      "hasBar": true,
-      "isSelectable": true,
-      "hasAmount": true
-    },
-    {
-      "name": "hstrm-01",
       "id": 1,
       "hasBar": true,
       "isSelectable": true,
       "hasAmount": true
     },
     {
-      "name": "ubr-100",
+      "name": "hstrm-01",
       "id": 2,
       "hasBar": true,
       "isSelectable": true,
       "hasAmount": true
     },
     {
-      "name": "sar-01",
+      "name": "ubr-100",
       "id": 3,
       "hasBar": true,
       "isSelectable": true,
       "hasAmount": true
     },
     {
-      "name": "sar-02",
+      "name": "sar-01",
       "id": 4,
+      "hasBar": true,
+      "isSelectable": true,
+      "hasAmount": true
+    },
+    {
+      "name": "sar-02",
+      "id": 5,
       "hasBar": true,
       "isSelectable": true,
       "hasAmount": true

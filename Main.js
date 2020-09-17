@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.5.9";
+const BUILD_VERSION = "0.6.0";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //loading bar data
@@ -28,6 +28,7 @@ const BTN_PORT = 106;
 const BTN_FULLSCREEN = 122;
 const BTN_SWITCH = [43, 283, 353, 269, 345, 382, 253, 225, 237, 233];
 const BTN_CONFIG = 99;
+const BTN_ACTIONBAR_SUBMENU = 116;
 //game vars not fetched
 const REFRESH_TIME = 100;
 const LASER_SPEED = 1100;

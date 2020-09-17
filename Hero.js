@@ -77,8 +77,8 @@ class Hero {
     this.config = this.config == 1 ? 2 : 1;
     MAIN.handleShipInfoData("CFG", this.config, 0);
   }
-  handleAttackState() {
-    if (this.ship.isAttacking) {
+  handleAttackState(isSameLaser = true) {
+    if (this.ship.isAttacking && isSameLaser) {
       SOCKET.sendPacket([STOP_ATTACK]);
       MAIN.writeToLog("end_attack", true);
       this.ship.stopAttack();

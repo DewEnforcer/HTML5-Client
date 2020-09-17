@@ -10,6 +10,7 @@ class ActionBar {
     this.subMenuGen = [];
     this.subMenusSelectedItems = [];
     this.selectedSubmenu = 0;
+    this.lastLaser = 0;
     this.subMenuKeys = [
       "ammunition_laser",
       "ammunition_rocket",
@@ -60,7 +61,6 @@ class ActionBar {
     for (let i = 0; i < this.maxSlots; i++) {
       this.actionBarItems.push({});
     }
-    this.setActionbarItems("0;0|0;1");
   }
   generateActionSlots() {
     const parent = document.createElement("div");
@@ -247,11 +247,12 @@ class ActionBar {
     this.selectSubMenuItem();
   }
   setActionbarItems(data) {
-    data = data.split("|");
+    data = trimData(data);
     data.forEach((item, i) => {
       if (i >= this.maxSlots) return;
       const itemPos = item.split(";");
       if (itemPos[0] == -1) return;
+      console.log(itemPos, SUB_MENU_ITEMS);
       const itemData = {
         ...SUB_MENU_ITEMS[itemPos[0]][itemPos[1]],
         menu: itemPos[0],
@@ -421,5 +422,10 @@ class ActionBar {
     packetCollection.push(menuPackets[itemMenu]);
     packetCollection.push(itemID);
     SOCKET.sendPacket(packetCollection);
+    if (itemMenu == 0 && SETTINGS.settingsArr[1][0]) {
+      //actionbar attack
+      HERO.handleAttackState(this.lastLaser == itemID);
+      this.lastLaser = itemID;
+    }
   }
 }
