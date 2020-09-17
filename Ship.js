@@ -11,6 +11,7 @@ class Ship {
     shd,
     maxHP,
     maxSHD,
+    isCloaked,
     robotType = 0,
     isNpc = 0,
     isHero = false
@@ -61,7 +62,7 @@ class Ship {
       renderY: null,
     };
     //
-    this.isCloaked = false;
+    this.isCloaked = !!Number(isCloaked);
     //
     this.deactivateLasers = 0;
     this.laserClass = getLaserClass(shipID);
@@ -109,6 +110,7 @@ class Ship {
   }
   stopAttack() {
     this.isAttacking = false;
+    this.deactivateLasers = 1;
   }
   isFlying() {
     return this.isFly;
@@ -277,7 +279,7 @@ class Ship {
   }
   update() {
     this.resetAttackState();
-    if (this.isFly || this.isAttacking) this.rotate();
+    if (this.isFly || (this.isAttacking && this.targetID != 0)) this.rotate();
     if (this.isFly) {
       if (this.isHover) {
         //ship state has changed from hover to flying one

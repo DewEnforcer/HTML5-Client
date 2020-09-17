@@ -13,6 +13,7 @@ class Hero {
     shd,
     maxHP,
     maxSHD,
+    isCloaked,
     mapID,
     config,
     repairBot
@@ -38,6 +39,7 @@ class Hero {
         shd,
         maxHP,
         maxSHD,
+        isCloaked,
         repairBot,
         0,
         true,

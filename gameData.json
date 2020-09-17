@@ -45,7 +45,7 @@
   "laser_data": {
     "SHIP_LASER_CLASS": [0, 0, 2, 2],
     "LASER_SALVO_POINTS": {
-      "0": [],
+      "0": [["CenterFront"]],
       "1": [],
       "2": [
         ["LeftRearIn", "RightRearIn"],

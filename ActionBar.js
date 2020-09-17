@@ -252,7 +252,6 @@ class ActionBar {
       if (i >= this.maxSlots) return;
       const itemPos = item.split(";");
       if (itemPos[0] == -1) return;
-      console.log(itemPos, SUB_MENU_ITEMS);
       const itemData = {
         ...SUB_MENU_ITEMS[itemPos[0]][itemPos[1]],
         menu: itemPos[0],

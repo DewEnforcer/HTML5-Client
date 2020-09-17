@@ -62,7 +62,11 @@ class Engine {
     this.setSpriteSeq();
   }
   createSmoke() {
-    if (SETTINGS.settingsArr[this.settingMenu][this.settingIndex] != 4) return;
+    if (
+      SETTINGS.settingsArr[this.settingMenu][this.settingIndex] != 4 ||
+      this.maxSmokes < this.smoke.length
+    )
+      return;
     this.smoke.push(new Smoke(this.x, this.y, "engineSmoke", this));
   }
   update() {

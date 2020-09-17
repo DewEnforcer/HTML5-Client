@@ -19,6 +19,7 @@ class CombatLayer {
     let startPoint, target, rocketID;
     startPoint = getShipById(data[0]);
     target = getShipById(data[1]);
+    if (startPoint == null || target == null) return;
     rocketID = data[2];
     const rocketFire = new Sound(`./spacemap/audio/rockets/rocket.mp3`);
     ROCKET_LAYER.push(
@@ -34,9 +35,11 @@ class CombatLayer {
   }
   static generateLasers(data) {
     data = trimData(data, 3);
+    let LaserToFire;
     let ship, target, laserID;
     ship = getShipById(data[0]);
     target = getShipById(data[1]);
+    if (ship == null || target == null) return;
     ship.setTarget(target.ID);
     ship.deactivateLasers = Date.now() + 5000;
     ship.startAttack();
@@ -50,9 +53,14 @@ class CombatLayer {
       salvos = LASER_DATA.LASER_SALVO_POINTS[ship.laserClass].length;
     let i = 0;
     setInterval(() => {
+      //needs rework
       if (i >= salvos) return;
-      const LaserToFire =
-        LASER_DATA.LASER_SALVO_POINTS[ship.laserClass][ship.salvoPhase - 1];
+      if (laserID == 4) {
+        LaserToFire = LASER_DATA.LASER_SALVO_POINTS[ship.laserClass][0]; //TODO ADD PROPER SAB CENTER
+      } else {
+        LaserToFire =
+          LASER_DATA.LASER_SALVO_POINTS[ship.laserClass][ship.salvoPhase - 1];
+      }
       LaserToFire.forEach((posKey) => {
         let offset = LASER_POS[ship.laserClass][posKey][ship.sequenceNum];
         LASER_LAYER.push(
@@ -80,9 +88,10 @@ class CombatLayer {
   static generateHit(data) {
     data.splice(0, 2);
     let targetHit = data[0];
+    const ship = getShipById(targetHit);
+    if (ship == null) return;
     let value = numberFormated(data[1], ",");
     let isHeal = data[2];
-    const ship = getShipById(targetHit);
     isHeal = !!Number(isHeal);
     HIT_LAYER.push(
       new Hit(

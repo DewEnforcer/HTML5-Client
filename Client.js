@@ -9,6 +9,7 @@ class Client {
     this.shipInfoStatus = {};
     this.actionBar = null;
     this.isFullscreen = false;
+    this.lightLevel = 1;
   }
   generateElements() {
     this.clearDOM();
@@ -50,6 +51,7 @@ class Client {
     this.CANVAS.classList.add("canvas");
     ctx = this.CANVAS.getContext("2d");
     document.body.appendChild(this.CANVAS);
+    document.body.style.backgroundImage = 'url("")';
     els.forEach((elUi, i) => {
       const elDOM = document.createElement("div");
       elDOM.classList.add(elUi.cls);
@@ -84,6 +86,7 @@ class Client {
     this.actionBar = new ActionBar();
     this.resizeCanvas();
     EVENT_MANAGER.initListeners();
+    this.updateGameLightLevel();
   }
   clearDOM() {
     document.body.innerHTML = "";
@@ -109,6 +112,11 @@ class Client {
     let offsetY = height * offset;
     this.MINIMAP_C.width = width - offsetX;
     this.MINIMAP_C.height = height - offsetY;
+  }
+  updateGameLightLevel() {
+    if (this.lightLevel > 1) this.lightLevel = 1;
+    if (this.lightLevel < 0) this.lightLevel = 0;
+    this.CANVAS.style.opacity = this.lightLevel;
   }
   reqFullScreen() {
     if (!this.isFullscreen) {

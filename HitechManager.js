@@ -10,6 +10,7 @@ class HitechManager {
   }
   static handleLeechTech(ID) {
     let ship = getShipById(ID);
+    if (ship == null) return;
     ship.leechOn = true;
   }
 }

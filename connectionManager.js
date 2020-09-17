@@ -98,6 +98,9 @@ class Socket {
       case SET_ACTIONBAR_ITEMS:
         MAIN.actionBar.setActionbarItems(data);
         break;
+      case SET_CLOAK_STATE:
+        ShipManager.cloakShip(data);
+        break;
       default:
         break;
     }

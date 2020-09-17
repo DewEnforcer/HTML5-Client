@@ -12,11 +12,18 @@ class ShipManager {
   static shipData(data) {
     data.splice(0, 2);
     const ship = getShipById(data[0]);
+    if (ship == null) return;
     ship.HP = Number(data[1]);
     ship.SHD = Number(data[2]);
     ship.maxHP = Number(data[3]);
     ship.maxSHD = Number(data[4]);
     MAIN.updateHeroStats();
+  }
+  static cloakShip(data) {
+    data = trimData(data);
+    const ship = getShipById(data[0]);
+    if (ship == null) return;
+    ship.isCloaked = !!Number(data[1]);
   }
   static removeShip(data) {
     data = trimData(data);
@@ -31,8 +38,8 @@ class ShipManager {
         }
         index = i;
       } else if (ship.targetID == data[1]) {
-        ship.setTarget(0);
         ship.stopAttack();
+        ship.setTarget(0);
       }
     });
     if (index >= 0) MAP_SHIPS.splice(index, 1);
@@ -40,11 +47,13 @@ class ShipManager {
   static moveShip(data) {
     data = trimData(data);
     const ship = getShipById(data[0]);
+    if (ship == null) return;
     ship.setDestination(Number(data[1]), Number(data[2]), Number(data[3]));
   }
   static setAttackState(data) {
     data = trimData(data);
     const ship = getShipById(data[0]);
+    if (ship == null) return;
     const attackStatus = !!Number(data[1]);
     if (attackStatus) ship.startAttack();
     else ship.stopAttack();
@@ -52,6 +61,7 @@ class ShipManager {
   static tpShip(data) {
     data = trimData(data);
     const ship = getShipById(data[0]);
+    if (ship == null) return;
     ship.teleport(Number(data[1]), Number(data[2]));
     if (ship.isHero) {
       MINIMAP.minimapNavigating = false;

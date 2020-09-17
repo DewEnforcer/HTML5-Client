@@ -169,41 +169,48 @@
       "hasBar": false,
       "isSelectable": false,
       "hasAmount": false
+    },
+    {
+      "name": "cl04k-xl",
+      "id": 1,
+      "hasBar": true,
+      "isSelectable": false,
+      "hasAmount": true
     }
   ],
   "6": [],
   "7": [
     {
       "name": "energy-leech",
-      "id": 0,
-      "hasBar": false,
-      "isSelectable": false,
-      "hasAmount": true
-    },
-    {
-      "name": "precision-targeter",
       "id": 1,
       "hasBar": false,
       "isSelectable": false,
       "hasAmount": true
     },
     {
-      "name": "battle-repair-bot",
-      "id": 2,
-      "hasBar": false,
-      "isSelectable": false,
-      "hasAmount": true
-    },
-    {
-      "name": "backup-shields",
+      "name": "precision-targeter",
       "id": 3,
       "hasBar": false,
       "isSelectable": false,
       "hasAmount": true
     },
     {
-      "name": "chain-impulse",
+      "name": "battle-repair-bot",
+      "id": 5,
+      "hasBar": false,
+      "isSelectable": false,
+      "hasAmount": true
+    },
+    {
+      "name": "backup-shields",
       "id": 4,
+      "hasBar": false,
+      "isSelectable": false,
+      "hasAmount": true
+    },
+    {
+      "name": "chain-impulse",
+      "id": 2,
       "hasBar": false,
       "isSelectable": false,
       "hasAmount": true
