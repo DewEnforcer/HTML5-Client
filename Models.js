@@ -9,4 +9,5 @@ const Models = [
   ["sfx/leech", 29, 0],
   ["lensflares/lensflare0", 14, 0],
   ["pyroEffects/rocketExplosion0", 20, 0],
+  ["pyroEffects/explosion0", 79, 0],
 ];

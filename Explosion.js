@@ -1,30 +1,52 @@
 class Explosion {
-  constructor(x, y, type, qualLevel = 1) {
+  constructor(
+    x,
+    y,
+    type,
+    explType,
+    offset,
+    setOffset = false,
+    maxSeq = 20,
+    qualLevel = 1
+  ) {
     this.ID = getLaserID();
-    let randomOffset = 50;
-    this.x = x + getRandomNumber(-randomOffset, randomOffset);
-    this.y = y + getRandomNumber(-randomOffset, randomOffset);
+    this.settingMenu = MENU_GRAPHICS;
+    this.settingIndex = 4;
+    if (SETTINGS.settingsArr[this.settingMenu][this.settingIndex] != qualLevel)
+      this.terminate();
+    this.x = x;
+    this.y = y;
+    this.renderX;
+    this.renderY;
+    this.offsetSprite = offset / 2;
     this.type = type;
     this.sprite = new Image();
     this.sprite.src = null;
     this.frame = 0;
     this.activateOn = 2;
     this.seq = 0;
-    this.maxSeq = 20;
-    this.settingMenu = MENU_GRAPHICS;
-    this.settingIndex = 4;
-    if (SETTINGS.settingsArr[this.settingMenu][this.settingIndex] != qualLevel)
-      this.terminate();
-    else {
-      this.setSprite();
-      this.sound = new Sound(
-        `./spacemap/audio/explosions/rocketExplosion${this.type}.mp3`
-      );
-      this.sound.play();
-    }
+    this.maxSeq = maxSeq;
+    this.sound = null;
+    this.soundType = explType;
+    if (setOffset) this.setRandomCoords();
+    this.setSprite();
+    this.playExplosionSound();
+  }
+  playExplosionSound() {
+    this.sound = new Sound(
+      `./spacemap/audio/explosions/${this.soundType + this.type}.mp3`
+    );
+    this.sound.play();
+  }
+  setRandomCoords() {
+    let randomOffset = 50;
+    this.x += getRandomNumber(-randomOffset, randomOffset);
+    this.y += getRandomNumber(-randomOffset, randomOffset);
   }
   setSprite() {
-    this.sprite.src = `./spacemap/pyroEffects/rocketExplosion${this.type}/${this.seq}.png`;
+    this.sprite.src = `./spacemap/pyroEffects/${this.soundType + this.type}/${
+      this.seq
+    }.png`;
   }
   terminate() {
     EXPLOSION_LAYER.some((expl, i) => {
@@ -39,9 +61,16 @@ class Explosion {
     if (this.seq > this.maxSeq) this.terminate();
   }
   draw() {
-    ctx.drawImage(this.sprite, this.x, this.y);
+    ctx.drawImage(this.sprite, this.renderX, this.renderY);
+  }
+  updateRender() {
+    this.renderX =
+      this.x - this.offsetSprite - CAMERA.followX + halfScreenWidth; //count real distance to render one to the center
+    this.renderY =
+      this.y - this.offsetSprite - CAMERA.followY + halfScreenHeight;
   }
   update() {
+    this.updateRender();
     this.setSprite();
     this.draw();
     this.setSeq();

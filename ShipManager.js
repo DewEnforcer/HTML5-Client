@@ -20,12 +20,22 @@ class ShipManager {
   }
   static removeShip(data) {
     data = trimData(data);
-    MAP_SHIPS.some((ship, i) => {
-      if (ship.ID == data[0]) {
-        MAP_SHIPS.splice(i, 1);
-        return true;
+    let index = -1;
+    MAP_SHIPS.forEach((ship, i) => {
+      if (ship.ID == data[1]) {
+        //destroy?
+        if (data[0] == 1) {
+          EXPLOSION_LAYER.push(
+            new Explosion(ship.x, ship.y, 0, "explosion", 300, false, 79, 3)
+          );
+        }
+        index = i;
+      } else if (ship.targetID == data[1]) {
+        ship.setTarget(0);
+        ship.stopAttack();
       }
     });
+    if (index >= 0) MAP_SHIPS.splice(index, 1);
   }
   static moveShip(data) {
     data = trimData(data);
