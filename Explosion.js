@@ -9,28 +9,38 @@ class Explosion {
     maxSeq = 20,
     qualLevel = 1
   ) {
+    EXPLOSION_LAYER.push(this);
     this.ID = getLaserID();
     this.settingMenu = MENU_GRAPHICS;
     this.settingIndex = 4;
-    if (SETTINGS.settingsArr[this.settingMenu][this.settingIndex] != qualLevel)
+    console.log(
+      Number(SETTINGS.settingsArr[this.settingMenu][this.settingIndex]) <
+        qualLevel
+    );
+    if (
+      Number(SETTINGS.settingsArr[this.settingMenu][this.settingIndex]) <
+      qualLevel
+    ) {
       this.terminate();
-    this.x = x;
-    this.y = y;
-    this.renderX;
-    this.renderY;
-    this.offsetSprite = offset / 2;
-    this.type = type;
-    this.sprite = new Image();
-    this.sprite.src = null;
-    this.frame = 0;
-    this.activateOn = 2;
-    this.seq = 0;
-    this.maxSeq = maxSeq;
-    this.sound = null;
-    this.soundType = explType;
-    if (setOffset) this.setRandomCoords();
-    this.setSprite();
-    this.playExplosionSound();
+    } else {
+      this.x = x;
+      this.y = y;
+      this.renderX;
+      this.renderY;
+      this.offsetSprite = offset / 2;
+      this.type = type;
+      this.sprite = new Image();
+      this.sprite.src = null;
+      this.frame = 0;
+      this.activateOn = 2;
+      this.seq = 0;
+      this.maxSeq = maxSeq;
+      this.sound = null;
+      this.soundType = explType;
+      if (setOffset) this.setRandomCoords();
+      this.setSprite();
+      this.playExplosionSound();
+    }
   }
   playExplosionSound() {
     this.sound = new Sound(
@@ -50,6 +60,7 @@ class Explosion {
   }
   terminate() {
     EXPLOSION_LAYER.some((expl, i) => {
+      console.log(expl.ID, this.ID);
       if (expl.ID == this.ID) {
         EXPLOSION_LAYER.splice(i, 1);
         return true;
