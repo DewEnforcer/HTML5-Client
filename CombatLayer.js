@@ -51,39 +51,40 @@ class CombatLayer {
     if (laserID == 5) isRapidSalvo = true;
     if (isRapidSalvo)
       salvos = LASER_DATA.LASER_SALVO_POINTS[ship.laserClass].length;
-    let i = 0;
-    setInterval(() => {
-      //needs rework
-      if (i >= salvos) return;
-      if (laserID == 4) {
-        LaserToFire = LASER_DATA.LASER_SALVO_POINTS[ship.laserClass][0]; //TODO ADD PROPER SAB CENTER
-      } else {
-        LaserToFire =
-          LASER_DATA.LASER_SALVO_POINTS[ship.laserClass][ship.salvoPhase - 1];
-      }
-      LaserToFire.forEach((posKey) => {
-        let offset = LASER_POS[ship.laserClass][posKey][ship.sequenceNum];
-        LASER_LAYER.push(
-          new Laser(
-            ship.x, //start point
-            ship.y,
-            offset,
-            target.x,
-            target.y,
-            target.offset.x,
-            target.offset.y,
-            laserID
-          )
-        );
-      });
-      ship.salvoPhase++;
-      if (
-        ship.salvoPhase > LASER_DATA.LASER_SALVO_POINTS[ship.laserClass].length
-      )
-        ship.salvoPhase = 1;
-      i++;
-    }, 60);
+    this.addLaser(salvos, ship, target, laserID);
     laserBlast.play();
+  }
+  static addLaser(salvos, ship, target, laserID) {
+    let LaserToFire;
+    if (laserID == 4) {
+      LaserToFire = LASER_DATA.LASER_SALVO_POINTS[ship.laserClass][0]; //TODO ADD PROPER SAB CENTER
+    } else {
+      LaserToFire =
+        LASER_DATA.LASER_SALVO_POINTS[ship.laserClass][ship.salvoPhase - 1];
+    }
+    LaserToFire.forEach((posKey) => {
+      let offset = LASER_POS[ship.laserClass][posKey][ship.sequenceNum];
+      LASER_LAYER.push(
+        new Laser(
+          ship.x, //start point
+          ship.y,
+          offset,
+          target.x,
+          target.y,
+          target.offset.x,
+          target.offset.y,
+          laserID
+        )
+      );
+    });
+    ship.salvoPhase++;
+    if (ship.salvoPhase > LASER_DATA.LASER_SALVO_POINTS[ship.laserClass].length)
+      ship.salvoPhase = 1;
+    salvos--;
+    if (salvos <= 0) return;
+    setTimeout(() => {
+      this.addLaser(salvos, ship, target, laserID);
+    }, 100);
   }
   static generateHit(data) {
     data.splice(0, 2);

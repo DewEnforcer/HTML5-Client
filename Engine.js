@@ -7,7 +7,7 @@ class Engine {
     this.startFrame = 0;
     this.seq = 0;
     this.frame = 0;
-    this.activateOnFrame = 2;
+    this.activateOnFrame = 4; //2
     this.engineSprite = new Image();
     this.spriteOffset = OFFSET_DATA.ENGINE_OFFSETS[0];
     this.x = 0;

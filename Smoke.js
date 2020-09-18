@@ -1,5 +1,5 @@
 class Smoke {
-  constructor(x, y, type, parentEngine, activateOn = 2) {
+  constructor(x, y, type, parentEngine, activateOn = 1) {
     this.x = x;
     this.y = y;
     this.renderX = this.x;

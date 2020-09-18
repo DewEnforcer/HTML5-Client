@@ -201,6 +201,10 @@ class Client {
     let msgBox = document.createElement("span");
     msgBox.innerText = msg;
     this.LOG.appendChild(msgBox);
+    this.focusLastLogMsg();
+  }
+  focusLastLogMsg() {
+    console.log(this.LOG.lastChild.scrollIntoView());
   }
   cleanup() {
     ctx.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);
