@@ -1,5 +1,5 @@
 class Hit {
-  constructor(x, y, value, isHeal = false) {
+  constructor(x, y, value, isMiss, isHeal = false, isHero = false) {
     this.settingMenu = MENU_INTERFACE;
     this.settingIndex = 1;
     this.id = getLaserID();
@@ -9,7 +9,8 @@ class Hit {
       this.x = x + OFFSET_DATA.HIT_OFFSET.x;
       this.y = y + OFFSET_DATA.HIT_OFFSET.y;
       this.value = value;
-      this.color = isHeal ? "#49BE40" : "#ff0000";
+      if (isMiss) this.value = TEXT_TRANSLATIONS.miss_hit;
+      this.color = isHeal ? "#49BE40" : isHero ? "#db63e2" : "#ff0000";
       this.fontSize = 20;
       this.seq = 1;
       this.MAX_SEQUENCE = 700;

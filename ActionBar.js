@@ -15,7 +15,7 @@ class ActionBar {
       "ammunition_laser",
       "ammunition_rocket",
       "ammunition_rocketlauncher",
-      "ammunition_explosive",
+      "ammunition_specialammo",
       "ammunition_mine",
       "equipment_extra_cpu",
       "buy_now",
@@ -25,6 +25,7 @@ class ActionBar {
     ];
     this.SUB_MENU_AMOUNT = 10;
     this.actionBarItems = [];
+    this.cooldownItems = [];
     this.selectedActionBarItem = 0;
     this.selectItemSound = new Sound(
       `./spacemap/audio/ui/selectItem.mp3`,
@@ -54,6 +55,7 @@ class ActionBar {
   preGenSubmenus() {
     for (let i = 0; i < this.SUB_MENU_AMOUNT; i++) {
       this.subMenuGen.push(false);
+      this.cooldownItems.push({});
       this.subMenusSelectedItems.push(0);
     }
   }
@@ -290,6 +292,7 @@ class ActionBar {
     });
   }
   isSelectable(id) {
+    if (id in this.cooldownItems[this.selectedSubmenu] === true) return false;
     if (this.selectedSubmenu in SUB_MENU_ITEMS !== true) return false;
     return SUB_MENU_ITEMS[this.selectedSubmenu][id].isSelectable;
   }
@@ -315,9 +318,12 @@ class ActionBar {
     this.actionBarItems.forEach((item, i) => {
       this.slots[i].innerHTML = ""; //clear the slot of previous item
       this.slots[i].draggable = false;
-      if ("id" in item !== true) return;
-      const itemName = `${this.subMenuKeys[item.menu]}_${item.name}`;
+      if ("id" in item !== true) {
+        this.slots[i].setAttribute("item_info", `-1_-1`); //menu, id
+        return;
+      }
       this.slots[i].setAttribute("item_info", `${item.menu}_${item.id}`); //menu, id
+      const itemName = `${this.subMenuKeys[item.menu]}_${item.name}`;
       this.slots[i].draggable = true; //set only on slots with items
       if (item.hasBar) {
         const amountBar = document.createElement("div");
@@ -334,9 +340,18 @@ class ActionBar {
         amountText.classList.add("item_actionbar_amount_text");
         this.slots[i].appendChild(amountText);
       }
+      //check cld
+      if (item.id in this.cooldownItems[item.menu] === true) {
+        //is on cooldown, add visual cooldown graphic
+        const img = document.createElement("img");
+        img.classList.add(`cooldown_${item.menu}_${item.id}`, "cooldown_icon");
+        this.slots[i].appendChild(img);
+      }
     });
     this.selectActionbarItem();
   } //adds items on the slotbar
+  setItemAmount(data) {} //TODO
+  setItemAmountBar() {}
   /* drag n drop */
   checkSwitchStatus(originID) {
     return originID.includes("action_bar");
@@ -354,6 +369,7 @@ class ActionBar {
   dropItem(ev) {
     const itemData = JSON.parse(ev.dataTransfer.getData("itemData"));
     let targetIndex = ev.target.id.split("_")[0];
+    console.log(targetIndex);
     if (targetIndex == "") targetIndex = ev.path[1].id.split("_")[0];
     itemData.push(targetIndex);
     if (this.checkSwitchStatus(itemData[2])) {
@@ -391,7 +407,6 @@ class ActionBar {
     this.actionBarItems.forEach((item) => {
       menu = -1; // -1 = empty
       id = -1;
-      console.log(item);
       if ("id" in item === true) {
         menu = item.menu;
         id = item.id;
@@ -400,8 +415,86 @@ class ActionBar {
     });
     SOCKET.sendPacket(packetCollection);
   }
+  //cld handlers
+  removeCooldown(items) {
+    items.forEach((item) => {
+      item.querySelector(".cooldown_icon").remove();
+    });
+  }
+  cooldownHandler(cldItem) {
+    const percComplete = Math.round(
+      (cldItem.timeSpent / cldItem.timeEnd) * 100
+    );
+    const items = document.querySelectorAll(
+      `[item_info="${cldItem.itemType}_${cldItem.itemID}"]`
+    );
+    if (percComplete >= 100) {
+      delete this.cooldownItems[cldItem.itemType][cldItem.itemID];
+      this.removeCooldown(items);
+      return;
+    }
+    items.forEach((item) => {
+      if (cldItem.timeSpent == 0) {
+        const img = document.createElement("img");
+        img.classList.add(
+          `cooldown_${cldItem.itemType}_${cldItem.itemID}`,
+          "cooldown_icon"
+        );
+        item.appendChild(img);
+      }
+      const img = document.querySelectorAll(
+        `.cooldown_${cldItem.itemType}_${cldItem.itemID}`
+      );
+      img.forEach(
+        (icon) =>
+          (icon.src = `./spacemap/ui/actionBar/cooldown/${percComplete}.png`)
+      );
+    });
+    cldItem.timeSpent += 1;
+    setTimeout(() => {
+      this.cooldownHandler(cldItem);
+    }, 1000);
+  }
+  setItemCooldown(data) {
+    data = trimData(data);
+    const itemType = this.getItemPacket(data[0], true);
+    const itemID = data[1];
+    const time = data[2];
+    if (itemID in this.cooldownItems[itemType] === true) {
+      //reset time since function is already ticking
+      this.cooldownItems[itemType][itemID].timeEnd = time;
+      this.cooldownItems[itemType][itemID].timeSpent = 0;
+    } else {
+      //create new cd
+      const cldItem = { itemID, itemType, timeEnd: time, timeSpent: 0 };
+      this.cooldownItems[itemType] = {
+        ...this.cooldownItems[itemType],
+        [itemID]: cldItem,
+      };
+      this.cooldownHandler(cldItem);
+    }
+  }
   /* handle item trigger */
   handleItemTriggered(itemData) {
+    const itemMenu = itemData[0];
+    const itemID = itemData[1];
+    if (
+      typeof itemMenu == "undefined" ||
+      typeof itemID == "undefined" ||
+      itemID in this.cooldownItems[itemMenu] === true
+    )
+      return; //empty slot or on cooldown
+    const packetCollection = [ITEM_SELECT];
+    packetCollection.push(this.getItemPacket(itemMenu));
+    packetCollection.push(itemID);
+    SOCKET.sendPacket(packetCollection);
+    if (itemMenu == 0 && SETTINGS.settingsArr[1][0]) {
+      //actionbar attack
+      HERO.handleAttackState(this.lastLaser == itemID);
+      this.lastLaser = itemID;
+    }
+  }
+  getItemPacket(key, reverse = false) {
     const menuPackets = [
       "L",
       "R",
@@ -414,17 +507,9 @@ class ActionBar {
       "SK",
       "DF",
     ];
-    const itemMenu = itemData[0];
-    const itemID = itemData[1];
-    if (typeof itemMenu == "undefined" || typeof itemID == "undefined") return; //empty slot
-    const packetCollection = [ITEM_SELECT];
-    packetCollection.push(menuPackets[itemMenu]);
-    packetCollection.push(itemID);
-    SOCKET.sendPacket(packetCollection);
-    if (itemMenu == 0 && SETTINGS.settingsArr[1][0]) {
-      //actionbar attack
-      HERO.handleAttackState(this.lastLaser == itemID);
-      this.lastLaser = itemID;
+    if (reverse) {
+      return menuPackets.indexOf(key);
     }
+    return menuPackets[key];
   }
 }

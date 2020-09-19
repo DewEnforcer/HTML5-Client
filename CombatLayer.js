@@ -9,6 +9,9 @@ class CombatLayer {
       case ROCKET:
         this.generateRocket(data);
         break;
+      case ACTIVATE_EMP:
+        this.generateEmp(data);
+        break;
       default:
         break;
     }
@@ -93,14 +96,24 @@ class CombatLayer {
     if (ship == null) return;
     let value = numberFormated(data[1], ",");
     let isHeal = data[2];
+    let isMiss = !!Number(data[3]);
     isHeal = !!Number(isHeal);
     HIT_LAYER.push(
       new Hit(
         ship.render.renderX + ship.offset.x,
         ship.render.renderY + ship.offset.y,
         value,
-        isHeal
+        isMiss,
+        isHeal,
+        ship.isHero
       )
     );
+  }
+  static generateEmp(data) {
+    data = trimData(data);
+    console.log(data);
+    const ship = getShipById(data[1]);
+    if (ship == null) return;
+    COMBAT_LAYER.push(new Emp(ship));
   }
 }

@@ -101,6 +101,29 @@ class Socket {
       case SET_CLOAK_STATE:
         ShipManager.cloakShip(data);
         break;
+      case SET_COOLDOWN:
+        MAIN.actionBar.setItemCooldown(data);
+        break;
+      case DMZ_STATE:
+        if (data[2] == 1) {
+          MESSAGE_LAYER.push(new MapMessage(TEXT_TRANSLATIONS.dmz, 4, false));
+        } else {
+          MESSAGE_LAYER.forEach((msg) => {
+            if (msg.type == 4) msg.changeFadeActive();
+          });
+        }
+        break;
+      case RADIATION_STATE:
+        if (data[2] == 1) {
+          MESSAGE_LAYER.push(
+            new MapMessage(TEXT_TRANSLATIONS.rad_warn, 5, false)
+          );
+        } else {
+          MESSAGE_LAYER.forEach((msg) => {
+            if (msg.type == 5) msg.changeFadeActive();
+          });
+        }
+        break;
       default:
         break;
     }

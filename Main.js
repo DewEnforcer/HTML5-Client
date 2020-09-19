@@ -1,6 +1,7 @@
-const BUILD_VERSION = "0.6.4";
+const BUILD_VERSION = "0.6.5";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
+//karnival, replacement, turkey, winterGiftBox
 //loading bar data
 let loadingStatus = false;
 let progress = 0;
@@ -60,6 +61,7 @@ const langNameToKey = {
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;
 const PATH_TO_BG = `./spacemap/backgrounds`;
+const PATH_TO_EFFECTS = `./spacemap/effects`;
 // fly sound - sort later, 2 sounds required to create proper sound - fix later too
 const flySound = new Sound(`./spacemap/audio/misc/flying.mp3`, true);
 const flySound2 = new Sound(`./spacemap/audio/misc/flying.mp3`, true);
@@ -71,6 +73,7 @@ const MAP_STATIONS = [];
 const MAP_SHIPS = [];
 const LASER_LAYER = [];
 const ROCKET_LAYER = [];
+const COMBAT_LAYER = [];
 const HIT_LAYER = [];
 const DRONES_LAYER = [];
 const EXPLOSION_LAYER = [];
@@ -175,6 +178,7 @@ const drawGame = (timestamp) => {
   MAP_PORTALS.forEach((portal) => portal.update());
   MAP_STATIONS.forEach((sta) => sta.update());
   MAP_SHIPS.forEach((ship) => ship.update());
+  COMBAT_LAYER.forEach((item) => item.update());
   DRONES_LAYER.forEach((drone) => drone.update());
   LASER_LAYER.forEach((laser) => laser.update());
   ROCKET_LAYER.forEach((rocket) => rocket.update());

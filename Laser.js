@@ -95,7 +95,6 @@ class Laser {
   }
   update() {
     if (this.end) return;
-    //this.drawPoint();
     this.changeRenderPos();
     this.changePos();
     this.draw();

@@ -124,7 +124,15 @@
       "hasAmount": true
     }
   ],
-  "3": [],
+  "3": [
+    {
+      "name": "emp-01",
+      "id": 0,
+      "hasBar": true,
+      "isSelectable": true,
+      "hasAmount": true
+    }
+  ],
   "4": [
     {
       "name": "acm-01",
@@ -174,7 +182,7 @@
       "name": "cl04k-xl",
       "id": 1,
       "hasBar": true,
-      "isSelectable": false,
+      "isSelectable": true,
       "hasAmount": true
     }
   ],

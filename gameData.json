@@ -57,13 +57,28 @@
   },
   "gameMsg": {
     "msgFonts": {
-      "1": { "size": "20px", "shadowC": 0, "shadowBlur": 0, "way": 1 },
-      "2": { "size": "50px", "shadowC": 0, "shadowBlur": 0, "way": 1 },
+      "1": { "size": "20px", "shadowC": 0, "shadowBlur": 0, "way": 1, "y": 50 },
+      "2": { "size": "50px", "shadowC": 0, "shadowBlur": 0, "way": 1, "y": 50 },
       "3": {
         "size": "bold 48px",
         "shadowC": "#0000ff",
         "shadowBlur": 10,
-        "way": 1
+        "way": 1,
+        "y": 250
+      },
+      "4": {
+        "size": "bold 30px",
+        "shadowC": "#000000",
+        "shadowBlur": 10,
+        "way": 1,
+        "y": 300
+      },
+      "5": {
+        "size": "bold 34px",
+        "shadowC": "#000000",
+        "shadowBlur": 10,
+        "way": 1,
+        "y": 300
       }
     }
   },
