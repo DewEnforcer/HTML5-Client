@@ -26,6 +26,7 @@ class ActionBar {
     this.SUB_MENU_AMOUNT = 10;
     this.actionBarItems = [];
     this.cooldownItems = [];
+    this.itemAmounts = [];
     this.selectedActionBarItem = 0;
     this.selectItemSound = new Sound(
       `./spacemap/audio/ui/selectItem.mp3`,
@@ -50,6 +51,7 @@ class ActionBar {
     this.generateActionSlots();
     this.preGenSubmenus();
     this.preGenActionbarItems();
+    this.preGenItemAmounts();
     this.generateMenuBtn();
   }
   preGenSubmenus() {
@@ -58,6 +60,17 @@ class ActionBar {
       this.cooldownItems.push({});
       this.subMenusSelectedItems.push(0);
     }
+  }
+  preGenItemAmounts() {
+    for (let subs in SUB_MENU_ITEMS) {
+      let newSecObj = {};
+      for (let items in SUB_MENU_ITEMS[subs]) {
+        const item = SUB_MENU_ITEMS[subs][items];
+        newSecObj = { ...newSecObj, [item.id]: 0 };
+      }
+      this.itemAmounts.push(newSecObj);
+    }
+    console.log(this.itemAmounts);
   }
   preGenActionbarItems() {
     for (let i = 0; i < this.maxSlots; i++) {
@@ -216,6 +229,7 @@ class ActionBar {
     if (this.selectedSubmenu in SUB_MENU_ITEMS !== true) return;
     const items = SUB_MENU_ITEMS[this.selectedSubmenu];
     items.forEach((item, i) => {
+      //TODO - add max item generation and horizontal item scroller
       //switch to another subfunction
       const newItem = document.createElement("div");
       newItem.classList.add("item_submenu");
@@ -225,10 +239,13 @@ class ActionBar {
       const itemName = `${this.subMenuKeys[this.selectedSubmenu]}_${item.name}`;
       newItem.id = `item_submenu_${itemName}`;
       newItem.setAttribute("item_id", i);
-      newItem.setAttribute("item_info", `${this.selectedSubmenu}_${i}`); //menu, id
+      newItem.setAttribute("item_info", `${this.selectedSubmenu}_${item.id}`); //menu, id
       if (item.hasBar) {
         const amountBar = document.createElement("div");
+        const amountBarReal = document.createElement("div");
+        amountBarReal.classList.add("item_actionbar_amount_bar_box_real");
         amountBar.classList.add("item_submenu_amount_bar_box");
+        amountBar.appendChild(amountBarReal);
         newItem.appendChild(amountBar);
       }
       const itemIcon = document.createElement("img");
@@ -247,6 +264,7 @@ class ActionBar {
       this.subMenuBox.appendChild(newItem);
     });
     this.selectSubMenuItem();
+    this.updateItemAmounts();
   }
   setActionbarItems(data) {
     data = trimData(data);
@@ -261,7 +279,7 @@ class ActionBar {
       if (typeof itemData === "undefined") return;
       this.actionBarItems[i] = itemData;
     });
-    this.popularizeSlotBar();
+    this.popularizeSlotBar(true);
   }
   selectMenuBtn() {
     const currentSelect = document.querySelector(".sub_menu_btn_active");
@@ -314,7 +332,7 @@ class ActionBar {
     this.selectSubMenuItem();
     this.selectItemSound.play();
   }
-  popularizeSlotBar() {
+  popularizeSlotBar(init = false) {
     this.actionBarItems.forEach((item, i) => {
       this.slots[i].innerHTML = ""; //clear the slot of previous item
       this.slots[i].draggable = false;
@@ -327,7 +345,10 @@ class ActionBar {
       this.slots[i].draggable = true; //set only on slots with items
       if (item.hasBar) {
         const amountBar = document.createElement("div");
+        const amountBarReal = document.createElement("div");
+        amountBarReal.classList.add("item_actionbar_amount_bar_box_real");
         amountBar.classList.add("item_actionbar_amount_bar_box");
+        amountBar.appendChild(amountBarReal);
         this.slots[i].appendChild(amountBar);
       }
       const itemIcon = document.createElement("img");
@@ -349,9 +370,54 @@ class ActionBar {
       }
     });
     this.selectActionbarItem();
+    if (init) {
+      SOCKET.sendPacket([REQUEST_ITEM_AMOUNTS]);
+      return;
+    }
+    this.updateItemAmounts();
   } //adds items on the slotbar
-  setItemAmount(data) {} //TODO
-  setItemAmountBar() {}
+  setItemAmount(data) {
+    data = trimData(data);
+    data.forEach((section, i) => {
+      section = section.split("/");
+      section.forEach((item) => {
+        item = item.split(";");
+        const itemID = item[0];
+        const amount = Number(item[1]);
+        this.itemAmounts[i] = { ...this.itemAmounts[i], [itemID]: amount };
+      });
+    });
+    this.updateItemAmounts();
+  }
+  setItemAmountBar(value, barReal, maxValue) {
+    let fillPerc = (value / maxValue) * 100;
+    if (fillPerc > 100) fillPerc = 100;
+    barReal.style.width = fillPerc + "%";
+  }
+  updateItemAmounts() {
+    const slots = document.querySelectorAll("[item_info]");
+    slots.forEach((slot) => {
+      const slotData = slot.getAttribute("item_info").split("_");
+      if (slotData[0] < 0) return;
+      const maxDisplayNum = 1000000;
+      const amount =
+        this.itemAmounts[slotData[0]][slotData[1]] > maxDisplayNum
+          ? maxDisplayNum - 1
+          : this.itemAmounts[slotData[0]][slotData[1]];
+      const submenuItem = SUB_MENU_ITEMS[slotData[0]][slotData[1]];
+      if (submenuItem.hasAmount) {
+        slot.getElementsByTagName("span")[0].innerText = amount;
+      }
+      if (submenuItem.hasBar) {
+        const barMax = "maxBar" in submenuItem ? submenuItem.maxBar : 1000;
+        this.setItemAmountBar(
+          amount,
+          slot.getElementsByTagName("div")[1],
+          barMax
+        );
+      }
+    });
+  }
   /* drag n drop */
   checkSwitchStatus(originID) {
     return originID.includes("action_bar");
@@ -483,7 +549,7 @@ class ActionBar {
       typeof itemID == "undefined" ||
       itemID in this.cooldownItems[itemMenu] === true
     )
-      return; //empty slot or on cooldown
+      return; //empty slot or on cooldown or 0 ammo TODO add 0 ammo fix
     const packetCollection = [ITEM_SELECT];
     packetCollection.push(this.getItemPacket(itemMenu));
     packetCollection.push(itemID);

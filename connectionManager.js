@@ -124,6 +124,9 @@ class Socket {
           });
         }
         break;
+      case SET_ITEM_AMOUNTS:
+        MAIN.actionBar.setItemAmount(data);
+        break;
       default:
         break;
     }

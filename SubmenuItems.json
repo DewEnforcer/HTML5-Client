@@ -49,42 +49,48 @@
       "id": 1,
       "hasBar": true,
       "isSelectable": true,
-      "hasAmount": true
+      "hasAmount": true,
+      "maxBar": 100
     },
     {
       "name": "plt-2026",
       "id": 2,
       "hasBar": true,
       "isSelectable": true,
-      "hasAmount": true
+      "hasAmount": true,
+      "maxBar": 100
     },
     {
       "name": "plt-2021",
       "id": 3,
       "hasBar": true,
       "isSelectable": true,
-      "hasAmount": true
+      "hasAmount": true,
+      "maxBar": 100
     },
     {
       "name": "plt-3030",
       "id": 4,
       "hasBar": true,
       "isSelectable": true,
-      "hasAmount": true
+      "hasAmount": true,
+      "maxBar": 100
     },
     {
       "name": "pld-8",
       "id": 5,
       "hasBar": true,
       "isSelectable": true,
-      "hasAmount": true
+      "hasAmount": true,
+      "maxBar": 100
     },
     {
       "name": "dcr-250",
       "id": 6,
       "hasBar": true,
       "isSelectable": true,
-      "hasAmount": true
+      "hasAmount": true,
+      "maxBar": 100
     }
   ],
   "2": [
@@ -130,7 +136,8 @@
       "id": 0,
       "hasBar": true,
       "isSelectable": true,
-      "hasAmount": true
+      "hasAmount": true,
+      "maxBar": 100
     }
   ],
   "4": [
@@ -183,7 +190,8 @@
       "id": 1,
       "hasBar": true,
       "isSelectable": true,
-      "hasAmount": true
+      "hasAmount": true,
+      "maxBar": 50
     }
   ],
   "6": [],
@@ -265,6 +273,97 @@
     {
       "name": "default",
       "id": 0,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-01-tu",
+      "id": 1,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-02-ar",
+      "id": 2,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-03-la",
+      "id": 3,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-04-st",
+      "id": 4,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-05-pi",
+      "id": 5,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-06-da",
+      "id": 6,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-07-di",
+      "id": 7,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-08-ch",
+      "id": 7,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-09-mo",
+      "id": 7,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-10-cr",
+      "id": 7,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-11-he",
+      "id": 7,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-12-ba",
+      "id": 7,
+      "hasBar": false,
+      "isSelectable": true,
+      "hasAmount": false
+    },
+    {
+      "name": "f-13-bt",
+      "id": 7,
       "hasBar": false,
       "isSelectable": true,
       "hasAmount": false

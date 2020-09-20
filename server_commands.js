@@ -32,3 +32,4 @@ const ACTIVATE_EMP = "EMP";
 const SET_COOLDOWN = "STCL";
 const RADIATION_STATE = "RDST";
 const DMZ_STATE = "DMZST";
+const SET_ITEM_AMOUNTS = "STIAM";
