@@ -14,9 +14,8 @@ class Drone {
     this.prevCoords = [];
     this.type = type;
     this.lvl = lvl;
-    this.design = design;
+    this.design = Number(design);
     this.angle = this.owner.pointingAngle;
-    this.angleDroneShip = 0;
     this.angleCalc = 360 / 32; //change;
     this.position = position;
     let offsetsData = DRONE_POSITIONS[position + 1];
@@ -34,15 +33,28 @@ class Drone {
       y: 32.5,
     };
     this.sprite = new Image();
+    this.spritePath = null;
     this.sprite.src = null;
     this.settingMenu = MENU_INTERFACE;
     this.settingIndex = 2;
+    this.setSpritePath();
     this.setGroup();
     this.getOwnerCenter();
     this.setSequence();
     this.setColor();
     this.setSimpleDrone();
     this.setAngleFromShip();
+  }
+  setSpritePath() {
+    this.spritePath = `./spacemap/drones/`;
+    switch (this.design) {
+      case 1:
+        this.spritePath += `designs/havoc/`;
+        break;
+      case 2:
+        this.spritePath += `designs/hercules/`;
+    }
+    console.log(this.spritePath);
   }
   setAngleFromShip() {
     this.realAngle = Math.atan2(
@@ -75,16 +87,18 @@ class Drone {
     this.ownerCenter.y = this.owner.y; //; + this.offset.y;
   }
   setSequence() {
-    this.sprite.src = `./spacemap/drones/${this.type}/${this.lvl}/${Math.round(
+    const newSrc = `${this.spritePath + this.type}/${this.lvl}/${Math.round(
       toDegs(this.angle) / this.angleCalc
     )}.png`;
+    if (newSrc == this.sprite.src) return;
+    this.sprite.src = newSrc;
   }
   draw() {
     ctx.drawImage(this.sprite, this.renderX, this.renderY);
     ctx.globalAlpha = 1;
   }
   rotateSelf() {
-    this.angle = this.owner.pointingAngle;
+    this.angle = toRadians(this.owner.sequenceNum * this.owner.rotationCalc);
     this.setSequence();
   }
   drawPrevious() {

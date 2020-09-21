@@ -95,7 +95,7 @@ class EventManager {
     if (HERO.lockedControls) return;
     this.isMouseDown = true;
     HERO.ship.isFly = true;
-    //this.initInterval();
+    this.initInterval();
   }
   handleInfoVisualChange(ev) {
     //handle changes between text and visual info

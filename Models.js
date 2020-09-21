@@ -11,4 +11,7 @@ const Models = [
   ["pyroEffects/rocketExplosion0", 20, 0],
   ["pyroEffects/explosion0", 79, 0],
   ["ui/actionBar/cooldown", 99, 0],
+  ["drones/iris/6", 32, 0],
+  ["drones/apis/6", 32, 0],
+  ["drones/zeus/6", 32, 0],
 ];

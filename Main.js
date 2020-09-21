@@ -32,6 +32,7 @@ const BTN_CONFIG = 99;
 const BTN_ACTIONBAR_SUBMENU = 116;
 //game vars not fetched
 const REFRESH_TIME = 100;
+const DRONE_SPEED = 200;
 const LASER_SPEED = 1100;
 const ELA_SPEED = 500;
 const MISSILE_SPEED = 1000;
@@ -171,7 +172,7 @@ const drawGame = (timestamp) => {
   requestAnimationFrame(drawGame);
   MAIN.cleanup();
   BG_LAYER.update();
-  HERO.processDest();
+  //HERO.processDest();
   LENSFLARE_LAYER.forEach((lens) => lens.update());
   NEBULA_LAYER.forEach((neb) => neb.update());
   MAP_PLANETS.forEach((planet) => planet.update());
