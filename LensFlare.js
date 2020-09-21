@@ -49,7 +49,6 @@ class LensFlare {
     for (let i = 1; i <= this.lensesAmount; i++) {
       this.lenses.push(new Lens(this, i));
     }
-    console.log(this.lenses);
   }
   resetSequence() {
     this.seq = 0;

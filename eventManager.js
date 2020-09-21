@@ -19,13 +19,11 @@ class EventManager {
       return;
     }
     if (HERO.isLogout) {
-      console.log("here too");
       manageLogoutWindow();
       HERO.setLogout();
       SOCKET.sendPacket([REQUEST_LOGOUT_STOP]);
       return;
     }
-    console.log("here");
     manageLogoutWindow();
     HERO.setLogout();
     SOCKET.sendPacket([REQUEST_LOGOUT]);
@@ -97,7 +95,7 @@ class EventManager {
     if (HERO.lockedControls) return;
     this.isMouseDown = true;
     HERO.ship.isFly = true;
-    this.initInterval();
+    //this.initInterval();
   }
   handleInfoVisualChange(ev) {
     //handle changes between text and visual info

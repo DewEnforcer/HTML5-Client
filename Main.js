@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.6.6";
+const BUILD_VERSION = "0.6.7";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //karnival, replacement, turkey, winterGiftBox
@@ -121,7 +121,6 @@ const setGamemapObjects = () => {
     multiplier = mapObjectList.scale;
   }
   mapScale = multiplier;
-  console.log(mapScale);
   realMapWidth = mapWidth * multiplier;
   realMapHeight = mapHeight * multiplier;
   mapObjectList.planets.forEach((planet) => {
@@ -172,6 +171,7 @@ const drawGame = (timestamp) => {
   requestAnimationFrame(drawGame);
   MAIN.cleanup();
   BG_LAYER.update();
+  HERO.processDest();
   LENSFLARE_LAYER.forEach((lens) => lens.update());
   NEBULA_LAYER.forEach((neb) => neb.update());
   MAP_PLANETS.forEach((planet) => planet.update());

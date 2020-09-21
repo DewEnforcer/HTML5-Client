@@ -10,6 +10,10 @@ class ActionBar {
     this.subMenuGen = [];
     this.subMenusSelectedItems = [];
     this.selectedSubmenu = 0;
+    this.submenuItemOffset = 0;
+    this.submenuVisibleMax = 10;
+    this.submenuScrollGen = false;
+    this.maxScroll = 0;
     this.lastLaser = 0;
     this.subMenuKeys = [
       "ammunition_laser",
@@ -70,7 +74,6 @@ class ActionBar {
       }
       this.itemAmounts.push(newSecObj);
     }
-    console.log(this.itemAmounts);
   }
   preGenActionbarItems() {
     for (let i = 0; i < this.maxSlots; i++) {
@@ -168,6 +171,7 @@ class ActionBar {
     this.selectItemSound.play();
   }
   openActionMenu() {
+    //TODO finish scroll btn fades
     if (!this.menuGen) this.genMenu();
     const box = document.querySelector(".action_bar_submenu_list");
     box.style.display = "flex";
@@ -183,6 +187,8 @@ class ActionBar {
     this.genSubMenu();
   }
   closeActionMenu() {
+    const btn1 = document.getElementById("btn_submenu_scroll_forward");
+    const btn2 = document.getElementById("btn_submenu_scroll_backward");
     const box = document.querySelector(".action_bar_submenu_list");
     MAIN.fadeOut(this.minOpacity, this.maxOpacity, this.fadeDuration, box, 0.1);
     MAIN.fadeOut(
@@ -192,9 +198,25 @@ class ActionBar {
       this.subMenuBox,
       0.1
     );
+    MAIN.fadeOut(
+      this.minOpacity,
+      this.maxOpacity,
+      this.fadeDuration,
+      btn1,
+      0.1
+    );
+    MAIN.fadeOut(
+      this.minOpacity,
+      this.maxOpacity,
+      this.fadeDuration,
+      btn2,
+      0.1
+    );
     setTimeout(() => {
       box.style.display = "none";
       this.subMenuBox.style.display = "none";
+      btn1.style.display = "none";
+      btn2.style.display = "none";
     }, this.fadeDuration);
   }
   genMenuBox() {
@@ -223,12 +245,71 @@ class ActionBar {
   clearSubMenuBox() {
     this.subMenuBox.innerHTML = "";
   }
-  genSubMenu() {
+  // submenu scrolling
+  removeSubmenuScrollBtns() {
+    if (!this.submenuScrollGen) return;
+    this.submenuScrollGen = false;
+    document.getElementById("btn_submenu_scroll_forward").remove();
+    document.getElementById("btn_submenu_scroll_backward").remove();
+  }
+  genSubmenuScrollBtns() {
+    if (this.submenuScrollGen) return;
+    this.submenuScrollGen = true;
+    const margin = 2;
+    const iconHeightHalf = 6;
+    const iconWidth = 12;
+    const btnForward = document.createElement("img");
+    const btnBackward = document.createElement("img");
+    btnForward.id = "btn_submenu_scroll_forward";
+    btnBackward.id = "btn_submenu_scroll_backward";
+    btnForward.src = "./spacemap/ui/actionBar/scroll_normal.png";
+    btnBackward.src = "./spacemap/ui/actionBar/scroll_normal.png";
+    btnBackward.classList.add("btn_submenu_scroll");
+    btnForward.classList.add(
+      "btn_submenu_scroll_forward",
+      "btn_submenu_scroll"
+    );
+    const coords = document
+      .querySelector(".sub_menu_box")
+      .getBoundingClientRect();
+    btnBackward.style.left = coords.x - margin - iconWidth + "px";
+    btnBackward.style.top = coords.y + iconHeightHalf + "px";
+    btnForward.style.left = coords.x + coords.width + margin + "px";
+    btnForward.style.top = coords.y + iconHeightHalf + "px";
+    btnForward.value = "forward";
+    btnBackward.value = "backwards";
+    btnForward.addEventListener("click", (ev) => this.handleSubmenuScroll(ev));
+    btnBackward.addEventListener("click", (ev) => this.handleSubmenuScroll(ev));
+    document.body.appendChild(btnForward);
+    document.body.appendChild(btnBackward);
+  }
+  handleSubmenuScroll(ev) {
+    const val = ev.currentTarget.value;
+    if (val == "forward") {
+      if (this.submenuItemOffset < this.maxScroll) this.submenuItemOffset += 1;
+    } else {
+      if (this.submenuItemOffset > 0) this.submenuItemOffset -= 1;
+    }
+    this.genSubMenu(true);
+  }
+  //
+  genSubMenu(sameSec = false) {
     this.clearSubMenuBox();
     this.subMenuGen[this.selectedSubmenu] = true;
     if (this.selectedSubmenu in SUB_MENU_ITEMS !== true) return;
     const items = SUB_MENU_ITEMS[this.selectedSubmenu];
+    this.maxScroll = items.length - this.submenuVisibleMax;
+    if (this.maxScroll < 0) this.maxScroll = 0;
+    if (!sameSec) {
+      this.submenuItemOffset = 0; //reset offset;
+      this.removeSubmenuScrollBtns();
+    }
     items.forEach((item, i) => {
+      if (i < this.submenuItemOffset) return;
+      if (i >= this.submenuVisibleMax) {
+        this.genSubmenuScrollBtns();
+        if (i >= this.submenuVisibleMax + this.submenuItemOffset) return;
+      }
       //TODO - add max item generation and horizontal item scroller
       //switch to another subfunction
       const newItem = document.createElement("div");
@@ -435,7 +516,6 @@ class ActionBar {
   dropItem(ev) {
     const itemData = JSON.parse(ev.dataTransfer.getData("itemData"));
     let targetIndex = ev.target.id.split("_")[0];
-    console.log(targetIndex);
     if (targetIndex == "") targetIndex = ev.path[1].id.split("_")[0];
     itemData.push(targetIndex);
     if (this.checkSwitchStatus(itemData[2])) {

@@ -204,7 +204,7 @@ class Client {
     this.focusLastLogMsg();
   }
   focusLastLogMsg() {
-    console.log(this.LOG.lastChild.scrollIntoView());
+    this.LOG.lastChild.scrollIntoView();
   }
   cleanup() {
     ctx.clearRect(0, 0, this.CANVAS.width, this.CANVAS.height);

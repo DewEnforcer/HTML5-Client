@@ -24,6 +24,9 @@ class Drone {
     this.offsetY = offsetsData.y;
     this.baseOffsetX = offsetsData.x;
     this.baseOffsetY = offsetsData.y;
+    this.Hypo = null;
+    this.realAngle = null;
+    //console.log(this.baseOffsetX, this.baseOffsetY, this.position);
     this.simpleRepresentation = this.type[0].toUpperCase();
     this.simpleColor = "white";
     this.spriteOffset = {
@@ -39,6 +42,17 @@ class Drone {
     this.setSequence();
     this.setColor();
     this.setSimpleDrone();
+    this.setAngleFromShip();
+  }
+  setAngleFromShip() {
+    this.realAngle = Math.atan2(
+      this.baseOffsetY + DEFAULTS.DRONE_DISTANCE,
+      this.baseOffsetX
+    );
+    this.Hypo = Math.sqrt(
+      Math.pow(this.baseOffsetX, 2) +
+        Math.pow(this.baseOffsetY + DEFAULTS.DRONE_DISTANCE, 2)
+    );
   }
   setGroup() {
     const groups = [
@@ -46,9 +60,10 @@ class Drone {
       [4, 6, 8],
       [5, 7, 9],
     ];
-    const grpAngles = [90, 180, 0];
+    const grpAngles = [180, 90, 270];
     groups.forEach((grp, i) => {
-      if (grp.includes(this.position)) this.groupAngle = grpAngles[i];
+      if (grp.includes(this.position))
+        this.groupAngle = toRadians(grpAngles[i]);
     });
   }
   setColor() {
@@ -65,11 +80,7 @@ class Drone {
     )}.png`;
   }
   draw() {
-    ctx.drawImage(
-      this.sprite,
-      this.renderX + this.offsetX,
-      this.renderY + this.offsetY
-    );
+    ctx.drawImage(this.sprite, this.renderX, this.renderY);
     ctx.globalAlpha = 1;
   }
   rotateSelf() {
@@ -95,12 +106,15 @@ class Drone {
     this.y = this.ownerCenter.y; //; + this.offset.y;
   }
   rotateAround() {
+    //const offsetAngle = this.angle + this.groupAngle; //start angle
     // TODO fix the offset bug
-    this.offsetX = this.baseOffsetX * Math.cos(this.angle);
-    this.offsetY = this.baseOffsetY * Math.sin(this.angle);
-    this.angle -= toRadians(this.groupAngle);
-    this.x -= DEFAULTS.DRONE_DISTANCE * Math.cos(this.angle); //; + this.offset.x;
-    this.y += DEFAULTS.DRONE_DISTANCE * Math.sin(this.angle); //; + this.offset.y;
+    //this.offsetX = this.baseOffsetX * Math.cos(offsetAngle);
+    //this.offsetY = this.baseOffsetY * Math.sin(offsetAngle);
+    //this.angle -= toRadians(this.groupAngle);
+    this.x -=
+      this.Hypo * Math.cos(this.realAngle + this.angle + this.groupAngle); //; + this.offset.x;
+    this.y +=
+      this.Hypo * Math.sin(this.realAngle + this.angle + this.groupAngle); //; + this.offset.y;
   }
   setSimpleDrone() {
     this.owner.simpleDroneRepresentations += this.simpleRepresentation;

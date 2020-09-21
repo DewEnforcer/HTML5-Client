@@ -16,7 +16,6 @@ class Background {
   setCoords() {
     this.x = ((mapScale - 1) * realMapWidth) / 4 / 10;
     this.y = ((mapScale - 1) * realMapHeight) / 4 / 10;
-    console.log(this.x, this.y);
   }
   setNewMap() {
     this.mapID = HERO.mapID;
