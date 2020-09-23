@@ -30,6 +30,7 @@ class Portal {
     this.state = "portalInactive";
     this.active = false;
     clearInterval(this.interval);
+    HERO.ship.drones.forEach((d) => d.setDistPerFrame());
   }
   activate() {
     if (this.active) return;

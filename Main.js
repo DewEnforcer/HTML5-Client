@@ -1,11 +1,11 @@
-const BUILD_VERSION = "0.6.7";
+const BUILD_VERSION = "0.6.9";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //karnival, replacement, turkey, winterGiftBox
 //loading bar data
 let loadingStatus = false;
 let progress = 0;
-const maxProgress = 13;
+const maxProgress = 13 + Models.length;
 //vars awaiting fetch
 let TEXT_TRANSLATIONS;
 let DEFAULTS;
@@ -46,6 +46,7 @@ let END = false;
 let SHOW_FPS = false;
 let DELTA_TIME = new Date() * 1;
 let LAST_UPDATE = 0;
+let FPS = 0;
 let gameInit = false;
 let mapName = "";
 const CLOAK_ALPHA = 0.5;
@@ -58,6 +59,7 @@ const langNameToKey = {
   English: "en",
   Česky: "cz",
 };
+const averageRefreshRate = [];
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;
@@ -99,7 +101,6 @@ let screenHeight;
 let ctx;
 //MAIN FUNCTIONS
 const initiatePostHero = () => {
-  PRELOADER.preload();
   UIcls = new UI();
   SETTINGS = new Settings();
   SETTINGS.genUi();
@@ -113,6 +114,7 @@ const initiatePostHero = () => {
   voice.play();
   welcome.play();
   MAIN.writeToLog("welcome_log", true);
+  displayFPS();
   drawGame();
 };
 const setGamemapObjects = () => {
@@ -168,7 +170,7 @@ const drawGame = (timestamp) => {
   if (END) return;
   DELTA_TIME = timestamp - LAST_UPDATE;
   LAST_UPDATE = timestamp;
-  displayFPS();
+  averageRefreshRate.push(DELTA_TIME);
   requestAnimationFrame(drawGame);
   MAIN.cleanup();
   BG_LAYER.update();
@@ -237,4 +239,5 @@ window.onload = () => {
   MAIN = new Client();
   SOCKET = new Socket(HOST);
   PRELOADER = new Preloader(Models);
+  PRELOADER.preload();
 };

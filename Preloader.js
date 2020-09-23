@@ -13,6 +13,8 @@ class Preloader {
         arr.push(buffSprite);
       }
       this.modelsBuffer.push(arr);
+      progress++;
+      manageLoadingBar();
     });
   }
 }

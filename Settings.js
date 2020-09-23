@@ -56,6 +56,11 @@ class Settings {
           options: ["low", "high"],
         },
         {
+          name: "ships",
+          isCheck: false,
+          options: ["low", "high"],
+        },
+        {
           name: "language",
           isCheck: false,
           options: ["Česky", "English"],
@@ -242,7 +247,8 @@ class Settings {
     this.settingsArr[settingParams[1]][settingParams[2]] = settingVal;
     if (settingParams[1] == MENU_INTERFACE && settingParams[2] == 5) {
       UIcls.changeUiBgs(settingVal);
-    } else if (settingParams[1] == MENU_GRAPHICS && settingParams[2] == 6) {
+    } else if (settingParams[1] == MENU_GRAPHICS && settingParams[2] == 7) {
+      //lang settings
       MAIN.setNewLanguage(settingVal);
     }
     this.saveSettings();

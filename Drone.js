@@ -18,6 +18,11 @@ class Drone {
     this.angle = this.owner.pointingAngle;
     this.angleCalc = 360 / 32; //change;
     this.position = position;
+    //
+    this.goalDistance = DEFAULTS.DRONE_DISTANCE;
+    this.currDistance = 0;
+    this.distPerFrame = 1;
+    //
     let offsetsData = DRONE_POSITIONS[position + 1];
     this.offsetX = offsetsData.x;
     this.offsetY = offsetsData.y;
@@ -37,6 +42,7 @@ class Drone {
     this.sprite.src = null;
     this.settingMenu = MENU_INTERFACE;
     this.settingIndex = 2;
+    this.setDistPerFrame();
     this.setSpritePath();
     this.setGroup();
     this.getOwnerCenter();
@@ -44,6 +50,17 @@ class Drone {
     this.setColor();
     this.setSimpleDrone();
     this.setAngleFromShip();
+  }
+  setDistPerFrame(toShip = false) {
+    if (toShip) {
+      this.distPerFrame = -2;
+      this.currDistance += this.distPerFrame;
+      this.goalDistance = 0;
+    } else {
+      this.distPerFrame = 2;
+      this.currDistance += this.distPerFrame;
+      this.goalDistance = DEFAULTS.DRONE_DISTANCE;
+    }
   }
   setSpritePath() {
     this.spritePath = `./spacemap/drones/`;
@@ -58,12 +75,12 @@ class Drone {
   }
   setAngleFromShip() {
     this.realAngle = Math.atan2(
-      this.baseOffsetY + DEFAULTS.DRONE_DISTANCE,
+      this.baseOffsetY + this.currDistance,
       this.baseOffsetX
     );
     this.Hypo = Math.sqrt(
       Math.pow(this.baseOffsetX, 2) +
-        Math.pow(this.baseOffsetY + DEFAULTS.DRONE_DISTANCE, 2)
+        Math.pow(this.baseOffsetY + this.currDistance, 2)
     );
   }
   setGroup() {
@@ -120,11 +137,6 @@ class Drone {
     this.y = this.ownerCenter.y; //; + this.offset.y;
   }
   rotateAround() {
-    //const offsetAngle = this.angle + this.groupAngle; //start angle
-    // TODO fix the offset bug
-    //this.offsetX = this.baseOffsetX * Math.cos(offsetAngle);
-    //this.offsetY = this.baseOffsetY * Math.sin(offsetAngle);
-    //this.angle -= toRadians(this.groupAngle);
     this.x -=
       this.Hypo * Math.cos(this.realAngle + this.angle + this.groupAngle); //; + this.offset.x;
     this.y +=
@@ -134,7 +146,6 @@ class Drone {
     this.owner.simpleDroneRepresentations += this.simpleRepresentation;
   }
   drawSimpleDrone() {
-    //TODO FIX IIIIIIIAZ
     let margin = 0;
     if (this.simpleRepresentation == "Z") margin = 5;
     this.x =
@@ -152,12 +163,19 @@ class Drone {
     );
     ctx.fillStyle = "black";
   }
+  updateRadPos() {
+    //ad inital
+    if (this.goalDistance == this.currDistance) return;
+    this.currDistance += this.distPerFrame;
+    this.setAngleFromShip();
+  }
   update() {
     if (!SETTINGS.settingsArr[this.settingMenu][this.settingIndex]) {
       this.drawSimpleDrone();
       return;
     }
     this.getOwnerCenter();
+    this.updateRadPos();
     this.setRealPos();
     this.rotateSelf();
     this.rotateAround();

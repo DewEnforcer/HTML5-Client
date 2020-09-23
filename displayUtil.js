@@ -47,6 +47,50 @@ const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   }
   ctx.fillStyle = "black";
 };
+const getDroneOffset = (drnString) => {
+  return getTextOffset(DEFAULTS.DRONE_SIMPLE_FONT, drnString);
+};
+const drawUserShipInfo = (
+  rankSprite,
+  rank,
+  factionSprite,
+  factionID,
+  x,
+  y,
+  usernameOffsetX,
+  offsetY,
+  isHero,
+  username
+) => {
+  if (!SETTINGS.settingsArr[MENU_INTERFACE][0]) return;
+  const xRankMargin = 18;
+  const xFactionMargin = 2;
+  const marginTop = 14;
+  if (rank >= 0)
+    ctx.drawImage(
+      rankSprite,
+      x - xRankMargin - usernameOffsetX,
+      y + offsetY - marginTop
+    );
+  if (factionID > 0) {
+    ctx.drawImage(
+      factionSprite,
+      x + xFactionMargin + usernameOffsetX,
+      y + offsetY - marginTop + 2
+    );
+  }
+  let color = COLORS.COLOR_ENEMY;
+  if (isHero) color = COLORS.COLOR_HERO;
+  else if (factionID == HERO.ship.faction) color = COLORS.COLOR_ALLY;
+  ctx.shadowColor = "black";
+  ctx.shadowBlur = 4;
+  ctx.textAlign = "left";
+  ctx.font = DEFAULTS.USERNAME_FONT;
+  ctx.fillStyle = color;
+  ctx.fillText(username, x - usernameOffsetX, Math.round(y + offsetY)); //add proper offset
+  ctx.fillStyle = "black";
+  ctx.shadowBlur = 0;
+};
 const drawName = (offsetX, username, faction, isHero, x, y, offsetY = 120) => {
   if (!SETTINGS.settingsArr[MENU_INTERFACE][0]) username = "Unidentified";
   x -= offsetX;
@@ -63,9 +107,6 @@ const drawName = (offsetX, username, faction, isHero, x, y, offsetY = 120) => {
   ctx.fillText(username, x, y); //add proper offset
   ctx.fillStyle = "black";
   ctx.shadowBlur = 0;
-};
-const getDroneOffset = (drnString) => {
-  return getTextOffset(DEFAULTS.DRONE_SIMPLE_FONT, drnString);
 };
 const drawRank = (rank, x, y, offsetY) => {
   if (rank < 0) return;
@@ -95,9 +136,7 @@ const drawLeech = (width, height, x, y, seq) => {
 const drawFormation = (formation, x, y) => {
   const top = 30;
   const marginX = 65;
-  const sprite = new Image();
-  sprite.src = `./spacemap/formations/${formation}.png`;
-  ctx.drawImage(sprite, x - marginX, y - top);
+  ctx.drawImage(formation, x - marginX, y - top);
 };
 const drawGateRings = (numOfRings, x, y, offsetY) => {
   const xMargin = 19;
@@ -161,20 +200,28 @@ const manageFpsWindow = () => {
     fpsBox.classList.add("fps_display");
     document.body.appendChild(fpsBox);
     SHOW_FPS = true;
+    displayFPS();
   }
 };
 const displayFPS = () => {
+  FPS = Math.round(
+    1000 /
+      (averageRefreshRate.reduce((total, val) => total + val, 0) /
+        averageRefreshRate.length)
+  );
+  averageRefreshRate.splice(0, averageRefreshRate.length);
+  setTimeout(displayFPS, 1000);
   if (!SHOW_FPS) return;
-  let fps = Math.round(1000 / DELTA_TIME);
   document.querySelector(
     ".fps_display"
-  ).innerHTML = `<span>FPS: ${fps} | V${BUILD_VERSION}</span>`;
+  ).innerHTML = `<span>FPS: ${FPS} | V${BUILD_VERSION}</span>`;
 };
 //game objects interactions
 const handlePortalJump = (data) => {
   data = trimData(data);
   const portal = getPortalById(data[0]);
   if (portal == null) return;
+  HERO.ship.drones.forEach((d) => d.setDistPerFrame(true));
   const sound = new Sound(`./spacemap/audio/portal/portalJump.mp3`);
   const voice = new Sound(`./spacemap/audio/portal/voicePortalJump.mp3`);
   voice.play();

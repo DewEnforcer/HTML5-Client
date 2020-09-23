@@ -27,7 +27,12 @@ class Ship {
     this.destY = this.y;
     this.ID = ID;
     this.rank = rank;
+    this.rankSprite = new Image();
+    this.rankSprite.src = `./spacemap/ui/rank/rank_${this.rank}.png`;
     this.faction = faction;
+    this.factionSprite = new Image();
+    this.factionSprite.src = `./spacemap/ui/faction/${faction}.png`;
+    this.formationSprite = new Image();
     this.hoverVal = 0;
     this.speed = {
       x: 0,
@@ -46,7 +51,7 @@ class Ship {
     this.maxRotation = Models[shipID][1];
     this.sequenceNum = 0;
     this.sequenceNumEnd = 0;
-    this.sequence = this.setSequence(0);
+    this.sequence = this.setSequence();
     this.setSmooth = false;
     this.isAttacking = false;
     this.targetID = 0;
@@ -84,6 +89,10 @@ class Ship {
     //
     this.robotType = robotType;
     this.robot = new Robot(this, robotType);
+    this.setFormationSprite();
+  }
+  setFormationSprite(id = 0) {
+    this.formationSprite.src = `./spacemap/formations/${id}.png`;
   }
   setTarget(target) {
     this.targetID = target;
@@ -125,7 +134,8 @@ class Ship {
       rotateTo.x = enemyCoords.x;
       rotateTo.y = enemyCoords.y;
     }
-    this.pointingAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
+    let newPointAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
+    this.pointingAngle = newPointAngle;
     this.sequence = this.setSequence();
   }
   setSmoothRotation() {
@@ -219,28 +229,19 @@ class Ship {
       this.y - this.offset.y - CAMERA.followY + halfScreenHeight;
   }
   draw() {
-    drawName(
-      this.nickOffset,
-      this.name,
+    drawUserShipInfo(
+      this.rankSprite,
+      this.rank,
+      this.factionSprite,
       this.faction,
-      this.isHero,
       this.render.renderX + this.offset.x,
       this.render.renderY,
-      this.nickOffsetY
+      this.nickOffset,
+      this.nickOffsetY,
+      this.isHero,
+      this.name
     );
     if (!this.isNpc) {
-      drawRank(
-        this.rank,
-        this.render.renderX + this.offset.x - this.nickOffset,
-        this.render.renderY,
-        this.nickOffsetY
-      );
-      drawFaction(
-        this.render.renderX + this.offset.x + this.nickOffset,
-        this.render.renderY,
-        this.faction,
-        this.nickOffsetY
-      );
       drawGateRings(
         7,
         this.render.renderX + this.offset.x - this.nickOffset,
@@ -248,7 +249,7 @@ class Ship {
         this.nickOffsetY
       );
       drawFormation(
-        0,
+        this.formationSprite,
         this.render.renderX + this.offset.x,
         this.render.renderY
       );
@@ -272,7 +273,9 @@ class Ship {
       }
     }
     this.sprite.src = this.sequence;
+    ctx.imageSmoothingEnabled = !(SETTINGS.settingsArr[0][6] == 4);
     ctx.drawImage(this.sprite, this.render.renderX, this.render.renderY);
+    ctx.imageSmoothingEnabled = true;
   }
   updateDrones() {
     this.drones.forEach((drn) => drn.update());
