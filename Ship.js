@@ -51,7 +51,7 @@ class Ship {
     this.maxRotation = Models[shipID][1];
     this.sequenceNum = 0;
     this.sequenceNumEnd = 0;
-    this.sequence = this.setSequence();
+    this.setSequence();
     this.setSmooth = false;
     this.isAttacking = false;
     this.targetID = 0;
@@ -136,7 +136,7 @@ class Ship {
     }
     let newPointAngle = calcAngle(this.x, this.y, rotateTo.x, rotateTo.y);
     this.pointingAngle = newPointAngle;
-    this.sequence = this.setSequence();
+    this.setSequence();
   }
   setSmoothRotation() {
     const currAngle = this.sequenceNum * this.rotationCalc; //add the rotation incr speed depending on distance between ship and distance
@@ -175,7 +175,8 @@ class Ship {
       }
     }
     this.rotateToSeq();
-    return `./spacemap/ships/${this.ship}/${this.sequenceNum}.png`;
+    console.log(PRELOADER.modelsBuffer[this.shipID]);
+    this.sprite = PRELOADER.modelsBuffer[this.shipID][this.sequenceNum];
   }
   controlLeech() {
     if (this.leechAwaitFrameMax == -1 && !this.leechDisplay)
@@ -272,7 +273,6 @@ class Ship {
         return;
       }
     }
-    this.sprite.src = this.sequence;
     ctx.imageSmoothingEnabled = !(SETTINGS.settingsArr[0][6] == 4);
     ctx.drawImage(this.sprite, this.render.renderX, this.render.renderY);
     ctx.imageSmoothingEnabled = true;

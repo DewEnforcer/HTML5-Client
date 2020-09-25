@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.6.9";
+const BUILD_VERSION = "0.7.0";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //karnival, replacement, turkey, winterGiftBox
