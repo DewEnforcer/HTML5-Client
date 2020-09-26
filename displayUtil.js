@@ -4,6 +4,21 @@ const getTextOffset = (font, txt) => {
   ctx.font = font;
   return Math.ceil(ctx.measureText(txt).width / 2);
 };
+const checkXVis = (x, off) => {
+  return x - off > screenWidth * 1.1 || x + off < -100;
+};
+const checkYVis = (y, off) => {
+  return y - off > screenHeight * 1.1 || y + off < -100;
+};
+const controlVisibility = (x, offX, y, offY) => {
+  //return if object is visible
+  if (checkXVis(x, offX) || checkYVis(y, offY)) {
+    return false;
+  } else {
+    return true;
+  }
+};
+//
 const drawCenter = (ship) => {
   ctx.fillStyle = "red";
   ctx.fillRect(
@@ -66,12 +81,13 @@ const drawUserShipInfo = (
   const xRankMargin = 18;
   const xFactionMargin = 2;
   const marginTop = 14;
-  if (rank >= 0)
+  if (rank >= 0) {
     ctx.drawImage(
       rankSprite,
       x - xRankMargin - usernameOffsetX,
       y + offsetY - marginTop
     );
+  }
   if (factionID > 0) {
     ctx.drawImage(
       factionSprite,
@@ -91,46 +107,11 @@ const drawUserShipInfo = (
   ctx.fillStyle = "black";
   ctx.shadowBlur = 0;
 };
-const drawName = (offsetX, username, faction, isHero, x, y, offsetY = 120) => {
-  if (!SETTINGS.settingsArr[MENU_INTERFACE][0]) username = "Unidentified";
-  x -= offsetX;
-  y += offsetY;
-  y = Math.round(y);
-  let color = COLORS.COLOR_ENEMY;
-  if (faction == HERO.ship.faction) color = COLORS.COLOR_ALLY;
-  if (isHero) color = COLORS.COLOR_HERO;
-  ctx.shadowColor = "black";
-  ctx.shadowBlur = 4;
-  ctx.textAlign = "left";
-  ctx.font = DEFAULTS.USERNAME_FONT;
-  ctx.fillStyle = color;
-  ctx.fillText(username, x, y); //add proper offset
-  ctx.fillStyle = "black";
-  ctx.shadowBlur = 0;
-};
-const drawRank = (rank, x, y, offsetY) => {
-  if (rank < 0) return;
-  const xMargin = 18; //16 + 2
-  const marginTOP = 14; //accounts for rank height
-  let rankSprite = new Image();
-  rankSprite.src = `./spacemap/ui/rank/rank_${rank}.png`;
-  ctx.drawImage(rankSprite, x - xMargin, y + offsetY - marginTOP);
-};
-const drawFaction = (x, y, faction, offsetY) => {
-  if (faction == 0) return;
-  const xMargin = 2;
-  const marginTOP = 12; //accounts for faction height
-  let factionSprite = new Image();
-  factionSprite.src = `./spacemap/ui/faction/${faction}.png`;
-  ctx.drawImage(factionSprite, x + xMargin, y + offsetY - marginTOP);
-};
 const drawLeech = (width, height, x, y, seq) => {
   const leechSize = 301;
   x += (width - leechSize) / 2;
   y += (height - leechSize) / 2;
-  const sprite = new Image();
-  sprite.src = `./spacemap/sfx/leech/${seq}.png`;
-  ctx.drawImage(sprite, x, y);
+  ctx.drawImage(PRELOADER.modelsBuffer[7][seq], x, y);
 };
 // TODO
 const drawFormation = (formation, x, y) => {
@@ -204,17 +185,15 @@ const manageFpsWindow = () => {
   }
 };
 const displayFPS = () => {
-  FPS = Math.round(
-    1000 /
-      (averageRefreshRate.reduce((total, val) => total + val, 0) /
-        averageRefreshRate.length)
-  );
+  if (averageRefreshRate.length <= 0) return;
+  const totalMS = averageRefreshRate.reduce((total, val) => total + val, 0);
+  FPS = Math.round(1000 / (totalMS / averageRefreshRate.length));
   averageRefreshRate.splice(0, averageRefreshRate.length);
   setTimeout(displayFPS, 1000);
   if (!SHOW_FPS) return;
   document.querySelector(
     ".fps_display"
-  ).innerHTML = `<span>FPS: ${FPS} | V${BUILD_VERSION}</span>`;
+  ).innerHTML = `<span>FPS: ${FPS} | Rendering ${SHIPS_ON_SCREEN} ships | V${BUILD_VERSION}</span>`;
 };
 //game objects interactions
 const handlePortalJump = (data) => {

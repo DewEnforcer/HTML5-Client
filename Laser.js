@@ -36,8 +36,7 @@ class Laser {
     );
     this.timeTo = 0;
     this.end = false;
-    this.sprite = new Image();
-    this.sprite.src = `./spacemap/lasers/laser${laserID}.png`;
+    this.sprite = PRELOADER.modelsBuffer[16][laserID];
     this.renderX = 0;
     this.renderY = 0;
     this.changeRenderPos();

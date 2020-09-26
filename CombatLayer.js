@@ -58,6 +58,7 @@ class CombatLayer {
     laserBlast.play();
   }
   static addLaser(salvos, ship, target, laserID) {
+    if (typeof ship == "undefined") return;
     let LaserToFire;
     if (laserID == 4) {
       LaserToFire = LASER_DATA.LASER_SALVO_POINTS[ship.laserClass][0]; //TODO ADD PROPER SAB CENTER

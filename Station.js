@@ -17,6 +17,7 @@ class Station {
     this.renderY = this.y + -CAMERA.followY / this.z + halfScreenHeight;
   }
   draw() {
+    if (!controlVisibility(this.renderX, this.renderY)) return; //save resources
     ctx.translate(this.renderX, this.renderY);
     ctx.rotate(-this.angle);
     ctx.drawImage(this.sprite, -this.offset.x, -this.offset.y);

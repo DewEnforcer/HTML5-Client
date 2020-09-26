@@ -47,7 +47,9 @@
     "miss_hit": "MISS",
     "dmz": "Demilitarized zone",
     "rad_warn": "WARNING! RADIATION LEVEL ABOVE THE TOLERANCE LIMIT, RETURN TO A SAFE ZONE!",
-    "ships_sett": "Quality of ships"
+    "ships_sett": "Quality of ships",
+    "game_sounds_sett": "Game sounds",
+    "game_music_sett": "Game soundtrack"
   },
   "cz": {
     "welcome_log": "Vítej v LOGIS-Systems",
@@ -96,7 +98,9 @@
     "actionbar_attack_sett": "Útok přes rychlou lištu slotů",
     "miss_hit": "MIMO",
     "dmz": "Zóna neútočení",
-    "rad_warn": "WARNING! RADIATION LEVEL ABOVE THE TOLERANCE LIMIT, RETURN TO A SAFE ZONE!",
-    "ships_sett": "Kvalita lodí"
+    "rad_warn": "POZOR! RADIACE NAD BEZPEČNOU ÚROVNÍ, VRAŤ SE DO BEZPEČNÉ ZÓNY!",
+    "ships_sett": "Kvalita lodí",
+    "game_sounds_sett": "Zvuky hry",
+    "game_music_sett": "Hudba hry"
   }
 }

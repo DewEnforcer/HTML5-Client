@@ -18,6 +18,7 @@ class Engine {
     this.angle = 0;
     this.settingMenu = MENU_GRAPHICS;
     this.settingIndex = 5;
+    this.spriteIndex = DEFAULT_SHIP_SPRITE_OFFSET + SPRITE_ID_LIST.engine_std;
     this.setPosOffset();
     this.changePos();
     this.setAngle();
@@ -38,7 +39,7 @@ class Engine {
       SHIPS_ENGINES[this.enginePoint.engineClass][this.enginePoint.sequenceNum];
   }
   setSpriteSeq() {
-    this.engineSprite.src = `./spacemap/engines/standard/${this.seq}.png`;
+    this.engineSprite = PRELOADER.modelsBuffer[this.spriteIndex][this.seq];
   }
   draw() {
     ctx.translate(this.renderX, this.renderY);

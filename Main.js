@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.7.0";
+const BUILD_VERSION = "0.7.1";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //karnival, replacement, turkey, winterGiftBox
@@ -21,6 +21,8 @@ let LASER_POS = null;
 let MAP_OBJECTS_LIST = null;
 let LENS_AMOUNTS = null;
 let DRONE_POSITIONS;
+let DEFAULT_SHIP_SPRITE_OFFSET = 0;
+let SPRITE_ID_LIST;
 // btns
 const BTN_FPS = 102;
 const BTN_ATTACK = 32;
@@ -59,6 +61,7 @@ const langNameToKey = {
   English: "en",
   Česky: "cz",
 };
+let SHIPS_ON_SCREEN = 0;
 const averageRefreshRate = [];
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
@@ -106,7 +109,6 @@ const initiatePostHero = () => {
   SETTINGS.genUi();
   MINIMAP = new Minimap();
   setGamemapObjects();
-  BG_LAYER = new Background(HERO.mapID);
   gameInit = true;
   MAIN.translateGame(true);
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);
@@ -126,6 +128,9 @@ const setGamemapObjects = () => {
   mapScale = multiplier;
   realMapWidth = mapWidth * multiplier;
   realMapHeight = mapHeight * multiplier;
+  BG_LAYER = new Background(HERO.mapID);
+  if ("music" in mapObjectList === true) BG_LAYER.setTheme(mapObjectList.music);
+  else BG_LAYER.setTheme("default");
   mapObjectList.planets.forEach((planet) => {
     MAP_PLANETS.push(
       new Planet(planet.id, planet.x, planet.y, planet.z, planet.mScale)
@@ -170,7 +175,7 @@ const drawGame = (timestamp) => {
   if (END) return;
   DELTA_TIME = timestamp - LAST_UPDATE;
   LAST_UPDATE = timestamp;
-  averageRefreshRate.push(DELTA_TIME);
+  if (!isNaN(DELTA_TIME)) averageRefreshRate.push(DELTA_TIME);
   requestAnimationFrame(drawGame);
   MAIN.cleanup();
   BG_LAYER.update();
@@ -180,6 +185,7 @@ const drawGame = (timestamp) => {
   MAP_PLANETS.forEach((planet) => planet.update());
   MAP_PORTALS.forEach((portal) => portal.update());
   MAP_STATIONS.forEach((sta) => sta.update());
+  SHIPS_ON_SCREEN = 0;
   MAP_SHIPS.forEach((ship) => ship.update());
   COMBAT_LAYER.forEach((item) => item.update());
   DRONES_LAYER.forEach((drone) => drone.update());

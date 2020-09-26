@@ -11,7 +11,18 @@ class Background {
     this.relativeY = 10;
     this.settingMenu = MENU_GRAPHICS;
     this.settingIndex = 0;
+    this.musicTheme = null;
+    this.music = null;
     this.setCoords();
+  }
+  setTheme(theme) {
+    if (theme == this.musicTheme) return;
+    this.music = new Sound(
+      "./spacemap/audio/themes/" + theme + ".mp3",
+      true,
+      1
+    );
+    this.music.play();
   }
   setCoords() {
     this.x = ((mapScale - 1) * realMapWidth) / 4 / 10;

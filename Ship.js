@@ -28,10 +28,14 @@ class Ship {
     this.ID = ID;
     this.rank = rank;
     this.rankSprite = new Image();
-    this.rankSprite.src = `./spacemap/ui/rank/rank_${this.rank}.png`;
+    if (this.rank >= 0) {
+      this.rankSprite.src = `./spacemap/ui/rank/rank_${this.rank}.png`;
+    }
     this.faction = faction;
     this.factionSprite = new Image();
-    this.factionSprite.src = `./spacemap/ui/faction/${faction}.png`;
+    if (this.faction > 0) {
+      this.factionSprite.src = `./spacemap/ui/faction/${faction}.png`;
+    }
     this.formationSprite = new Image();
     this.hoverVal = 0;
     this.speed = {
@@ -175,7 +179,6 @@ class Ship {
       }
     }
     this.rotateToSeq();
-    console.log(PRELOADER.modelsBuffer[this.shipID]);
     this.sprite = PRELOADER.modelsBuffer[this.shipID][this.sequenceNum];
   }
   controlLeech() {
@@ -230,6 +233,17 @@ class Ship {
       this.y - this.offset.y - CAMERA.followY + halfScreenHeight;
   }
   draw() {
+    if (
+      !controlVisibility(
+        this.render.renderX,
+        this.offset.x,
+        this.render.renderY,
+        this.offset.y
+      )
+    ) {
+      return; //save resources
+    }
+    SHIPS_ON_SCREEN++;
     drawUserShipInfo(
       this.rankSprite,
       this.rank,

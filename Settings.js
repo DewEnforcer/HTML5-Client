@@ -105,6 +105,18 @@ class Settings {
           options: [],
         },
       ],
+      [
+        {
+          name: "game_sounds",
+          isCheck: false,
+          options: ["off", "on"],
+        },
+        {
+          name: "game_music",
+          isCheck: false,
+          options: ["off", "on"],
+        },
+      ],
     ];
     this.settingsBox = null;
     this.wrapperMenu = null;
@@ -112,7 +124,7 @@ class Settings {
     this.setSettings();
     UIcls.changeUiBgs(this.settingsArr[MENU_INTERFACE][5]);
   }
-  resetSettings() {
+  resetSettings(force = false) {
     const allSettings = [];
     this.menuContents.forEach((set, i) => {
       allSettings.push([]);
@@ -127,6 +139,9 @@ class Settings {
         }
       });
     });
+    if (force) {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(allSettings));
+    }
     return allSettings;
   }
   getSettingsBox() {

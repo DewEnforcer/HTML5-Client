@@ -27,6 +27,7 @@ class Fetcher {
         OFFSET_DATA = data.offsets;
         progress++;
         LENS_AMOUNTS = data.lensNumber;
+        SPRITE_ID_LIST = data.spriteIDS;
         manageLoadingBar();
       });
   }

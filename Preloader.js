@@ -14,7 +14,13 @@ class Preloader {
     });
   }
   preloadModel(index) {
-    this.preloadSprite(index, 0, this.modelsData[index][1]);
+    this.preloadSprite(
+      index,
+      this.modelsData[index][2],
+      this.modelsData[index][1]
+    );
+    if (this.modelsData[index][0].includes("ships"))
+      DEFAULT_SHIP_SPRITE_OFFSET++;
     progress++;
     manageLoadingBar();
   }
