@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.7.1";
+const BUILD_VERSION = "0.7.2";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //karnival, replacement, turkey, winterGiftBox
@@ -180,22 +180,26 @@ const drawGame = (timestamp) => {
   MAIN.cleanup();
   BG_LAYER.update();
   //HERO.processDest();
-  LENSFLARE_LAYER.forEach((lens) => lens.update());
-  NEBULA_LAYER.forEach((neb) => neb.update());
-  MAP_PLANETS.forEach((planet) => planet.update());
-  MAP_PORTALS.forEach((portal) => portal.update());
-  MAP_STATIONS.forEach((sta) => sta.update());
+  updateLayer(LENSFLARE_LAYER);
+  updateLayer(NEBULA_LAYER);
+  updateLayer(MAP_PLANETS);
+  updateLayer(MAP_PORTALS);
   SHIPS_ON_SCREEN = 0;
-  MAP_SHIPS.forEach((ship) => ship.update());
-  COMBAT_LAYER.forEach((item) => item.update());
-  DRONES_LAYER.forEach((drone) => drone.update());
-  LASER_LAYER.forEach((laser) => laser.update());
-  ROCKET_LAYER.forEach((rocket) => rocket.update());
-  EXPLOSION_LAYER.forEach((exp) => exp.update());
-  MESSAGE_LAYER.forEach((msg) => msg.update());
+  updateLayer(MAP_SHIPS);
+  updateLayer(COMBAT_LAYER);
+  updateLayer(DRONES_LAYER);
+  updateLayer(LASER_LAYER);
+  updateLayer(ROCKET_LAYER);
+  updateLayer(EXPLOSION_LAYER);
+  updateLayer(MESSAGE_LAYER);
   lockTarget();
-  HIT_LAYER.forEach((hit) => hit.update());
+  updateLayer(HIT_LAYER);
   MINIMAP.minimapManager();
+};
+const updateLayer = (layer) => {
+  for (let i = 0, n = layer.length; i < n; i++) {
+    layer[i].update();
+  }
 };
 const resetGamemap = () => {
   const sound = new Sound(`./spacemap/audio/portal/mapChange.mp3`);
