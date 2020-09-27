@@ -34,6 +34,8 @@ class Laser {
       this.dest.x,
       this.dest.y
     );
+    this.minusAngle = this.angle - LASER_ANGLE_TOLERATION;
+    this.plusAngle = this.angle + LASER_ANGLE_TOLERATION;
     this.timeTo = 0;
     this.end = false;
     this.sprite = PRELOADER.modelsBuffer[16][laserID];
@@ -46,21 +48,25 @@ class Laser {
     };
     this.maxSpeedPerFrame = null;
     this.baseSpeed = LASER_SPEED;
+    this.initDist = 0;
     if (laserID == -1) this.baseSpeed = ELA_SPEED;
     this.setSpeed();
   }
   setSpeed() {
+    console.log(new Date().getTime());
     this.speed = speedVelocity(this.baseSpeed, this.angle);
-    this.maxSpeedPerFrame = Math.abs(this.speed.x) + Math.abs(this.speed.y);
+    this.initDist = getDistance(this.x, this.y, this.dest.x, this.dest.y);
+    this.timeTo = (this.initDist / this.baseSpeed) * 1000;
   }
   terminate() {
+    console.log(new Date().getTime(), this.speed, this.initDist);
     this.end = true;
-    LASER_LAYER.some((laser, i) => {
-      if (laser.ID == this.ID) {
+    for (let i = 0, n = LASER_LAYER.length; i < n; i++) {
+      if (LASER_LAYER[i].ID == this.ID) {
         LASER_LAYER.splice(i, 1);
-        return true;
+        break;
       }
-    });
+    }
   }
   drawPoint() {
     ctx.fillStyle = "red";
@@ -70,14 +76,19 @@ class Laser {
     this.x += this.speed.x / DELTA_TIME;
     this.y += this.speed.y / DELTA_TIME;
     this.timeTo -= DELTA_TIME;
-    let distanceFromTarget =
+    let relativeAngle = calcAngle(this.x, this.y, this.dest.x, this.dest.y);
+    if (this.timeTo <= 0) this.terminate();
+    //if (relativeAngle > this.plusAngle || this.relativeAngle < this.minusAngle)
+    //this.terminate();
+    /*let distanceFromTarget =
       getDistance(this.x, this.y, this.dest.x, this.dest.y) -
       this.maxSpeedPerFrame / DELTA_TIME;
     if (
       (distanceFromTarget > 0 && distanceFromTarget < this.targetOff.x) ||
       (distanceFromTarget < 0 && distanceFromTarget > this.targetOff.x)
-    )
+    ) {
       this.terminate();
+    } */
   }
   changeRenderPos() {
     this.renderX =

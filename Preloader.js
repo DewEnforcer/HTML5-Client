@@ -21,11 +21,13 @@ class Preloader {
     );
     if (this.modelsData[index][0].includes("ships"))
       DEFAULT_SHIP_SPRITE_OFFSET++;
-    progress++;
-    manageLoadingBar();
   }
   preloadSprite(modelIndex, spriteIndex, modelSprites) {
-    if (spriteIndex > modelSprites) return;
+    if (spriteIndex > modelSprites) {
+      progress++;
+      manageLoadingBar();
+      return;
+    }
     const model = this.modelsData[modelIndex];
     let buffSprite = new Image();
     buffSprite.src = `./spacemap/${model[0]}/${spriteIndex}.png`;
@@ -35,6 +37,28 @@ class Preloader {
       spriteIndex++;
       this.preloadSprite(modelIndex, spriteIndex, modelSprites);
     };
+    buffSprite.onerror = () => {
+      //add logger
+      this.modelsBuffer[modelIndex][spriteIndex] = buffSprite;
+      spriteIndex++;
+      this.preloadSprite(modelIndex, spriteIndex, modelSprites);
+    };
+  }
+  notifyUser(errType) {
+    //TODO
+  }
+  deliverErrorReport(type) {
+    fetch("./include/gameLogger.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `gameError=${type}&userID=${userID}&tsmp=${new Date().getTime()}`,
+    })
+      .then((res) => res.text())
+      .then((data) => {
+        console.log(data);
+      });
   }
 }
 

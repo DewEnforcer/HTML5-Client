@@ -49,7 +49,13 @@
     "rad_warn": "WARNING! RADIATION LEVEL ABOVE THE TOLERANCE LIMIT, RETURN TO A SAFE ZONE!",
     "ships_sett": "Quality of ships",
     "game_sounds_sett": "Game sounds",
-    "game_music_sett": "Game soundtrack"
+    "game_music_sett": "Game soundtrack",
+    "spacemap_label": "Star system",
+    "spacemap_target_currmap": "Current Map",
+    "spacemap_target_jumpmap": "Target Map",
+    "jump_start": "Initiate jump",
+    "sector_switch_0": "Show higher maps",
+    "sector_switch_1": "Show lower maps"
   },
   "cz": {
     "welcome_log": "Vítej v LOGIS-Systems",
@@ -101,6 +107,12 @@
     "rad_warn": "POZOR! RADIACE NAD BEZPEČNOU ÚROVNÍ, VRAŤ SE DO BEZPEČNÉ ZÓNY!",
     "ships_sett": "Kvalita lodí",
     "game_sounds_sett": "Zvuky hry",
-    "game_music_sett": "Hudba hry"
+    "game_music_sett": "Hudba hry",
+    "spacemap_label": "Hvězdný systém",
+    "spacemap_target_currmap": "Momentální Mapa",
+    "spacemap_target_jumpmap": "Cílová Mapa",
+    "jump_start": "Skoč",
+    "sector_switch_0": "Ukaž nové mapy",
+    "sector_switch_1": "Ukaž staré mapy"
   }
 }

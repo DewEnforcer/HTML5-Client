@@ -143,6 +143,13 @@
         "y": 0,
         "icon": "settings_",
         "useDefVal": false
+      },
+      {
+        "type": "spacemap_ov",
+        "x": -20,
+        "y": 117,
+        "icon": "spacemap_",
+        "useDefVal": true
       }
     ],
     "nonUiControllers": [

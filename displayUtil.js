@@ -185,15 +185,11 @@ const manageFpsWindow = () => {
   }
 };
 const displayFPS = () => {
-  if (averageRefreshRate.length <= 0) return;
-  const totalMS = averageRefreshRate.reduce((total, val) => total + val, 0);
-  FPS = Math.round(1000 / (totalMS / averageRefreshRate.length));
-  averageRefreshRate.splice(0, averageRefreshRate.length);
-  setTimeout(displayFPS, 1000);
   if (!SHOW_FPS) return;
+  let fps = Math.round(1000 / DELTA_TIME);
   document.querySelector(
     ".fps_display"
-  ).innerHTML = `<span>FPS: ${FPS} | Rendering ${SHIPS_ON_SCREEN} ships | V${BUILD_VERSION}</span>`;
+  ).innerHTML = `<span>FPS: ${fps} | Rendering ${SHIPS_ON_SCREEN} ships | V${BUILD_VERSION}</span>`;
 };
 //game objects interactions
 const handlePortalJump = (data) => {

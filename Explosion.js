@@ -13,10 +13,6 @@ class Explosion {
     this.ID = getLaserID();
     this.settingMenu = MENU_GRAPHICS;
     this.settingIndex = 4;
-    console.log(
-      Number(SETTINGS.settingsArr[this.settingMenu][this.settingIndex]) <
-        qualLevel
-    );
     if (
       Number(SETTINGS.settingsArr[this.settingMenu][this.settingIndex]) <
       qualLevel
@@ -60,7 +56,6 @@ class Explosion {
   }
   terminate() {
     EXPLOSION_LAYER.some((expl, i) => {
-      console.log(expl.ID, this.ID);
       if (expl.ID == this.ID) {
         EXPLOSION_LAYER.splice(i, 1);
         return true;

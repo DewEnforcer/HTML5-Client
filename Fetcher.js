@@ -7,6 +7,7 @@ class Fetcher {
     this.fetchEngineData();
     this.fetchLaserData();
     this.fetchActionbarData();
+    this.fetchSpacemapInfo();
   }
   static fetchData() {
     fetch("./js/client/gameData.json")
@@ -29,6 +30,13 @@ class Fetcher {
         LENS_AMOUNTS = data.lensNumber;
         SPRITE_ID_LIST = data.spriteIDS;
         manageLoadingBar();
+      });
+  }
+  static fetchSpacemapInfo() {
+    fetch("./js/client/spacemap.json")
+      .then((res) => res.json())
+      .then((data) => {
+        MAP_OVERVIEW_LIST = data;
       });
   }
   static fetchTranslations(callback = null) {

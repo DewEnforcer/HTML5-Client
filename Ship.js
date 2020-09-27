@@ -279,7 +279,6 @@ class Ship {
         this.render.renderY
       );
     }
-    this.updateDrones();
     if (this.isCloaked) {
       if (this.isHero) {
         ctx.globalAlpha = CLOAK_ALPHA;
@@ -287,6 +286,7 @@ class Ship {
         return;
       }
     }
+    this.updateDrones();
     ctx.imageSmoothingEnabled = !(SETTINGS.settingsArr[0][6] == 4);
     ctx.drawImage(this.sprite, this.render.renderX, this.render.renderY);
     ctx.imageSmoothingEnabled = true;
@@ -312,7 +312,7 @@ class Ship {
     this.draw();
     this.engine.update();
     this.robot.update();
-    if (this.leechOn) {
+    /* if (this.leechOn) { TODO
       this.controlLeech();
     }
     if (this.leechDisplay) {
@@ -328,7 +328,7 @@ class Ship {
         this.render.renderY,
         this.leechSeq
       );
-    }
+    } */
     ctx.globalAlpha = 1;
   }
 }

@@ -38,7 +38,6 @@ class CombatLayer {
   }
   static generateLasers(data) {
     data = trimData(data, 3);
-    let LaserToFire;
     let ship, target, laserID;
     ship = getShipById(data[0]);
     target = getShipById(data[1]);
@@ -59,20 +58,15 @@ class CombatLayer {
   }
   static addLaser(salvos, ship, target, laserID) {
     if (typeof ship == "undefined") return;
-    let LaserToFire;
-    if (laserID == 4) {
-      LaserToFire = LASER_DATA.LASER_SALVO_POINTS[ship.laserClass][0]; //TODO ADD PROPER SAB CENTER
-    } else {
-      LaserToFire =
-        LASER_DATA.LASER_SALVO_POINTS[ship.laserClass][ship.salvoPhase - 1];
-    }
-    LaserToFire.forEach((posKey) => {
-      let offset = LASER_POS[ship.laserClass][posKey][ship.sequenceNum];
+    let LaserToFire =
+      LASER_DATA.LASER_SALVO_POINTS[ship.laserClass][ship.salvoPhase - 1];
+    let baseOffset = LASER_POS[ship.laserClass];
+    for (let i = 0, n = LaserToFire.length; i < n; i++) {
       LASER_LAYER.push(
         new Laser(
           ship.x, //start point
           ship.y,
-          offset,
+          baseOffset[LaserToFire[i]][ship.sequenceNum],
           target.x,
           target.y,
           target.offset.x,
@@ -80,7 +74,7 @@ class CombatLayer {
           laserID
         )
       );
-    });
+    }
     ship.salvoPhase++;
     if (ship.salvoPhase > LASER_DATA.LASER_SALVO_POINTS[ship.laserClass].length)
       ship.salvoPhase = 1;

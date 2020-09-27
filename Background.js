@@ -15,8 +15,10 @@ class Background {
     this.music = null;
     this.setCoords();
   }
-  setTheme(theme) {
+  setTheme(theme, isInit = false) {
     if (theme == this.musicTheme) return;
+    this.musicTheme = theme;
+    if (!isInit) this.music.stop();
     this.music = new Sound(
       "./spacemap/audio/themes/" + theme + ".mp3",
       true,

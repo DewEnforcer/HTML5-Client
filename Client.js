@@ -44,6 +44,12 @@ class Client {
         icon: "settings",
         txt: "settings_label",
       },
+      {
+        cls: "spacemap_ov",
+        children: ["header", "main"],
+        icon: "spacemap",
+        txt: "spacemap_label",
+      },
     ];
     if (this.uiLoaded) return;
     this.CANVAS = document.createElement("canvas");

@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.7.2";
+const BUILD_VERSION = "0.7.3";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 //karnival, replacement, turkey, winterGiftBox
@@ -23,6 +23,7 @@ let LENS_AMOUNTS = null;
 let DRONE_POSITIONS;
 let DEFAULT_SHIP_SPRITE_OFFSET = 0;
 let SPRITE_ID_LIST;
+let MAP_OVERVIEW_LIST = null;
 // btns
 const BTN_FPS = 102;
 const BTN_ATTACK = 32;
@@ -35,7 +36,7 @@ const BTN_ACTIONBAR_SUBMENU = 116;
 //game vars not fetched
 const REFRESH_TIME = 100;
 const DRONE_SPEED = 200;
-const LASER_SPEED = 1100;
+const LASER_SPEED = 100;
 const ELA_SPEED = 500;
 const MISSILE_SPEED = 1000;
 const MAX_MISSILE_FLY_TIME = 5000;
@@ -63,6 +64,7 @@ const langNameToKey = {
 };
 let SHIPS_ON_SCREEN = 0;
 const averageRefreshRate = [];
+const LASER_ANGLE_TOLERATION = toRadians(20);
 //PATHS
 const PATH_TO_PORTALS = `./spacemap/portals`;
 const PATH_TO_PLANETS = `./spacemap/planets`;
@@ -96,7 +98,8 @@ let EVENT_MANAGER,
   PRELOADER,
   CAMERA,
   UIcls,
-  SETTINGS;
+  SETTINGS,
+  SPACEMAP;
 let halfScreenWidth;
 let halfScreenHeight;
 let screenWidth;
@@ -108,7 +111,8 @@ const initiatePostHero = () => {
   SETTINGS = new Settings();
   SETTINGS.genUi();
   MINIMAP = new Minimap();
-  setGamemapObjects();
+  setGamemapObjects(true);
+  SPACEMAP = new Spacemap();
   gameInit = true;
   MAIN.translateGame(true);
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);
@@ -119,7 +123,7 @@ const initiatePostHero = () => {
   displayFPS();
   drawGame();
 };
-const setGamemapObjects = () => {
+const setGamemapObjects = (init = false) => {
   let multiplier = 1;
   const mapObjectList = MAP_OBJECTS_LIST[HERO.mapID];
   if ("scale" in mapObjectList === true) {
@@ -128,9 +132,10 @@ const setGamemapObjects = () => {
   mapScale = multiplier;
   realMapWidth = mapWidth * multiplier;
   realMapHeight = mapHeight * multiplier;
-  BG_LAYER = new Background(HERO.mapID);
-  if ("music" in mapObjectList === true) BG_LAYER.setTheme(mapObjectList.music);
-  else BG_LAYER.setTheme("default");
+  if (init) BG_LAYER = new Background(HERO.mapID);
+  if ("music" in mapObjectList === true)
+    BG_LAYER.setTheme(mapObjectList.music, init);
+  else BG_LAYER.setTheme("default", init);
   mapObjectList.planets.forEach((planet) => {
     MAP_PLANETS.push(
       new Planet(planet.id, planet.x, planet.y, planet.z, planet.mScale)
@@ -175,7 +180,8 @@ const drawGame = (timestamp) => {
   if (END) return;
   DELTA_TIME = timestamp - LAST_UPDATE;
   LAST_UPDATE = timestamp;
-  if (!isNaN(DELTA_TIME)) averageRefreshRate.push(DELTA_TIME);
+  displayFPS();
+  FPS++;
   requestAnimationFrame(drawGame);
   MAIN.cleanup();
   BG_LAYER.update();
@@ -198,6 +204,7 @@ const drawGame = (timestamp) => {
 };
 const updateLayer = (layer) => {
   for (let i = 0, n = layer.length; i < n; i++) {
+    if (typeof layer[i] == "undefined") continue;
     layer[i].update();
   }
 };
