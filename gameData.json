@@ -150,6 +150,13 @@
         "y": 117,
         "icon": "spacemap_",
         "useDefVal": true
+      },
+      {
+        "type": "chat",
+        "x": 20,
+        "y": 117,
+        "icon": "chat_",
+        "useDefVal": true
       }
     ],
     "nonUiControllers": [

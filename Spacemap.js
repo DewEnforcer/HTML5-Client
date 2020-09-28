@@ -1,10 +1,10 @@
 class Spacemap {
   constructor() {
-    this.showcasedSector = 0;
+    this.showcasedSector = HERO.mapID > 15 ? 1 : 0;
     this.selectedJumpMap = null;
     this.currentMap = HERO.mapID;
     this.levelLockedMaps = [];
-    this.blockedMaps = [];
+    this.blockedMaps = [30, 31, 32];
     this.avalMaps = [
       1,
       2,

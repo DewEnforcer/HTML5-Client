@@ -1,6 +1,7 @@
 const BUILD_VERSION = "0.7.3";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
+const CHAT_HOST = "ws://localhost:9338";
 //karnival, replacement, turkey, winterGiftBox
 //loading bar data
 let loadingStatus = false;
@@ -99,7 +100,9 @@ let EVENT_MANAGER,
   CAMERA,
   UIcls,
   SETTINGS,
-  SPACEMAP;
+  SPACEMAP,
+  CHAT_SOCKET,
+  CHAT_UI;
 let halfScreenWidth;
 let halfScreenHeight;
 let screenWidth;

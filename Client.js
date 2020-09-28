@@ -50,6 +50,12 @@ class Client {
         icon: "spacemap",
         txt: "spacemap_label",
       },
+      {
+        cls: "chat",
+        children: ["header", "main"],
+        icon: "chat",
+        txt: "chat_label",
+      },
     ];
     if (this.uiLoaded) return;
     this.CANVAS = document.createElement("canvas");
