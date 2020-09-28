@@ -5,7 +5,37 @@ class Spacemap {
     this.currentMap = HERO.mapID;
     this.levelLockedMaps = [];
     this.blockedMaps = [];
-    this.avalMaps = [10, 12];
+    this.avalMaps = [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+    ];
     this.mapSizes = [
       [621, 427],
       [710, 432],
@@ -52,6 +82,7 @@ class Spacemap {
     this.jumpPrice = 0;
     this.window = document.querySelector(".spacemap_ov_main");
     this.isJumping = false;
+    this.jumpAval = false;
     this.genUI();
   }
   genUI() {
@@ -113,7 +144,7 @@ class Spacemap {
         : "None"
     }</span></div>`;
     const priceBox = MAIN.createBox("spacemap_ov_control_pricebox");
-    priceBox.innerHTML = `<div><span>${this.jumpPrice} U.</span></div>`;
+    priceBox.innerHTML = `<div><span id="pricebox_txt">${this.jumpPrice} U.</span></div>`;
     const btnJump = document.createElement("button");
     btnJump.classList.add("spacemap_ov_control_jump", "translate_txt");
     btnJump.setAttribute("transl_key", "jump_start");
@@ -227,10 +258,21 @@ class Spacemap {
   updateJumpCountdown(timeLeft, el) {
     el.innerText = timeLeft;
   }
+  updateJumpAval() {
+    this.jumpAval =
+      this.selectedJumpMap != null && this.selectedJumpMap != this.currentMap;
+    const btn = document.querySelector(".spacemap_ov_control_jump");
+    if (btn == null) return;
+    if (this.jumpAval) {
+      btn.classList.add("jump_btn_active");
+    } else {
+      btn.classList.remove("jump_btn_active");
+    }
+  }
   //animations
-  removeJumpAnimation() {
-    document.querySelector("jump_spinner_icon").remove();
-    document.querySelector("text_spacejump").remove();
+  removeJumpAnimation(el, txtEl) {
+    el.remove();
+    txtEl.remove();
   }
   handleJumpSpinner(el, angle) {
     angle += 10;
@@ -239,37 +281,66 @@ class Spacemap {
   }
   addJumpAnimation() {
     const icon = document.createElement("img");
-    icon.src = `./spacemap/ui/spacejump/jumpSpinner.png`;
+    icon.src = `./spacemap/ui/spacejump/iconSelMap.png`;
     icon.classList.add("icon_spacejump", "jump_spinner_icon");
     const textEl = document.createElement("span");
     textEl.classList.add("text_spacejump");
+    const mapNode = document.querySelector(
+      "[mapID='" + this.selectedJumpMap + "']"
+    );
+    if (mapNode != null) {
+      mapNode.querySelector("img").remove();
+      mapNode.appendChild(icon);
+      mapNode.appendChild(textEl);
+    }
     return [icon, textEl];
   }
   //countdowns
   initJumpCountdown(time, spinEl, timeEl) {
     if (this.isJumping) return;
     this.isJumping = true;
-    let timeLeft = time;
+    let timeLeft = time * 1000;
+    let realTime = time;
     let angle = 0;
     let x = setInterval(() => {
+      if (angle >= 360) angle = 0;
       timeLeft -= 100;
-      this.updateJumpCountdown(timeLeft, timeEl);
+      if (timeLeft % 1000 == 0) realTime -= 1;
+      this.updateJumpCountdown(realTime, timeEl);
       angle = this.handleJumpSpinner(spinEl, angle);
-      if (timeLeft <= 0) {
-        this.removeJumpAnimation();
+      if (timeLeft <= 0 || !this.isJumping) {
+        MAIN.writeToLog("advanced_jump_finished", true);
+        this.removeJumpAnimation(spinEl, timeEl);
         clearInterval(x);
         this.isJumping = false;
+        return;
       }
     }, 100);
   }
   // handlers
-  handleJumpInit(time) {
+  handlePriceChange(newPrice) {
+    const priceBox = document.getElementById("pricebox_txt");
+    priceBox.innerText = newPrice + " U.";
+  }
+  handleJumpInit(data) {
+    data = trimData(data);
+    if (data[0] == 0) {
+      if (this.isJumping) {
+        this.handleJumpCancelled();
+      }
+      return;
+    }
     //TODO connect to server , add texts
     //time in ms
     let elements = this.addJumpAnimation();
     let spinEl = elements[0];
     let timeEl = elements[1];
-    this.initJumpCountdown(time, spinEl, timeEl);
+    MAIN.writeToLog("advanced_jump_init", true);
+    this.initJumpCountdown(Number(data[1]), spinEl, timeEl);
+  }
+  handleJumpCancelled() {
+    this.isJumping = false;
+    MAIN.writeToLog("advanced_jump_cancel", true);
   }
   handleSectorSwitch(ev) {
     let newSector = 1;
@@ -294,8 +365,12 @@ class Spacemap {
     this.selectedJumpMap = newMapID;
     this.updateMapInfo();
     this.selectJumpMap();
+    this.updateJumpAval();
+    SOCKET.sendPacket([REQUEST_ADVANCED_JUMP_PRICE, this.selectedJumpMap]);
   }
-  handleJumpEvent(ev) {
-    console.log(ev);
+  handleJumpEvent() {
+    if (this.isJumping || HERO.loggingOut || !this.jumpAval) return;
+    const packetCollection = [REQUEST_ADVANCED_JUMP, this.selectedJumpMap];
+    SOCKET.sendPacket(packetCollection);
   }
 }

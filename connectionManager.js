@@ -127,7 +127,11 @@ class Socket {
       case SET_ITEM_AMOUNTS:
         MAIN.actionBar.setItemAmount(data);
         break;
-      default:
+      case ADVANCED_JUMP_REQUEST_STATUS:
+        SPACEMAP.handleJumpInit(data);
+        break;
+      case ADVANCED_JUMP_COST:
+        SPACEMAP.handlePriceChange(data[2]);
         break;
     }
   }

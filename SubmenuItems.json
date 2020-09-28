@@ -192,6 +192,13 @@
       "isSelectable": true,
       "hasAmount": true,
       "maxBar": 50
+    },
+    {
+      "name": "ajp-01",
+      "id": 2,
+      "hasBar": false,
+      "isSelectable": false,
+      "hasAmount": false
     }
   ],
   "6": [],
