@@ -1,5 +1,6 @@
 class Chat {
   constructor(initData) {
+    //msg origin type - 0 = normal msg, 1 = whisper, 2 = system
     initData = trimData(initData);
     this.rooms = [];
     this.isBanned = false;
@@ -10,6 +11,9 @@ class Chat {
     this.messageBarEl = null;
     this.handleRoomData(initData);
     this.openRoom = this.rooms[0].id;
+    this.maxRoomBtns = 3;
+    this.roomBtnOffset = 0;
+    this.isTyping = false;
     this.initUI();
   }
   initUI() {
@@ -40,7 +44,12 @@ class Chat {
     }
     if (this.openRoom == null) return;
     this.rooms[this.openRoom].messages.forEach((msg) => {
-      this.createChatMsgEl(msg.fromUser, msg.msg, msg.isWhisper);
+      this.createChatMsgEl(
+        msg.fromUser,
+        msg.msg,
+        msg.isWhisper,
+        msg.originType
+      );
     });
   }
   genMsgBar() {
@@ -50,45 +59,66 @@ class Chat {
     this.messageBarEl.addEventListener("keypress", (ev) =>
       this.handleMsgSend(ev)
     );
+    this.messageBarEl.onfocus = () => (this.isTyping = true);
+    this.messageBarEl.addEventListener(
+      "focusout",
+      () => (this.isTyping = false)
+    );
     this.chatElBlock.appendChild(this.messageBarEl);
   }
   handleMessageData(data) {
     data = trimData(data); //msgText, isWhisper, roomParentID
     data.forEach((msg) => {
-      msgData = msg.split("/");
+      let msgData = msg.split("/");
       this.addChatMessage(msgData);
     });
   }
   addChatMessage(msgData) {
     const msgObj = {
       msg: msgData[0],
-      isWhisper: !!msgData[1],
-      fromUser: msgData[3],
+      isWhisper: !!msgData[2],
+      fromUser: msgData[1],
+      originType: 0,
     };
     this.rooms.forEach((room) => {
-      if (room.id == msgData[2]) {
+      if (room.id == msgData[3]) {
         room.messages.push(msgObj);
       }
     });
-    if (msgData[2] == this.openRoom) {
-      this.createChatMsgEl(msgObj.fromUser, msgObj.msg, msgObj.isWhisper);
+    if (msgData[3] == this.openRoom) {
+      this.createChatMsgEl(
+        msgObj.fromUser,
+        msgObj.msg,
+        msgObj.isWhisper,
+        msgObj.originType
+      );
     }
   }
-  createChatMsgEl(from, text, isWhisper) {
+  createChatMsgEl(from, text, isWhisper, type) {
     const msgNode = document.createElement("div");
     const msgText = document.createElement("span");
-    msgText.innerText = from + ": " + text;
-    if (isWhisper) msgNode.classList.add("msg_whisper");
+    msgText.classList.add("msg_text");
+    const fromWrapper = document.createElement("span");
+    fromWrapper.classList.add("chat_from_txt");
+    fromWrapper.innerText = from + ": ";
+    if (type == 2) fromWrapper.classList.add("system_msg");
+    if (isWhisper) fromWrapper.classList.add("msg_whisper");
+    msgNode.appendChild(fromWrapper);
+    msgText.innerText = text;
     msgNode.classList.add("msg_box");
     msgNode.appendChild(msgText);
     msgNode.setAttribute("from", from); //used to retrieve nickname for whispers
     msgNode.onclick = (ev) => this.handleMsgClick(ev);
+    let scHeight, top, clHeight;
+    scHeight = this.messageListEl.scrollHeight;
+    top = this.messageListEl.scrollTop;
+    clHeight = this.messageListEl.clientHeight;
     this.messageListEl.appendChild(msgNode);
+    this.focusNewMessage(scHeight, top, clHeight);
   }
   handleRoomData(data) {
     data.forEach((chatRoom) => {
       let roomData = chatRoom.split("/"); //roomID, roomName
-      console.log(roomData);
       this.addRoom(roomData);
     });
   }
@@ -96,9 +126,16 @@ class Chat {
     const roomObj = {
       name: roomData[0],
       id: roomData[1],
-      messages: [],
+      messages: [
+        //initial message
+        {
+          msg: TEXT_TRANSLATIONS.welcome_to_room + roomData[0],
+          isWhisper: false,
+          fromUser: "ChatBot",
+          originType: 2,
+        },
+      ],
     };
-    console.log(roomObj);
     this.rooms.push(roomObj);
     if (this.roomsListEl == null) return;
     const roomEl = document.createElement("button");
@@ -110,6 +147,12 @@ class Chat {
   }
   clearRoomMsgs() {
     this.messageListEl.innerHTML = "";
+  }
+  focusNewMessage(scrlHeight, top, clHeight) {
+    //scroll into view only when user isnt reading old msgs
+    if (Math.ceil(scrlHeight - top) === clHeight) {
+      this.messageListEl.lastChild.scrollIntoView();
+    }
   }
   //UI handlers
   handleMsgClick(ev) {

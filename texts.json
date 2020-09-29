@@ -59,7 +59,8 @@
     "advanced_jump_init": "Jump sequence has been initiated, stand-by!",
     "advanced_jump_cancel": "ERROR: Jump sequence has been stopped!",
     "advanced_jump_finished": "Jump sequence successfully complete!",
-    "chat_label": "Chat"
+    "chat_label": "Chat",
+    "welcome_to_room": "Welcome to room "
   },
   "cz": {
     "welcome_log": "Vítej v LOGIS-Systems",
@@ -121,6 +122,7 @@
     "advanced_jump_init": "Skoková sekvence byla spuštěna!",
     "advanced_jump_cancel": "CHYBA: Skoková sekvence byla ukončena!",
     "advanced_jump_finished": "Skoková sekvence byla úspešně dokončena!",
-    "chat_label": "Chat"
+    "chat_label": "Chat",
+    "welcome_to_room": "Vítej v místnosti "
   }
 }

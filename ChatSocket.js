@@ -23,7 +23,7 @@ class ChatSocket {
       //try connection again;
     }
   }
-  handleDisconnected() {
+  handleDisconnected(ev) {
     this.connected = false;
   }
   sendPacket(data) {

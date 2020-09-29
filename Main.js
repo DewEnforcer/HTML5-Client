@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.7.6";
+const BUILD_VERSION = "0.7.7";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 const CHAT_HOST = "ws://localhost:9338";
@@ -193,6 +193,7 @@ const drawGame = (timestamp) => {
   updateLayer(LENSFLARE_LAYER);
   updateLayer(NEBULA_LAYER);
   updateLayer(MAP_PLANETS);
+  updateLayer(MAP_STATIONS);
   updateLayer(MAP_PORTALS);
   SHIPS_ON_SCREEN = 0;
   updateLayer(MAP_SHIPS);

@@ -124,6 +124,7 @@ class EventManager {
   initListeners() {
     //game listeners
     document.addEventListener("keypress", (keyPress) => {
+      if (CHAT_UI.isTyping) return;
       this.handleKeyPress(keyPress);
     });
     window.addEventListener("mousemove", (evMouse) =>
