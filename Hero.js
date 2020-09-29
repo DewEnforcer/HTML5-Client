@@ -18,6 +18,7 @@ class Hero {
     config,
     repairBot
   ) {
+    this.username = username;
     this.isLogout = false;
     this.isJumping = false;
     this.lockedControls = false;

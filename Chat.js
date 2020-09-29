@@ -9,6 +9,7 @@ class Chat {
     this.messageListEl = null;
     this.messageBarEl = null;
     this.handleRoomData(initData);
+    this.openRoom = this.rooms[0].id;
     this.initUI();
   }
   initUI() {
@@ -61,7 +62,7 @@ class Chat {
   addChatMessage(msgData) {
     const msgObj = {
       msg: msgData[0],
-      isWhisper: !!Number(msgData[1]),
+      isWhisper: !!msgData[1],
       fromUser: msgData[3],
     };
     this.rooms.forEach((room) => {
@@ -85,9 +86,9 @@ class Chat {
     this.messageListEl.appendChild(msgNode);
   }
   handleRoomData(data) {
-    data = trimData(data);
     data.forEach((chatRoom) => {
       let roomData = chatRoom.split("/"); //roomID, roomName
+      console.log(roomData);
       this.addRoom(roomData);
     });
   }
@@ -97,7 +98,9 @@ class Chat {
       id: roomData[1],
       messages: [],
     };
+    console.log(roomObj);
     this.rooms.push(roomObj);
+    if (this.roomsListEl == null) return;
     const roomEl = document.createElement("button");
     roomEl.classList.add("btn_room_switch");
     roomEl.setAttribute("roomID", roomObj.id);
@@ -130,7 +133,8 @@ class Chat {
       const msgCopy = msgSent;
       msgCopy.replace(/ /g, "");
       if (msgCopy.length <= 0) return;
-      CHAT_SOCKET.sendPacket([CHAT_SEND_MESSAGE, msgSent]);
+      CHAT_SOCKET.sendPacket([CHAT_SEND_MESSAGE, msgSent, this.openRoom]);
+      this.messageBarEl.value = "";
     }
   }
 }

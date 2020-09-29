@@ -3,11 +3,10 @@ class ChatSocket {
     this.CONNECT_TARGET = target;
     this.socket = null;
     this.connected = false;
+    this.initiateConnection();
   }
   initiateConnection() {
     this.initSocket();
-    MAIN.generateConn();
-    MAIN.changeConnStatus(true);
     this.initiateSocketListeners();
   }
   initSocket() {
@@ -32,6 +31,7 @@ class ChatSocket {
   }
   DataHandler({ data }) {
     data = data.split("|");
+    console.log(data);
     switch (data[1]) {
       case CHAT_INIT:
         CHAT_UI = new Chat(data);
@@ -54,7 +54,13 @@ class ChatSocket {
   }
   initiateSocketListeners() {
     this.socket.addEventListener("open", () => {
-      this.sendPacket([CHAT_CONN_DATA, userID, sessionID, GAME_HASH]);
+      this.sendPacket([
+        CHAT_CONN_DATA,
+        userID,
+        sessionID,
+        HERO.username,
+        GAME_HASH,
+      ]);
       this.connected = true;
     });
     this.socket.addEventListener("error", this.handleDisconnected);

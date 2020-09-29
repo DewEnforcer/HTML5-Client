@@ -71,7 +71,6 @@ class Drone {
       case 2:
         this.spritePath += `designs/hercules/`;
     }
-    console.log(this.spritePath);
   }
   setAngleFromShip() {
     this.realAngle = Math.atan2(

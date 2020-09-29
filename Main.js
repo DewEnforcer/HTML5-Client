@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.7.3";
+const BUILD_VERSION = "0.7.6";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 const CHAT_HOST = "ws://localhost:9338";
@@ -118,6 +118,7 @@ const initiatePostHero = () => {
   SPACEMAP = new Spacemap();
   gameInit = true;
   MAIN.translateGame(true);
+  CHAT_SOCKET = new ChatSocket(CHAT_HOST);
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);
   const voice = new Sound(`./spacemap/audio/start/voiceReady.mp3`);
   voice.play();
