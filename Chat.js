@@ -172,7 +172,7 @@ class Chat {
   handleMsgSend({ keyCode }) {
     if (keyCode == 13) {
       //pressed send
-      const msgSent = this.messageBarEl.value;
+      const msgSent = this.messageBarEl.value.replace("/", "&#47;");
       const msgCopy = msgSent;
       msgCopy.replace(/ /g, "");
       if (msgCopy.length <= 0) return;

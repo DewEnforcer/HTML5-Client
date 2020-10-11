@@ -4,8 +4,7 @@ class LensFlare {
     this.y = Number(y);
     this.z = Number(z);
     this.id = id;
-    this.sprite = new Image();
-    this.sprite.src = null;
+    this.sprite = null;
     this.lenses = [];
     this.seq = 0;
     this.frame = 0;
@@ -70,7 +69,7 @@ class LensFlare {
     this.setSprite();
   }
   setSprite() {
-    this.sprite.src = `./spacemap/lensflares/lensflare${this.id}/${this.seq}.png`;
+    this.sprite = PRELOADER.modelsBuffer.lensflares[this.id][this.seq];
   }
   rotate() {
     this.angle++;

@@ -211,5 +211,19 @@
     "jump_animat": 1,
     "port_idle": 2,
     "engine_std": 11
+  },
+  "Portals": {
+    "0": {
+      "name": "portal_std",
+      "sprite_active": 120,
+      "sprite_idle": 57,
+      "jump_animation": 0
+    },
+    "1": {
+      "name": "portal_zeta",
+      "sprite_active": 1,
+      "sprite_idle": 1,
+      "jump_animation": 1
+    }
   }
 }

@@ -33,7 +33,7 @@ function getOffset(shipID) {
   return OFFSET_DATA.SHIP_OFFSETS[shipID];
 }
 function getPortalOffset() {
-  return { x: 100, y: 100 }; //change once more portal types appear
+  return { x: 160, y: 160 }; //change once more portal types appear
 }
 function getStationOffset(id) {
   const stationOffsets = {

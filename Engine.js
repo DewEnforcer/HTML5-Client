@@ -1,5 +1,6 @@
 class Engine {
   constructor(enginePoint) {
+    this.engineType = 0;
     this.enginePoint = enginePoint;
     this.smoke = [];
     this.maxSmokes = 10;
@@ -8,7 +9,7 @@ class Engine {
     this.seq = 0;
     this.frame = 0;
     this.activateOnFrame = 4; //2
-    this.engineSprite = new Image();
+    this.engineSprite = null;
     this.spriteOffset = OFFSET_DATA.ENGINE_OFFSETS[0];
     this.x = 0;
     this.y = 0;
@@ -18,7 +19,6 @@ class Engine {
     this.angle = 0;
     this.settingMenu = MENU_GRAPHICS;
     this.settingIndex = 5;
-    this.spriteIndex = DEFAULT_SHIP_SPRITE_OFFSET + SPRITE_ID_LIST.engine_std;
     this.setPosOffset();
     this.changePos();
     this.setAngle();
@@ -39,7 +39,7 @@ class Engine {
       SHIPS_ENGINES[this.enginePoint.engineClass][this.enginePoint.sequenceNum];
   }
   setSpriteSeq() {
-    this.engineSprite = PRELOADER.modelsBuffer[this.spriteIndex][this.seq];
+    this.engineSprite = PRELOADER.modelsBuffer.engines[this.engineType][this.seq];
   }
   draw() {
     ctx.translate(this.renderX, this.renderY);

@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.7.7";
+const BUILD_VERSION = "0.7.8";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 const CHAT_HOST = "ws://localhost:9338";
@@ -6,7 +6,7 @@ const CHAT_HOST = "ws://localhost:9338";
 //loading bar data
 let loadingStatus = false;
 let progress = 0;
-const maxProgress = 13 + Models.length;
+const maxProgress = 13 + 26;
 //vars awaiting fetch
 let TEXT_TRANSLATIONS;
 let DEFAULTS;
@@ -25,6 +25,7 @@ let DRONE_POSITIONS;
 let DEFAULT_SHIP_SPRITE_OFFSET = 0;
 let SPRITE_ID_LIST;
 let MAP_OVERVIEW_LIST = null;
+let PORTAL_LIST_DATA = null;
 // btns
 const BTN_FPS = 102;
 const BTN_ATTACK = 32;

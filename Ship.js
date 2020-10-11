@@ -50,9 +50,9 @@ class Ship {
     this.nickOffsetY = this.offset.nickY + DEFAULTS.NICK_Y;
     this.sprite = new Image();
     this.pointingAngle = 0;
-    this.rotationCalc = 360 / Models[shipID][1];
+    this.rotationCalc = 360 / Models.ships[shipID][1];
     this.rotationIncr = 0;
-    this.maxRotation = Models[shipID][1];
+    this.maxRotation = Models.ships[shipID][1];
     this.sequenceNum = 0;
     this.sequenceNumEnd = 0;
     this.setSequence();
@@ -179,7 +179,7 @@ class Ship {
       }
     }
     this.rotateToSeq();
-    this.sprite = PRELOADER.modelsBuffer[this.shipID][this.sequenceNum];
+    this.sprite = PRELOADER.modelsBuffer.ships[this.shipID][this.sequenceNum];
   }
   controlLeech() {
     if (this.leechAwaitFrameMax == -1 && !this.leechDisplay)

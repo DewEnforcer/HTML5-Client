@@ -4,6 +4,7 @@ class Explosion {
     y,
     type,
     explType,
+    explTypeKey,
     offset,
     setOffset = false,
     maxSeq = 20,
@@ -25,14 +26,14 @@ class Explosion {
       this.renderY;
       this.offsetSprite = offset / 2;
       this.type = type;
-      this.sprite = new Image();
-      this.sprite.src = null;
+      this.sprite = null;
       this.frame = 0;
       this.activateOn = 2;
       this.seq = 0;
       this.maxSeq = maxSeq;
       this.sound = null;
       this.soundType = explType;
+      this.explTypeKey = explTypeKey;
       if (setOffset) this.setRandomCoords();
       this.setSprite();
       this.playExplosionSound();
@@ -50,9 +51,7 @@ class Explosion {
     this.y += getRandomNumber(-randomOffset, randomOffset);
   }
   setSprite() {
-    this.sprite.src = `./spacemap/pyroEffects/${this.soundType + this.type}/${
-      this.seq
-    }.png`;
+    this.sprite = PRELOADER.modelsBuffer.explosions[this.explTypeKey][this.type][this.seq];
   }
   terminate() {
     EXPLOSION_LAYER.some((expl, i) => {

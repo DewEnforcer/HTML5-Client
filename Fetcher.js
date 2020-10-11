@@ -29,6 +29,7 @@ class Fetcher {
         progress++;
         LENS_AMOUNTS = data.lensNumber;
         SPRITE_ID_LIST = data.spriteIDS;
+        PORTAL_LIST_DATA = data.Portals;
         manageLoadingBar();
       });
   }

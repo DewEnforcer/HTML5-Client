@@ -78,7 +78,7 @@ class Missile {
   }
   onDetonation() {
     if (typeof this.target == "undefined") return;
-    new Explosion(this.target.x, this.target.y, 0, "rocketExplosion", 89, true);
+    new Explosion(this.target.x, this.target.y, 0, "rocketExplosion", "rockets", 89, true);
   }
   terminate() {
     ROCKET_LAYER.some((rocket, i) => {

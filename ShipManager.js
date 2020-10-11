@@ -32,7 +32,7 @@ class ShipManager {
       if (ship.ID == data[1]) {
         //destroy?
         if (data[0] == 1) {
-          new Explosion(ship.x, ship.y, 0, "explosion", 300, false, 79, 3);
+          new Explosion(ship.x, ship.y, 0, "explosion", "pyro", 300, false, 79, 3);
         }
         index = i;
       } else if (ship.targetID == data[1]) {

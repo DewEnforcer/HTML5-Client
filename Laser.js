@@ -38,7 +38,7 @@ class Laser {
     this.plusAngle = this.angle + LASER_ANGLE_TOLERATION;
     this.timeTo = 0;
     this.end = false;
-    this.sprite = PRELOADER.modelsBuffer[16][laserID];
+    this.sprite = PRELOADER.modelsBuffer.lasers[this.laserID][this.laserID];
     this.renderX = 0;
     this.renderY = 0;
     this.changeRenderPos();
