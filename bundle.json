@@ -1,0 +1,83 @@
+{
+    "client": {
+        "audio": ["Sound.js"],
+        "commands": [
+            "client_commands.js",
+            "server_commands.js"
+        ],
+        "common": [
+            "Draggable.js"
+        ],
+        "components": [
+            "Component.js",
+            "Log.js",
+            "UserInfo.js",
+            "ShipInfo.js"
+        ],
+        "layers": [
+            "CombatLayer.js",
+            "Hit.js",
+            "MapMessage.js"
+        ],
+        "managers": [
+            "DroneManager.js",
+            "eventManager.js",
+            "HitechManager.js",
+            "LanguageManager.js",
+            "MapObjectManager.js",
+            "ShipManager.js"
+        ],
+        "mapObjects": [
+            "MapObject.js",
+            "Background.js",
+            "Drone.js",
+            "Emp.js",
+            "Engine.js",
+            "Explosion.js",
+            "Laser.js",
+            "Lens.js",
+            "LensFlare.js",
+            "Missile.js",
+            "Nebula.js",
+            "Planet.js",
+            "Portal.js",
+            "Robot.js",
+            "Ship.js",
+            "Smoke.js",
+            "Station.js"
+        ],
+        "socketManagers": [
+            "connectionManager.js",
+            "ChatSocket.js",
+            "SocketObject.js"
+        ],
+        "ui": [
+            "Window.js",
+            "Header.js",
+            "Body.js",
+            "Controller.js",
+            "ClientPrototype.js",
+            "Chat.js",
+            "Minimap.js",
+            "Spacemap.js",
+            "Ui.js"
+        ],
+        "utils": [
+            {"name": "displayUtil.js", "defer": true},
+            "ElUtils.js",
+            "uiUtils.js",
+            "util.js"
+        ], 
+        "misc": [
+            "ActionBarPrototype.js",
+            "Camera.js",
+            "Fetcher.js",
+            "Hero.js",
+            "Models.js",
+            "Preloader.js",
+            "Refinery.js",
+            "Settings.js",
+            "Main.js"
+        ]
+    }
+}

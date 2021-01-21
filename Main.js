@@ -1,4 +1,4 @@
-const BUILD_VERSION = "0.7.8";
+const BUILD_VERSION = "0.7.9";
 let CURRENT_LANGUAGE = "en";
 const HOST = "ws://localhost:8080";
 const CHAT_HOST = "ws://localhost:9338";
@@ -6,7 +6,7 @@ const CHAT_HOST = "ws://localhost:9338";
 //loading bar data
 let loadingStatus = false;
 let progress = 0;
-const maxProgress = 13 + 26;
+const maxProgress = 13 + 26; //fix magic numbers
 //vars awaiting fetch
 let TEXT_TRANSLATIONS;
 let DEFAULTS;
@@ -24,6 +24,7 @@ let LENS_AMOUNTS = null;
 let DRONE_POSITIONS;
 let DEFAULT_SHIP_SPRITE_OFFSET = 0;
 let SPRITE_ID_LIST;
+let UI_ELEMENTS_DATA = null;
 let MAP_OVERVIEW_LIST = null;
 let PORTAL_LIST_DATA = null;
 // btns
@@ -99,11 +100,11 @@ let EVENT_MANAGER,
   MINIMAP,
   PRELOADER,
   CAMERA,
-  UIcls,
   SETTINGS,
   SPACEMAP,
   CHAT_SOCKET,
-  CHAT_UI;
+  CHAT_UI,
+  LANGUAGE_MANAGER;
 let halfScreenWidth;
 let halfScreenHeight;
 let screenWidth;
@@ -111,14 +112,15 @@ let screenHeight;
 let ctx;
 //MAIN FUNCTIONS
 const initiatePostHero = () => {
-  UIcls = new UI();
+  new UserInfo(MAIN.UI_ELEMENTS[1]);
+  new ShipInfo(MAIN.UI_ELEMENTS[2]);
   SETTINGS = new Settings();
   SETTINGS.genUi();
   MINIMAP = new Minimap();
   setGamemapObjects(true);
   SPACEMAP = new Spacemap();
   gameInit = true;
-  MAIN.translateGame(true);
+  LANGUAGE_MANAGER.translateGame(true);
   CHAT_SOCKET = new ChatSocket(CHAT_HOST);
   const welcome = new Sound(`./spacemap/audio/start/welcomeSound.mp3`);
   const voice = new Sound(`./spacemap/audio/start/voiceReady.mp3`);
@@ -163,8 +165,7 @@ const setGamemapObjects = (init = false) => {
     NEBULA_LAYER.push(new Nebula(neb.x, neb.y, neb.z, neb.type, neb.id));
   });
   mapName = mapObjectList.name;
-  if (typeof mapName === "undefined")
-    mapName = TEXT_TRANSLATIONS["unknown_map"];
+  if (!mapName) mapName = TEXT_TRANSLATIONS["unknown_map"];
   MESSAGE_LAYER.push(
     new MapMessage(`${TEXT_TRANSLATIONS["map_name_title"]} ${mapName}`, 3)
   );
@@ -210,7 +211,7 @@ const drawGame = (timestamp) => {
 };
 const updateLayer = (layer) => {
   for (let i = 0, n = layer.length; i < n; i++) {
-    if (typeof layer[i] == "undefined") continue;
+    if (!layer[i]) continue;
     layer[i].update();
   }
 };
@@ -227,8 +228,11 @@ const terminateGame = () => {
   window.close();
 };
 const handleLogoutResult = (bool) => {
-  if (bool == 1) terminateGame();
-  else HERO.setLogout();
+  if (bool == true) {
+    SOCKET.terminate();
+    terminateGame();
+  }
+  else if (HERO.isLogout) HERO.setLogout();
 };
 const stopFlySound = () => {
   isPlayingFly = false;
@@ -263,4 +267,5 @@ window.onload = () => {
   SOCKET = new Socket(HOST);
   PRELOADER = new Preloader(Models);
   PRELOADER.preload();
+  LANGUAGE_MANAGER = new LanguageManager();
 };

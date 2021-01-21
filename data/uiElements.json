@@ -1,0 +1,109 @@
+{
+    "ui": [
+        {
+            "id": 0,
+            "name": "log",
+            "children": ["header", "main"],
+            "icon": "log",
+            "label": "log_label",
+            "controller": {
+                "x": 0,
+                "y": 78,
+                "useDefPosition": true
+            },
+            "content": []
+        },
+        {
+            "id": 1,
+            "name": "userinfo",
+            "children": ["header", "main"],
+            "icon": "user",
+            "label": "user_label",
+            "hasComponent": true,
+            "controller": {
+                "x": 0,
+                "y": 0,
+                "useDefPosition": true
+            },
+            "content": [
+                { "name": "EP", "isBar": false, "color": "white", "icon": "iconEp" },
+                { "name": "CRED", "isBar": false, "color": "white", "icon": "iconCreds" },
+                { "name": "LVL", "isBar": false, "color": "white", "icon": "iconLevel" },
+                { "name": "URI", "isBar": false, "color": "white", "icon": "iconUri" },
+                { "name": "HON", "isBar": false, "color": "white", "icon": "iconHon" }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "shipinfo",
+            "children": ["header", "main"],
+            "icon": "ship",
+            "label": "ship_label",
+            "hasComponent": true,
+            "controller": {
+                "x": -20,
+                "y": 39,
+                "useDefPosition": true
+            },
+            "content": [
+                { "name": "HP", "isBar": true, "color": "#49BE40", "icon": "iconHp" },
+                { "name": "SHD", "isBar": true, "color": "#338FCC", "icon": "iconShd" },
+                { "name": "CFG", "isBar": false, "color": "white", "icon": "iconCfg", "hasEvent": true },
+                { "name": "CARGO", "isBar": true, "color": "yellow", "icon": "iconCargo"},
+                { "name": "SPEED", "isBar": false, "color": "white", "icon": "iconSpd" }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "spacemap",
+            "children": ["header", "main"],
+            "icon": "minimap",
+            "label": "minimap_label",
+            "controller": {
+                "x": 20,
+                "y": 39,
+                "useDefPosition": true
+            },
+            "content": []
+        },
+        {
+            "id": 4,
+            "name": "settings",
+            "children": ["header", "main"],
+            "icon": "settings",
+            "label": "settings_label",
+            "controller": {
+                "x": 1700,
+                "y": 0,
+                "useDefPosition": false
+            },
+            "content": []
+        },
+        {
+            "id": 5,
+            "name": "spacemap_ov",
+            "children": ["header", "main"],
+            "icon": "spacemap",
+            "label": "spacemap_label",
+            "controller": {
+                "x": -20,
+                "y": 117,
+                "useDefPosition": true
+            },
+            "content": []
+        },
+        {
+            "id": 6,
+            "name": "chat",
+            "children": ["header", "main"],
+            "icon": "chat",
+            "label": "chat_label",
+            "controller": {
+                "x": 20,
+                "y": 117,
+                "useDefPosition": true
+            },
+            "content": []
+        }
+    ]
+}

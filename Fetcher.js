@@ -8,9 +8,11 @@ class Fetcher {
     this.fetchLaserData();
     this.fetchActionbarData();
     this.fetchSpacemapInfo();
+    this.fetchUiElements();
   }
+  static PATH_TO_DATA = "./client/data"
   static fetchData() {
-    fetch("./js/client/gameData.json")
+    fetch(`${this.PATH_TO_DATA}/gameData.json`)
       .then((res) => res.json())
       .then((data) => {
         DEFAULTS = data.defaults;
@@ -33,15 +35,20 @@ class Fetcher {
         manageLoadingBar();
       });
   }
+  static async fetchUiElements() {
+    const res = await fetch(`${this.PATH_TO_DATA}/uiElements.json`);
+    const {ui} = await res.json();
+    UI_ELEMENTS_DATA = ui;
+  }
   static fetchSpacemapInfo() {
-    fetch("./js/client/spacemap.json")
+    fetch(`${this.PATH_TO_DATA}/spacemap.json`)
       .then((res) => res.json())
       .then((data) => {
         MAP_OVERVIEW_LIST = data;
       });
   }
   static fetchTranslations(callback = null) {
-    fetch("./js/client/texts.json")
+    fetch(`${this.PATH_TO_DATA}/texts.json`)
       .then((res) => res.json())
       .then((data) => {
         TEXT_TRANSLATIONS = data[CURRENT_LANGUAGE];
@@ -51,7 +58,7 @@ class Fetcher {
       });
   }
   static fetchMapObjects() {
-    fetch("./js/client/mapObjects.json")
+    fetch(`${this.PATH_TO_DATA}/mapObjects.json`)
       .then((res) => res.json())
       .then((data) => {
         MAP_OBJECTS_LIST = data;
@@ -60,7 +67,7 @@ class Fetcher {
       });
   }
   static fetchDroneObjects() {
-    fetch("./js/client/dronePos.json")
+    fetch(`${this.PATH_TO_DATA}/dronePos.json`)
       .then((res) => res.json())
       .then((data) => {
         DRONE_POSITIONS = data;
@@ -69,7 +76,7 @@ class Fetcher {
       });
   }
   static fetchEngineData() {
-    fetch("./js/client/enginePos.json")
+    fetch(`${this.PATH_TO_DATA}/enginePos.json`)
       .then((res) => res.json())
       .then((data) => {
         SHIPS_ENGINES = data;
@@ -78,7 +85,7 @@ class Fetcher {
       });
   }
   static fetchLaserData() {
-    fetch("./js/client/laserPos.json")
+    fetch(`${this.PATH_TO_DATA}/laserPos.json`)
       .then((res) => res.json())
       .then((data) => {
         LASER_POS = data;
@@ -87,7 +94,7 @@ class Fetcher {
       });
   }
   static fetchActionbarData() {
-    fetch("./js/client/SubmenuItems.json")
+    fetch(`${this.PATH_TO_DATA}/SubmenuItems.json`)
       .then((res) => res.json())
       .then((data) => {
         SUB_MENU_ITEMS = data;

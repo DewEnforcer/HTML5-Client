@@ -122,7 +122,7 @@ class Settings {
     this.wrapperMenu = null;
     this.menuOpen = 0;
     this.setSettings();
-    UIcls.changeUiBgs(this.settingsArr[MENU_INTERFACE][5]);
+    //UIcls.changeUiBgs(this.settingsArr[MENU_INTERFACE][5]);
   }
   resetSettings(force = false) {
     const allSettings = [];
@@ -159,11 +159,11 @@ class Settings {
     if (this.UI_GEN) return;
     this.getSettingsBox();
     //gen submenu wrapper
-    const wrapperSubmenu = MAIN.createBox("settings_submenu_wrapper");
+    const wrapperSubmenu = ElUtils.createBox("settings_submenu_wrapper");
     this.settingsBox.appendChild(wrapperSubmenu);
     //gen submenu
     this.subSections.forEach((subSec, i) => {
-      const btn = MAIN.createBox(
+      const btn = ElUtils.createBox(
         [subSec, "settings_submenu_btn", "translate_txt"],
         `submenu_btn_${i}`
       );
@@ -172,7 +172,7 @@ class Settings {
       wrapperSubmenu.appendChild(btn);
     });
     //gen menu
-    this.wrapperMenu = MAIN.createBox("settings_menu_wrapper");
+    this.wrapperMenu = ElUtils.createBox("settings_menu_wrapper");
     this.settingsBox.appendChild(this.wrapperMenu);
     //gen menu contents
     this.genMenuContents();
@@ -187,7 +187,7 @@ class Settings {
     if (this.menuContents.length <= this.menuOpen) return;
     const contents = this.menuContents[this.menuOpen];
     contents.forEach((option, i) => {
-      const wrap = MAIN.createBox([
+      const wrap = ElUtils.createBox([
         `${option.name}_wrapper_main`,
         `${option.isCheck ? "check" : "option"}_wrapper_main`,
       ]);
@@ -195,7 +195,7 @@ class Settings {
         option.name
       }_sett">${TEXT_TRANSLATIONS[option.name + "_sett"]}</span>`; //translate in real time, translating the whole game would be a waste of resources
       if (option.isCheck) {
-        const checker = MAIN.createCheckBox(
+        const checker = ElUtils.createCheckBox(
           "settings_checkbox",
           `checkbox_${this.menuOpen}_${i}`,
           this.settingsArr[this.menuOpen][i]
@@ -206,7 +206,7 @@ class Settings {
         );
         wrap.appendChild(checker);
       } else {
-        const select = MAIN.createSelectBox(
+        const select = ElUtils.createSelectBox(
           "settings_select",
           `select_${this.menuOpen}_${i}`,
           option.options,
@@ -230,7 +230,7 @@ class Settings {
     const opacityBoxCls = "settings_opct_box";
     const loaderCls = "loader_vis";
     if (loading) {
-      this.settingsBox.appendChild(MAIN.createBox(opacityBoxCls));
+      this.settingsBox.appendChild(ElUtils.createBox(opacityBoxCls));
       const icon = document.createElement("img");
       icon.classList.add(loaderCls);
       icon.src = "./image/graphics/loading.gif";
@@ -261,10 +261,10 @@ class Settings {
     } else settingVal = ev.currentTarget.checked;
     this.settingsArr[settingParams[1]][settingParams[2]] = settingVal;
     if (settingParams[1] == MENU_INTERFACE && settingParams[2] == 5) {
-      UIcls.changeUiBgs(settingVal);
+      //UIcls.changeUiBgs(settingVal);
     } else if (settingParams[1] == MENU_GRAPHICS && settingParams[2] == 7) {
       //lang settings
-      MAIN.setNewLanguage(settingVal);
+      LANGUAGE_MANAGER.setNewLanguage(settingVal);
     }
     this.saveSettings();
   }
