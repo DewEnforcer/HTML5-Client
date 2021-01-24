@@ -1,5 +1,5 @@
 class Nebula extends MapObject {
-  constructor(x, y, z, type, id) {
+  constructor({x, y, z, type, id}) {
     super(x,y,z);
     this.type = type;
 

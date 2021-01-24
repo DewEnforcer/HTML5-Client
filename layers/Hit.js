@@ -26,20 +26,20 @@ class Hit {
     });
   }
   fadeOut() {
-    this.fontSize += DELTA_TIME / 30; //max font size will now be 44
-    this.MAX_SEQUENCE -= DELTA_TIME;
+    this.fontSize += GAME_MAP.getDeltaTime() / 30; //max font size will now be 44
+    this.MAX_SEQUENCE -= GAME_MAP.getDeltaTime();
     this.seq++;
     if (Math.round(this.MAX_SEQUENCE) <= 0) this.terminate();
   }
   draw() {
-    ctx.font = this.font;
-    ctx.fillStyle = this.color;
-    ctx.textAlign = "center";
-    ctx.shadowColor = "black";
-    ctx.shadowBlur = 10;
-    ctx.fillText(this.value, this.x, this.y);
-    ctx.fillStyle = "black"; //reset fillstyle
-    ctx.shadowBlur = 0;
+    GAME_MAP.ctx.font = this.font;
+    GAME_MAP.ctx.fillStyle = this.color;
+    GAME_MAP.ctx.textAlign = "center";
+    GAME_MAP.ctx.shadowColor = "black";
+    GAME_MAP.ctx.shadowBlur = 10;
+    GAME_MAP.ctx.fillText(this.value, this.x, this.y);
+    GAME_MAP.ctx.fillStyle = "black"; //reset fillstyle
+    GAME_MAP.ctx.shadowBlur = 0;
   }
   update() {
     this.fadeOut();

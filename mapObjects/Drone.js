@@ -110,8 +110,8 @@ class Drone {
     this.sprite.src = newSrc;
   }
   draw() {
-    ctx.drawImage(this.sprite, this.renderX, this.renderY);
-    ctx.globalAlpha = 1;
+    GAME_MAP.ctx.drawImage(this.sprite, this.renderX, this.renderY);
+    GAME_MAP.ctx.globalAlpha = 1;
   }
   rotateSelf() {
     this.angle = toRadians(this.owner.sequenceNum * this.owner.rotationCalc);
@@ -119,9 +119,9 @@ class Drone {
   }
   drawPrevious() {
     this.prevCoords.forEach((pos) => {
-      ctx.fillStyle = "red";
-      ctx.fillRect(pos.x - 2.5, pos.y - 2.5, 5, 5);
-      ctx.fillStyle = "black";
+      GAME_MAP.ctx.fillStyle = "red";
+      GAME_MAP.ctx.fillRect(pos.x - 2.5, pos.y - 2.5, 5, 5);
+      GAME_MAP.ctx.fillStyle = "black";
     });
   }
   setRender() {
@@ -153,14 +153,14 @@ class Drone {
       DEFAULTS.DRONE_SIMPLE_MARGIN_X * this.position +
       margin; //center
     this.y = Math.round(this.owner.render.renderY + DEFAULTS.DRONE_SIMPLE_Y);
-    ctx.fillStyle = this.simpleColor;
-    ctx.font = DEFAULTS.DRONE_SIMPLE_FONT;
-    ctx.fillText(
+    GAME_MAP.ctx.fillStyle = this.simpleColor;
+    GAME_MAP.ctx.font = DEFAULTS.DRONE_SIMPLE_FONT;
+    GAME_MAP.ctx.fillText(
       this.simpleRepresentation,
       this.x - this.owner.droneSimpleOffset,
       this.y
     );
-    ctx.fillStyle = "black";
+    GAME_MAP.ctx.fillStyle = "black";
   }
   updateRadPos() {
     //ad inital

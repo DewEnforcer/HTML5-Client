@@ -1,5 +1,5 @@
 class Portal {
-  constructor(x, y, id, type = 0) {
+  constructor({x, y, id, type = 0}) {
     this.type =type;
     this.ID = id;
     this.x = x;
@@ -14,7 +14,6 @@ class Portal {
     this.maxIdleFrames = PORTAL_LIST_DATA[type].sprite_idle;
     this.jumpAnimationType = PORTAL_LIST_DATA[type].jump_animation;
     this.maxJumpAnimationFrames = PRELOADER.modelsData.portals.shockwave[this.jumpAnimationType][1];
-    console.log(this.maxJumpAnimationFrames);
     this.jumpInterval = 2500; //in ms
     this.shockwaveSprite = null;
     this.idlePortalWay = 1;
@@ -69,7 +68,7 @@ class Portal {
   }
   drawShockwave() {
     this.shockwaveSprite = PRELOADER.modelsBuffer.portals.shockwave[this.jumpAnimationType][this.shockwave.frame];
-    ctx.drawImage(
+    GAME_MAP.ctx.drawImage(
       this.shockwaveSprite,
       this.renderX - this.offset.x,
       this.renderY - this.offset.y
@@ -77,7 +76,7 @@ class Portal {
   }
   draw() {
     if (!controlVisibility(this.renderX, this.renderY)) return; //save resources
-    ctx.drawImage(
+    GAME_MAP.ctx.drawImage(
       this.sprite,
       this.renderX - this.offset.x,
       this.renderY - this.offset.y

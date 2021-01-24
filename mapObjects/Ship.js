@@ -1,6 +1,7 @@
 class Ship {
   constructor(
-    ID,
+    {
+    userID,
     x,
     y,
     shipID,
@@ -15,6 +16,7 @@ class Ship {
     robotType = 0,
     isNpc = 0,
     isHero = false
+  }
   ) {
     this.isHero = isHero;
     this.isNpc = Boolean(Number(isNpc));
@@ -25,7 +27,7 @@ class Ship {
     this.y = Number(y);
     this.destX = this.x;
     this.destY = this.y;
-    this.ID = ID;
+    this.ID = userID;
     this.rank = rank;
     this.rankSprite = new Image();
     if (this.rank >= 0) {
@@ -94,6 +96,12 @@ class Ship {
     this.robotType = robotType;
     this.robot = new Robot(this, robotType);
     this.setFormationSprite();
+  }
+  setShipData([id, hp, shd, maxHp, maxShd]) {
+    this.HP = Number(hp);
+    this.SHD = Number(shd);
+    this.maxHP = Number(maxHp);
+    this.maxSHD = Number(maxShd);
   }
   setFormationSprite(id = 0) {
     this.formationSprite.src = `./spacemap/formations/${id}.png`;
@@ -183,7 +191,7 @@ class Ship {
   }
   controlLeech() {
     if (this.leechAwaitFrameMax == -1 && !this.leechDisplay)
-      this.leechAwaitFrameMax = Math.round(10000 / DELTA_TIME);
+      this.leechAwaitFrameMax = Math.round(10000 / GAME_MAP.getDeltaTime());
     this.leechAwaitFrame++;
     if (this.leechAwaitFrame >= this.leechAwaitFrameMax && !this.leechDisplay) {
       this.leechFrame = 0;
@@ -220,9 +228,9 @@ class Ship {
     this.isFly = false;
   }
   changePos() {
-    this.x += this.speed.x * DELTA_TIME;
-    this.y += this.speed.y * DELTA_TIME;
-    this.timeTo -= DELTA_TIME;
+    this.x += this.speed.x * GAME_MAP.getDeltaTime();
+    this.y += this.speed.y * GAME_MAP.getDeltaTime();
+    this.timeTo -= GAME_MAP.getDeltaTime();
     if (this.isHero) CAMERA.update();
     if (Math.round(this.timeTo) <= 0) this.stopFlying();
   }
@@ -281,15 +289,15 @@ class Ship {
     }
     if (this.isCloaked) {
       if (this.isHero) {
-        ctx.globalAlpha = CLOAK_ALPHA;
+        GAME_MAP.ctx.globalAlpha = CLOAK_ALPHA;
       } else {
         return;
       }
     }
     this.updateDrones();
-    ctx.imageSmoothingEnabled = !(SETTINGS.settingsArr[0][6] == 4);
-    ctx.drawImage(this.sprite, this.render.renderX, this.render.renderY);
-    ctx.imageSmoothingEnabled = true;
+    GAME_MAP.ctx.imageSmoothingEnabled = !(SETTINGS.settingsArr[0][6] == 4);
+    GAME_MAP.ctx.drawImage(this.sprite, this.render.renderX, this.render.renderY);
+    GAME_MAP.ctx.imageSmoothingEnabled = true;
   }
   updateDrones() {
     this.drones.forEach((drn) => drn.update());
@@ -329,6 +337,6 @@ class Ship {
         this.leechSeq
       );
     } */
-    ctx.globalAlpha = 1;
+    GAME_MAP.ctx.globalAlpha = 1;
   }
 }

@@ -1,5 +1,6 @@
 class LensFlare {
-  constructor(id, x, y, z, lenses = 5) {
+  constructor({id, x, y, z, lenses = 5}) {
+    console.log(id);
     this.x = Number(x);
     this.y = Number(y);
     this.z = Number(z);
@@ -69,7 +70,7 @@ class LensFlare {
     this.setSprite();
   }
   setSprite() {
-    this.sprite = PRELOADER.modelsBuffer.lensflares[this.id][this.seq];
+    this.sprite = PRELOADER.modelsBuffer.lensflares[this.id][this.seq]; //nice
   }
   rotate() {
     this.angle++;
@@ -80,11 +81,11 @@ class LensFlare {
   }
   draw() {
     if (!this.display) return;
-    ctx.translate(this.renderX, this.renderY);
-    ctx.rotate(-toRadians(this.angle));
-    ctx.drawImage(this.sprite, -this.offset.x, -this.offset.y);
-    ctx.rotate(toRadians(this.angle));
-    ctx.translate(-this.renderX, -this.renderY);
+    GAME_MAP.ctx.translate(this.renderX, this.renderY);
+    GAME_MAP.ctx.rotate(-toRadians(this.angle));
+    GAME_MAP.ctx.drawImage(this.sprite, -this.offset.x, -this.offset.y);
+    GAME_MAP.ctx.rotate(toRadians(this.angle));
+    GAME_MAP.ctx.translate(-this.renderX, -this.renderY);
   }
   update() {
     if (!SETTINGS.settingsArr[this.settingMenu][this.settingIndex]) return;

@@ -1,6 +1,7 @@
 {
   "0": [
     {
+      "id": 1,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -11,6 +12,7 @@
       "portals": {}
     },
     {
+      "id": 2,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -21,6 +23,7 @@
       "portals": {}
     },
     {
+      "id": 3,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -31,6 +34,7 @@
       "portals": {}
     },
     {
+      "id": 4,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -41,6 +45,7 @@
       "portals": {}
     },
     {
+      "id": 5,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -51,6 +56,7 @@
       "portals": {}
     },
     {
+      "id": 6,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -61,6 +67,7 @@
       "portals": {}
     },
     {
+      "id": 7,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -71,6 +78,7 @@
       "portals": {}
     },
     {
+      "id": 8,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -81,6 +89,7 @@
       "portals": {}
     },
     {
+      "id": 9,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -91,6 +100,7 @@
       "portals": {}
     },
     {
+      "id": 10,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -101,6 +111,7 @@
       "portals": {}
     },
     {
+      "id": 11,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -111,6 +122,7 @@
       "portals": {}
     },
     {
+      "id": 12,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -121,6 +133,7 @@
       "portals": {}
     },
     {
+      "id": 13,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -131,6 +144,7 @@
       "portals": {}
     },
     {
+      "id": 14,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -141,6 +155,7 @@
       "portals": {}
     },
     {
+      "id": 15,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -153,6 +168,7 @@
   ],
   "1": [
     {
+      "id": 16,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -164,6 +180,7 @@
       "isBig": true
     },
     {
+      "id": 17,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -174,6 +191,7 @@
       "portals": {}
     },
     {
+      "id": 18,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -184,6 +202,7 @@
       "portals": {}
     },
     {
+      "id": 19,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -194,6 +213,7 @@
       "portals": {}
     },
     {
+      "id": 20,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -204,6 +224,7 @@
       "portals": {}
     },
     {
+      "id": 21,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -214,6 +235,7 @@
       "portals": {}
     },
     {
+      "id": 22,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -224,6 +246,7 @@
       "portals": {}
     },
     {
+      "id": 23,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -234,6 +257,7 @@
       "portals": {}
     },
     {
+      "id": 24,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -244,6 +268,7 @@
       "portals": {}
     },
     {
+      "id": 25,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -254,6 +279,7 @@
       "portals": {}
     },
     {
+      "id": 26,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -264,6 +290,7 @@
       "portals": {}
     },
     {
+      "id": 27,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -274,6 +301,7 @@
       "portals": {}
     },
     {
+      "id": 28,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -284,6 +312,7 @@
       "portals": {}
     },
     {
+      "id": 29,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -295,6 +324,7 @@
       "portals": {}
     },
     {
+      "id": 30,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -305,6 +335,7 @@
       "portals": {}
     },
     {
+      "id": 31,
       "hasCbs": false,
       "cbsPos": {
         "x": null,
@@ -315,6 +346,7 @@
       "portals": {}
     },
     {
+      "id": 32,
       "hasCbs": false,
       "cbsPos": {
         "x": null,

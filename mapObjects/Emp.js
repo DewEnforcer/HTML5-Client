@@ -56,15 +56,15 @@ class Emp {
   sequenceFlash() {
     if (this.flashFade <= 0 || !this.activateFlash) return;
     const flashFadePerFrame = 0.1;
-    ctx.globalAlpha = this.flashFade;
-    ctx.drawImage(
+    GAME_MAP.ctx.globalAlpha = this.flashFade;
+    GAME_MAP.ctx.drawImage(
       this.spriteFlash,
       this.renderX - this.MAX_EMP_SIZE,
       this.renderY - this.MAX_EMP_SIZE,
       this.MAX_EMP_SIZE * 2,
       this.MAX_EMP_SIZE * 2
     );
-    ctx.globalAlpha = 1;
+    GAME_MAP.ctx.globalAlpha = 1;
     if (this.frame % 2 == 0) this.flashFade -= flashFadePerFrame;
     if (this.flashFade <= 0.5) {
       this.activateRings = true;
@@ -90,9 +90,9 @@ class Emp {
       if (ring.radius * 2 >= this.MAX_EMP_SIZE) ring.startFade = true;
       if (ring.startFade && this.frame % 4 == 0) ring.fadeSeq -= fadePerFrame;
       ring.fadeSeq = this.roundFade(ring.fadeSeq);
-      ctx.globalAlpha = ring.fadeSeq;
+      GAME_MAP.ctx.globalAlpha = ring.fadeSeq;
       let fullsize = ring.radius * 2;
-      ctx.drawImage(
+      GAME_MAP.ctx.drawImage(
         this.spriteRing,
         this.renderX - ring.radius,
         this.renderY - ring.radius,
@@ -101,7 +101,7 @@ class Emp {
       );
       if (ring.fadeSeq <= 0) this.rings.splice(i, 1);
     });
-    ctx.globalAlpha = 1;
+    GAME_MAP.ctx.globalAlpha = 1;
   }
   roundFade(number) {
     var newnumber = number.toFixed(12);
@@ -126,15 +126,15 @@ class Emp {
       this.empFade -= empFadePerFrame;
       this.empFade = this.roundFade(this.empFade);
     }
-    ctx.globalAlpha = this.empFade;
-    ctx.drawImage(
+    GAME_MAP.ctx.globalAlpha = this.empFade;
+    GAME_MAP.ctx.drawImage(
       this.spriteEMP,
       this.renderX - size,
       this.renderY - size,
       fullsize,
       fullsize
     );
-    ctx.globalAlpha = 1;
+    GAME_MAP.ctx.globalAlpha = 1;
   }
   update() {
     this.updateRealPos();

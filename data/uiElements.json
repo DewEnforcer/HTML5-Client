@@ -3,9 +3,9 @@
         {
             "id": 0,
             "name": "log",
-            "children": ["header", "main"],
             "icon": "log",
             "label": "log_label",
+            "hasComponent": true,
             "controller": {
                 "x": 0,
                 "y": 78,
@@ -16,7 +16,6 @@
         {
             "id": 1,
             "name": "userinfo",
-            "children": ["header", "main"],
             "icon": "user",
             "label": "user_label",
             "hasComponent": true,
@@ -36,7 +35,6 @@
         {
             "id": 2,
             "name": "shipinfo",
-            "children": ["header", "main"],
             "icon": "ship",
             "label": "ship_label",
             "hasComponent": true,
@@ -56,9 +54,9 @@
         {
             "id": 3,
             "name": "spacemap",
-            "children": ["header", "main"],
             "icon": "minimap",
             "label": "minimap_label",
+            "hasComponent": true,
             "controller": {
                 "x": 20,
                 "y": 39,
@@ -69,41 +67,135 @@
         {
             "id": 4,
             "name": "settings",
-            "children": ["header", "main"],
             "icon": "settings",
             "label": "settings_label",
+            "hasComponent": true,
+            "isOpen": false,
             "controller": {
                 "x": 1700,
                 "y": 0,
                 "useDefPosition": false
             },
-            "content": []
+            "content": 
+                [
+                    [{"name":"bg","isCheck":false,"options":["off","on"]},{"name":"space_object","isCheck":false,"options":["off","on"]},{"name":"nebula","isCheck":false,"options":["off","on"]},{"name":"star","isCheck":false,"options":["off","good","high"]},{"name":"explosion","isCheck":false,"options":["off","average","good","high"]},{"name":"engine","isCheck":false,"options":["low","high"]},{"name":"ships","isCheck":false,"options":["low","high"]},{"name":"language","isCheck":false,"options":["Česky","English"]}],
+                    [{"name":"actionbar_attack","isCheck":true,"options":[]}],
+                    [{"name":"show_nick","isCheck":true,"options":["off","on"]},{"name":"hit_display","isCheck":true,"options":[]},{"name":"drone_display","isCheck":true,"options":[]},{"name":"minimap_bg","isCheck":true,"options":[]},{"name":"ship_hover","isCheck":true,"options":[]},{"name":"window_bg","isCheck":true,"options":[]}],
+                    [{"name":"game_sounds","isCheck":false,"options":["off","on"]},{"name":"game_music","isCheck":false,"options":["off","on"]}]
+                ]
         },
         {
             "id": 5,
             "name": "spacemap_ov",
-            "children": ["header", "main"],
             "icon": "spacemap",
             "label": "spacemap_label",
+            "hasComponent": true,
+            "isOpen": false,
             "controller": {
                 "x": -20,
                 "y": 117,
                 "useDefPosition": true
             },
-            "content": []
+            "content": {
+                "maps": {
+                    "unavailable": [30,31,32],
+                    "level": [],
+                    "available": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+                },
+                "sectorSizes": [
+                    [621,427],
+                    [710,432]
+                ],
+                "mapVectors": [
+                    [
+                        [0, 185],
+                        [107, 185],
+                        [204, 136],
+                        [204, 235],
+                        [506, 0],
+                        [408, 38],
+                        [303, 87],
+                        [508, 97],
+                        [506, 375],
+                        [407, 326],
+                        [508, 192],
+                        [301, 283],
+                        [302, 182],
+                        [398, 151],
+                        [401, 219]
+                    ],
+                    [
+                        [272, 138],
+                        [164, 171],
+                        [84, 107],
+                        [84, 238],
+                        [0, 171],
+                        [506, 131],
+                        [506, 43],
+                        [619, 93],
+                        [619, 0],
+                        [487, 269],
+                        [519, 363],
+                        [594, 269],
+                        [628, 363],
+                        [230, 297],
+                        [202, 60],
+                        [296, 18],
+                        [388, 60]
+                      ]
+                ]
+            }
         },
         {
             "id": 6,
             "name": "chat",
-            "children": ["header", "main"],
             "icon": "chat",
             "label": "chat_label",
+            "hasComponent": true,
             "controller": {
                 "x": 20,
                 "y": 117,
                 "useDefPosition": true
             },
             "content": []
-        }
+        },
+        {
+            "id": 7,
+            "name": "fullscreen",
+            "icon": "fullscreen",
+            "label": "",
+            "isSeperateContr": true,
+            "controller" : {
+                "x": 1740,
+                "y": 0,
+                "useDefPosition": false
+            }
+          },
+          {
+            "id": 8,
+            "name": "help",
+            "icon": "help",
+            "label": "",
+            "isSeperateContr": true,
+            "controller" : {
+                "x": 1780,
+                "y": 0,
+                "useDefPosition": false
+            }
+          },
+          {
+            "id": 9,
+            "name": "logout",
+            "icon": "logout",
+            "label": "logout_label",
+            "isOpen": false,
+            "hasComponent": true,
+            "controller" : {
+                "x": 1820,
+                "y": 0,
+                "useDefPosition": false
+            },
+            "content": []
+          }
     ]
 }

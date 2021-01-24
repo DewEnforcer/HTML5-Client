@@ -6,11 +6,13 @@ class Header {
     init(data) {
         this.createNode(data);
     }
-    createHeaderBox(name) {
+    createHeaderBox(name, onEnter, onLeave) {
         this.node = ElUtils.createBox([`${name}_header`, "header", "header_active"]);
+        this.node.addEventListener("mouseenter", onEnter);
+        this.node.addEventListener("mouseleave",  onLeave);
     }
-    createNode({name, id, icon, onPress, label}) {
-        this.createHeaderBox(name);
+    createNode({name, id, icon, onPress, onEnter, onLeave, label}) {
+        this.createHeaderBox(name, onEnter, onLeave);
         this.node.appendChild(this.createHeaderIcon(icon, id, onPress));
         this.node.appendChild(this.createHeaderLabel(label));
     }

@@ -11,95 +11,85 @@ class Fetcher {
     this.fetchUiElements();
   }
   static PATH_TO_DATA = "./client/data"
-  static fetchData() {
-    fetch(`${this.PATH_TO_DATA}/gameData.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        DEFAULTS = data.defaults;
-        progress++;
-        COLORS = data.colors;
-        progress++;
-        UI_DATA = data.ui;
-        progress++;
-        GAME_MSGS = data.gameMsg;
-        progress++;
-        LASER_DATA = data.laser_data;
-        progress++;
-        SHIP_NAMES = data.shipNames;
-        progress++;
-        OFFSET_DATA = data.offsets;
-        progress++;
-        LENS_AMOUNTS = data.lensNumber;
-        SPRITE_ID_LIST = data.spriteIDS;
-        PORTAL_LIST_DATA = data.Portals;
-        manageLoadingBar();
-      });
+  static async fetchData() {
+    const res = await fetch(`${this.PATH_TO_DATA}/gameData.json`);
+    const data = await res.json();
+
+    DEFAULTS = data.defaults;
+    COLORS = data.colors;
+    UI_DATA = data.ui;
+    GAME_MSGS = data.gameMsg;
+    LASER_DATA = data.laser_data;
+    SHIP_NAMES = data.shipNames;
+    OFFSET_DATA = data.offsets;
+    LENS_AMOUNTS = data.lensNumber;
+    SPRITE_ID_LIST = data.spriteIDS;
+    PORTAL_LIST_DATA = data.Portals;
+
+    LOADER.dataLoaded("gameData");
   }
   static async fetchUiElements() {
     const res = await fetch(`${this.PATH_TO_DATA}/uiElements.json`);
     const {ui} = await res.json();
     UI_ELEMENTS_DATA = ui;
+
+    LOADER.dataLoaded("uiElements");
   }
-  static fetchSpacemapInfo() {
-    fetch(`${this.PATH_TO_DATA}/spacemap.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        MAP_OVERVIEW_LIST = data;
-      });
+  static async fetchSpacemapInfo() {
+    const res = await fetch(`${this.PATH_TO_DATA}/spacemap.json`);
+    const data = await res.json();
+
+    MAP_OVERVIEW_LIST = data;
+
+    LOADER.dataLoaded("spacemap");
   }
-  static fetchTranslations(callback = null) {
-    fetch(`${this.PATH_TO_DATA}/texts.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        TEXT_TRANSLATIONS = data[CURRENT_LANGUAGE];
-        progress++;
-        manageLoadingBar();
-        if (callback != null) callback();
-      });
+  static async fetchTranslations(callback = null) {
+    const res = await fetch(`${this.PATH_TO_DATA}/texts.json`);
+    const data = await res.json();
+  
+    TEXT_TRANSLATIONS = data[CURRENT_LANGUAGE];
+    
+    if (callback) callback();
+    LOADER.dataLoaded("Translations");
   }
-  static fetchMapObjects() {
-    fetch(`${this.PATH_TO_DATA}/mapObjects.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        MAP_OBJECTS_LIST = data;
-        progress++;
-        manageLoadingBar();
-      });
+  static async fetchMapObjects() {
+    const res = await fetch(`${this.PATH_TO_DATA}/mapObjects.json`);
+    const data = await res.json();
+
+    MAP_OBJECTS_LIST = data;
+
+    LOADER.dataLoaded("Map objects");
   }
-  static fetchDroneObjects() {
-    fetch(`${this.PATH_TO_DATA}/dronePos.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        DRONE_POSITIONS = data;
-        progress++;
-        manageLoadingBar();
-      });
+  static async fetchDroneObjects() {
+    const res = await fetch(`${this.PATH_TO_DATA}/dronePos.json`);
+    const data = await res.json();
+
+    DRONE_POSITIONS = data;
+
+    LOADER.dataLoaded("dronePos");
   }
-  static fetchEngineData() {
-    fetch(`${this.PATH_TO_DATA}/enginePos.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        SHIPS_ENGINES = data;
-        progress++;
-        manageLoadingBar();
-      });
+  static async fetchEngineData() {
+    const res = await fetch(`${this.PATH_TO_DATA}/enginePos.json`);
+    const data = await res.json();
+
+    SHIPS_ENGINES = data;
+
+    LOADER.dataLoaded("enginePos");
   }
-  static fetchLaserData() {
-    fetch(`${this.PATH_TO_DATA}/laserPos.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        LASER_POS = data;
-        progress++;
-        manageLoadingBar();
-      });
+  static async fetchLaserData() {
+    const res = await fetch(`${this.PATH_TO_DATA}/laserPos.json`);
+    const data = await res.json();
+
+    LASER_POS = data;
+
+    LOADER.dataLoaded("laserPos");
   }
-  static fetchActionbarData() {
-    fetch(`${this.PATH_TO_DATA}/SubmenuItems.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        SUB_MENU_ITEMS = data;
-        progress++;
-        manageLoadingBar();
-      });
+  static async fetchActionbarData() {
+    const res = await fetch(`${this.PATH_TO_DATA}/SubmenuItems.json`);
+    const data = await res.json();
+
+    SUB_MENU_ITEMS = data;
+    
+    LOADER.dataLoaded("submenuItems");
   }
 }

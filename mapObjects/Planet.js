@@ -1,12 +1,14 @@
 class Planet extends MapObject {
-  constructor(planetID, x, y, z, minimapScale) {
+  constructor({id, x, y, z, mScale}) {
     super(x,y,z);
 
-    this.planetID = planetID;
-    this.minimapScale = minimapScale;
+    this.planetID = id;
+    this.minimapScale = mScale;
+    this.minimapSprite = new Image();
+    this.minimapSprite.src = `./spacemap/minimap/planet${this.planetID}.png`;
 
     this.sprite.src = `${PATH_TO_PLANETS}/planet${this.planetID}.png`;
-    this.offset = getPlanetOffset(planetID);
+    this.offset = getPlanetOffset(this.planetID);
     
     this.settingMenu = MENU_GRAPHICS;
     this.settingIndex = 1;

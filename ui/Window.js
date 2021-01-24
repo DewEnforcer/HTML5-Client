@@ -1,14 +1,21 @@
 class Window extends Draggable{ //for body use main
-    constructor(data, openState = true) {
+    constructor(data, onToggle = null) {
         super();
+        
+        this.POSITION_LOCAL_KEY = "window_position";
+        this.OPENSTATE_LOCAL_KEY = "window_openstate";
+
         this.node = null;
         this.nodeData = null;
 
         this.header = null;
         this.body = null;
         this.controller = null;
+        this.onToggle = onToggle;
 
-        this.isOpen = openState;
+        this.isOpen = "isOpen" in data === true ? data.isOpen : true;
+        this.isAlwaysActive = false;
+        this.isActive = false;
         this.animating = false;
 
         this.MIN_SIZE_X = "38px";
@@ -16,7 +23,10 @@ class Window extends Draggable{ //for body use main
         this.ANIMATE_TIME = 500;
         this.effectDuration = 300;
 
-        this.data = {...data, onPress: this.handleIconPress}
+        this.SETTINGS_INDEX = 5;
+        this.SETTINGS_TYPE = MENU_INTERFACE;
+
+        this.data = {...data, onPress: this.handleIconPress, onEnter: this.setWindowActive, onLeave: this.setWindowInactive}
 
         this.generateWindowNode();
         this.setHeader();
@@ -24,11 +34,15 @@ class Window extends Draggable{ //for body use main
         this.setController();
         this.render();
         this.setNodeData();
-        if (!this.isOpen) this.handleWindowClose();
+        this.setWindowInactive();
+        this.setSavedOpenState();
+        if (!this.isOpen) this.handleWindowClose(true);
     }
     generateWindowNode() {
         this.node = ElUtils.createBox([this.data.name, "body_active"]);
         document.body.appendChild(this.node);
+
+        this.changeWindowPosition(this.getSavedPosition());
     }
 
     setNodeData() {
@@ -42,15 +56,19 @@ class Window extends Draggable{ //for body use main
     handleIconPress = () => {
         if (this.animating) return;
 
-        if (this.isOpen) return this.handleWindowClose();
-        this.handleWindowOpen();
+        if (this.isOpen) this.handleWindowClose();
+        else this.handleWindowOpen();
+        
+        if (this.onToggle) return this.onToggle();
+        
+        this.saveOpenState();
     }
-    handleWindowOpen() {
-        if (this.isOpen) return;
+    handleWindowOpen(init = false) {
+        if (this.isOpen && !init) return;
         this.animating = true;
         this.isOpen = true;
 
-        this.controller.setOpenStateVisual(this.isOpen);
+        if (this.controller) this.controller.setOpenStateVisual(this.isOpen);
 
         const textHeader = this.header.node.children[1];
         //first scale down horizontally, then vertically
@@ -74,11 +92,11 @@ class Window extends Draggable{ //for body use main
         }, this.ANIMATE_TIME);
 
     }
-    handleWindowClose() {
-        if (!this.isOpen) return;
+    handleWindowClose(init = false) {
+        if (!this.isOpen && !init) return;
         this.animating = true;
         this.isOpen = false;
-        this.controller.setOpenStateVisual(this.isOpen);
+        if (this.controller) this.controller.setOpenStateVisual(this.isOpen);
 
         const textHeader = this.header.node.children[1];
         const elRes = this.node.getBoundingClientRect();
@@ -101,18 +119,68 @@ class Window extends Draggable{ //for body use main
           this.animating = false;
         }, this.effectDuration * 2);
     }
+    toggleWindowActive = () => {
+      if (this.isAlwaysActive) this.setWindowActive();
+      else this.setWindowInactive();
+    }
+    setWindowActive = () => {
+      if (!this.isAlwaysActive) return;
+
+      this.node.classList.add("body_active");
+      this.header.node.classList.add("header_active");
+      this.isActive = true;
+    }
+    setWindowInactive = () => {
+      if (this.isAlwaysActive) return;
+      this.node.classList.remove("body_active");
+      this.header.node.classList.remove("header_active");
+      this.isActive = false;
+    }
 
     setHeader() {
         this.header = new Header(this.data);
-        this.enableDrag(this.header.node, this.node);
+        this.enableDrag(this.header.node, this.node, this.savePosition);
     }
     setBody() {
         this.body = new Body(this.data);
     }
     setController() {
+        if (!this.data.controller) return;
         this.controller = new Controller(this.data);
         this.controller.setOpenStateVisual(this.isOpen);
     }
+    changeWindowPosition(data) {
+      if (!data) return;
+      const {x, y} = data;
+      this.node.style.top = y + "px";
+      this.node.style.left = x + "px";
+    }
+    savePosition = pos => {
+      const key = `${this.POSITION_LOCAL_KEY}_${this.data.name}`
+      
+      localStorage.setItem(key, JSON.stringify(pos));
+    }
+    getSavedPosition() {
+      const key = `${this.POSITION_LOCAL_KEY}_${this.data.name}`
+
+      return JSON.parse(localStorage.getItem(key));
+    }
+    saveOpenState = () => {
+      const key = `${this.OPENSTATE_LOCAL_KEY}_${this.data.name}`
+      
+      localStorage.setItem(key, JSON.stringify(this.isOpen));
+    }
+    setSavedOpenState() {
+      const key = `${this.OPENSTATE_LOCAL_KEY}_${this.data.name}`
+
+      const oldState = JSON.parse(localStorage.getItem(key));
+      if (oldState === null) return;
+      this.isOpen = oldState
+    }
+    getBodyNode() {
+      return this.body.node;
+    }
+
     render() {
         this.cleanup();
         this.node.appendChild(this.header.node);

@@ -1,8 +1,8 @@
 const lockOnSprite = new Image();
 lockOnSprite.src = `./spacemap/ui/lockOn.png`;
 function getTextOffset (font, txt) {
-  ctx.font = font;
-  return Math.ceil(ctx.measureText(txt).width / 2);
+  GAME_MAP.ctx.font = font;
+  return Math.ceil(GAME_MAP.ctx.measureText(txt).width / 2);
 }
 const checkXVis = (x, off) => {
   return x - off > screenWidth * 1.1 || x + off < -100;
@@ -20,24 +20,24 @@ const controlVisibility = (x, offX, y, offY) => {
 };
 //
 const drawCenter = (ship) => {
-  ctx.fillStyle = "red";
-  ctx.fillRect(
+  GAME_MAP.ctx.fillStyle = "red";
+  GAME_MAP.ctx.fillRect(
     ship.render.renderX + ship.offset.x - 5,
     ship.render.renderY + ship.offset.y - 5,
     10,
     10
   );
-  ctx.fillStyle = "black";
+  GAME_MAP.ctx.fillStyle = "black";
 };
 const drawBounds = (ship) => {
-  ctx.strokeStyle = "red";
-  ctx.strokeRect(
+  GAME_MAP.ctx.strokeStyle = "red";
+  GAME_MAP.ctx.strokeRect(
     ship.render.renderX,
     ship.render.renderY,
     ship.offset.x * 2,
     ship.offset.y * 2
   );
-  ctx.strokeStyle = "black";
+  GAME_MAP.ctx.strokeStyle = "black";
 };
 const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   const width = 60;
@@ -47,20 +47,20 @@ const displayShipStructure = (hp, shd, hpStart, shdStart, x, y) => {
   const start = x - width / 2;
   let hpPerc = (hp / hpStart) * width;
   let shdPerc = (shd / shdStart) * width;
-  ctx.strokeStyle = "black";
-  ctx.strokeRect(start, top, width, height); //container border
-  ctx.fillStyle = COLORS.STRUCTURE_BG;
-  ctx.fillRect(start, top, width, height); //bgcont
-  ctx.fillStyle = COLORS.HP_COLOR;
-  ctx.fillRect(start, top, hpPerc, height); //hp
+  GAME_MAP.ctx.strokeStyle = "black";
+  GAME_MAP.ctx.strokeRect(start, top, width, height); //container border
+  GAME_MAP.ctx.fillStyle = COLORS.STRUCTURE_BG;
+  GAME_MAP.ctx.fillRect(start, top, width, height); //bgcont
+  GAME_MAP.ctx.fillStyle = COLORS.HP_COLOR;
+  GAME_MAP.ctx.fillRect(start, top, hpPerc, height); //hp
   if (shdPerc > 0) {
-    ctx.strokeRect(start, top + margin, width, height); //container
-    ctx.fillStyle = COLORS.STRUCTURE_BG;
-    ctx.fillRect(start, top + margin, width, height); //bgcont
-    ctx.fillStyle = COLORS.SHD_COLOR;
-    ctx.fillRect(start, top + margin, shdPerc, height); //shd
+    GAME_MAP.ctx.strokeRect(start, top + margin, width, height); //container
+    GAME_MAP.ctx.fillStyle = COLORS.STRUCTURE_BG;
+    GAME_MAP.ctx.fillRect(start, top + margin, width, height); //bgcont
+    GAME_MAP.ctx.fillStyle = COLORS.SHD_COLOR;
+    GAME_MAP.ctx.fillRect(start, top + margin, shdPerc, height); //shd
   }
-  ctx.fillStyle = "black";
+  GAME_MAP.ctx.fillStyle = "black";
 };
 const getDroneOffset = (drnString) => {
   return getTextOffset(DEFAULTS.DRONE_SIMPLE_FONT, drnString);
@@ -82,14 +82,14 @@ const drawUserShipInfo = (
   const xFactionMargin = 2;
   const marginTop = 14;
   if (rank >= 0) {
-    ctx.drawImage(
+    GAME_MAP.ctx.drawImage(
       rankSprite,
       x - xRankMargin - usernameOffsetX,
       y + offsetY - marginTop
     );
   }
   if (factionID > 0) {
-    ctx.drawImage(
+    GAME_MAP.ctx.drawImage(
       factionSprite,
       x + xFactionMargin + usernameOffsetX,
       y + offsetY - marginTop + 2
@@ -98,26 +98,26 @@ const drawUserShipInfo = (
   let color = COLORS.COLOR_ENEMY;
   if (isHero) color = COLORS.COLOR_HERO;
   else if (factionID == HERO.ship.faction) color = COLORS.COLOR_ALLY;
-  ctx.shadowColor = "black";
-  ctx.shadowBlur = 4;
-  ctx.textAlign = "left";
-  ctx.font = DEFAULTS.USERNAME_FONT;
-  ctx.fillStyle = color;
-  ctx.fillText(username, x - usernameOffsetX, Math.round(y + offsetY)); //add proper offset
-  ctx.fillStyle = "black";
-  ctx.shadowBlur = 0;
+  GAME_MAP.ctx.shadowColor = "black";
+  GAME_MAP.ctx.shadowBlur = 4;
+  GAME_MAP.ctx.textAlign = "left";
+  GAME_MAP.ctx.font = DEFAULTS.USERNAME_FONT;
+  GAME_MAP.ctx.fillStyle = color;
+  GAME_MAP.ctx.fillText(username, x - usernameOffsetX, Math.round(y + offsetY)); //add proper offset
+  GAME_MAP.ctx.fillStyle = "black";
+  GAME_MAP.ctx.shadowBlur = 0;
 };
 const drawLeech = (width, height, x, y, seq) => {
   const leechSize = 301;
   x += (width - leechSize) / 2;
   y += (height - leechSize) / 2;
-  ctx.drawImage(PRELOADER.modelsBuffer[7][seq], x, y);
+  GAME_MAP.ctx.drawImage(PRELOADER.modelsBuffer[7][seq], x, y);
 };
 // TODO
 const drawFormation = (formation, x, y) => {
   const top = 30;
   const marginX = 65;
-  ctx.drawImage(formation, x - marginX, y - top);
+  GAME_MAP.ctx.drawImage(formation, x - marginX, y - top);
 };
 const drawGateRings = (numOfRings, x, y, offsetY) => {
   const xMargin = 19;
@@ -131,10 +131,10 @@ const drawGateRings = (numOfRings, x, y, offsetY) => {
     i = 7;
   } else sprite.src = `./spacemap/rings/ring.png`;
   for (i = i; i <= numOfRings; i++) {
-    if (i > 4 && i < 7) ctx.globalAlpha = 0.7;
+    if (i > 4 && i < 7) GAME_MAP.ctx.globalAlpha = 0.7;
     const pos = OFFSET_DATA.GATE_RING_OFFSETS[i - 1];
-    ctx.drawImage(sprite, x + pos.x, y + pos.y);
-    ctx.globalAlpha = 1;
+    GAME_MAP.ctx.drawImage(sprite, x + pos.x, y + pos.y);
+    GAME_MAP.ctx.globalAlpha = 1;
   }
 };
 const manageLogoutWindow = () => {
@@ -186,7 +186,7 @@ const manageFpsWindow = () => {
 };
 const displayFPS = () => {
   if (!SHOW_FPS) return;
-  let fps = Math.round(1000 / DELTA_TIME);
+  let fps = Math.round(1000 / GAME_MAP.getDeltaTime());
   document.querySelector(
     ".fps_display"
   ).innerHTML = `<span>FPS: ${fps} | Rendering ${SHIPS_ON_SCREEN} ships | V${BUILD_VERSION}</span>`;
@@ -208,7 +208,7 @@ const handlePortalRange = () => {
 };
 const getShipById = (id) => {
   let ship = null;
-  MAP_SHIPS.some((item) => {
+  MAP_MANAGER.MAP_SHIPS.some((item) => {
     if (item.ID == id) {
       ship = item;
       return true;
@@ -218,7 +218,7 @@ const getShipById = (id) => {
 };
 const getPortalById = (id) => {
   let portal = null;
-  MAP_PORTALS.some((p) => {
+  MAP_MANAGER.MAP_PORTALS.some((p) => {
     if (p.ID == id) {
       portal = p;
       return true;
@@ -236,7 +236,7 @@ const lockTarget = () => {
   const targetRndrX = ship.render.renderX;
   const targetRndrY = ship.render.renderY;
   const offset = getLockOffset(ship.shipID);
-  ctx.drawImage(
+  GAME_MAP.ctx.drawImage(
     lockOnSprite,
     targetRndrX + offset.x - DEFAULTS.LOCKON_RING,
     targetRndrY + offset.y
@@ -244,7 +244,7 @@ const lockTarget = () => {
 };
 const checkCollision = () => {
   let dist = null;
-  return Object.values(MAP_SHIPS).some((ship) => {
+  return Object.values(MAP_MANAGER.MAP_SHIPS).some((ship) => {
     dist = getDistance(
       ship.render.renderX + ship.offset.x,
       ship.render.renderY + ship.offset.y,

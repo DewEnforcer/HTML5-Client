@@ -28,8 +28,8 @@ class Background extends MapObject {
     this.x = ((mapScale - 1) * realMapWidth) / 4 / 10;
     this.y = ((mapScale - 1) * realMapHeight) / 4 / 10;
   }
-  setNewMap() {
-    this.mapID = HERO.mapID;
+  setNewMap(mapId) {
+    this.mapID = mapId;
     this.sprite.src = `${PATH_TO_BG}/background${this.mapID}.jpg`;
     this.setCoords();
   }

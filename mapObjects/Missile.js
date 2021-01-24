@@ -62,8 +62,8 @@ class Missile extends MapObject{
     this.angle = calcAngle(this.x, this.y, this.destX, this.destY);
   }
   changePos() {
-    this.x += this.speed.x * DELTA_TIME;
-    this.y += this.speed.y * DELTA_TIME;
+    this.x += this.speed.x * GAME_MAP.getDeltaTime();
+    this.y += this.speed.y * GAME_MAP.getDeltaTime();
   }
   changeRenderPos() {
     this.renderX = this.x - CAMERA.followX + halfScreenWidth; //count real distance to render one to the center
@@ -75,7 +75,7 @@ class Missile extends MapObject{
     if (overFlyTime < 0) overFlyTime = 0;
     this.speed.x += overFlyTime;
     this.speed.y += overFlyTime;
-    this.timeTo -= DELTA_TIME;
+    this.timeTo -= GAME_MAP.getDeltaTime();
     if (Math.round(this.timeTo) <= 0) this.terminate();
   }
   onDetonation() {
@@ -103,14 +103,14 @@ class Missile extends MapObject{
     }
   }
   draw() {
-    ctx.translate(this.renderX, this.renderY);
-    ctx.rotate(-this.angle);
-    ctx.drawImage(this.sprite, -this.spriteOffset.x, -this.spriteOffset.y);
-    ctx.rotate(this.angle);
-    ctx.translate(-this.renderX, -this.renderY);
+    GAME_MAP.ctx.translate(this.renderX, this.renderY);
+    GAME_MAP.ctx.rotate(-this.angle);
+    GAME_MAP.ctx.drawImage(this.sprite, -this.spriteOffset.x, -this.spriteOffset.y);
+    GAME_MAP.ctx.rotate(this.angle);
+    GAME_MAP.ctx.translate(-this.renderX, -this.renderY);
   }
   update() {
-    this.flyTime += DELTA_TIME;
+    this.flyTime += GAME_MAP.getDeltaTime();
     this.followTarget();
     this.rotate();
     //this.smoothRotate();

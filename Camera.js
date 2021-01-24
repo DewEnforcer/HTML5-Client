@@ -1,11 +1,20 @@
 class Camera {
-  constructor(target) {
-    this.followX = target.x;
-    this.followY = target.y;
-    this.followObject = target;
+  constructor() {
+    this.followX = 0;
+    this.followY = 0;
+    this.followObject = null;
   }
-  update() {
+  setCameraTarget(target) {
+    this.followObject = target;
+
+    this.setNewCoordinates();
+  }
+  setNewCoordinates() {
     this.followX = this.followObject.x;
     this.followY = this.followObject.y;
+  }
+  update() {
+    if (!this.followObject) return;
+    this.setNewCoordinates();
   }
 }

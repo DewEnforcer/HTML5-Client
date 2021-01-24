@@ -12,7 +12,7 @@ class MapObject {
         }
     }
     draw() {
-        ctx.drawImage(
+        GAME_MAP.ctx.drawImage(
             this.sprite,
             this.renderX - this.offset.x,
             this.renderY - this.offset.y

@@ -1,5 +1,5 @@
 class Station extends MapObject{
-  constructor(x, y, z, rotation, type, id) {
+  constructor({x, y, z, rotation, type, id}) {
     super(x,y,z);
 
     this.type = type;
@@ -11,11 +11,11 @@ class Station extends MapObject{
     this.sprite.src = `./spacemap/stations/base${type}.png`;
   }
   draw() {
-    ctx.translate(this.renderX, this.renderY);
-    ctx.rotate(-this.angle);
-    ctx.drawImage(this.sprite, -this.offset.x, -this.offset.y);
-    ctx.rotate(this.angle);
-    ctx.translate(-this.renderX, -this.renderY);
+    GAME_MAP.ctx.translate(this.renderX, this.renderY);
+    GAME_MAP.ctx.rotate(-this.angle);
+    GAME_MAP.ctx.drawImage(this.sprite, -this.offset.x, -this.offset.y);
+    GAME_MAP.ctx.rotate(this.angle);
+    GAME_MAP.ctx.translate(-this.renderX, -this.renderY);
   }
   update() {
     this.calculateRenderPos();

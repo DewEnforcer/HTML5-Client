@@ -52,7 +52,7 @@ class Lens {
   }
   draw() {
     if (!this.display) return;
-    ctx.drawImage(
+    GAME_MAP.ctx.drawImage(
       this.sprite,
       this.renderX - this.offset.x,
       this.renderY - this.offset.y

@@ -11,13 +11,12 @@ class ShipManager {
   }
   static shipData(data) {
     data.splice(0, 2);
+
     const ship = getShipById(data[0]);
-    if (ship == null) return;
-    ship.HP = Number(data[1]);
-    ship.SHD = Number(data[2]);
-    ship.maxHP = Number(data[3]);
-    ship.maxSHD = Number(data[4]);
-    MAIN.updateHeroStats();
+    if (!ship) return;
+
+    ship.setShipData(data);
+    if (ship.isHero) UI_MAIN.UI.shipinfo.updateAllShipData();
   }
   static cloakShip(data) {
     data = trimData(data);
@@ -68,7 +67,7 @@ class ShipManager {
     if (ship == null) return;
     ship.teleport(Number(data[1]), Number(data[2]));
     if (ship.isHero) {
-      MINIMAP.minimapNavigating = false;
+      UI_MAIN.UI.spacemap.navigateByMinimap = false;
     }
   }
 }

@@ -1,67 +1,45 @@
 class Hero {
-  constructor(
-    userID,
-    x,
-    y,
-    speed,
-    shipID,
-    username,
-    faction,
-    rank,
-    laserID,
-    hp,
-    shd,
-    maxHP,
-    maxSHD,
-    isCloaked,
-    mapID,
-    config,
-    repairBot
-  ) {
+  constructor(data) {
+    const [userID, x, y, speed, shipID, username, faction, rank, laserID, hp, shd, maxHP, maxSHD, isCloaked, mapID, config, repairBot ] = data;
+
     this.username = username;
-    this.isLogout = false;
-    this.isJumping = false;
-    this.lockedControls = false;
     this.mapID = mapID;
     this.speed = speed;
     this.laserID = laserID;
     this.config = config;
-    //
-    this.ship = ShipManager.createShip(
-      [
-        userID,
-        x,
-        y,
-        shipID,
-        username,
-        faction,
-        rank,
-        hp,
-        shd,
-        maxHP,
-        maxSHD,
-        isCloaked,
-        repairBot,
-        0,
-        true,
-      ],
-      false,
-      true
-    );
+    this.data = {userID, x, y, shipID, username, faction, rank, hp, shd, maxHP, maxSHD, isCloaked, repairBot, isNpc: 0, isHero: true};
+
+    this.isLogout = false;
+    this.isJumping = false;
+    this.lockedControls = false;
+    this.ship = null;
   }
-  changeMap(newMap) {
-    if (this.mapID === newMap) return;
-    this.mapID = Number(newMap);
-    resetGamemap();
+
+  setShip() {
+    this.ship = new Ship(this.data);
+    MAP_MANAGER.MAP_SHIPS.push(this.ship);
+    UI_MAIN.UI.shipinfo.updateAllShipData();
+  }
+  getShip() {
+    return this.ship;
   }
   setLogout() {
     this.isLogout = !this.isLogout;
     this.lockedControls = this.isLogout;
   }
-  setRepairBot(bool) {
-    this.ship.robot.active = !!Number(bool);
+  getLogout() {
+    return this.isLogout;
   }
-  requestTarget(target) {
+  getIsJumping() {
+    return this.isJumping;
+  }
+  setIsJumping(val) {
+    if (this.isJumping === val) return;
+
+    this.isJumping = val;
+  }
+
+  requestTarget(target) { //combat manager
     if (target != this.ship.ID) SOCKET.sendPacket([REQUEST_TARGET, target]);
   }
   switchAmmo(laserID) {
@@ -92,7 +70,7 @@ class Hero {
       this.ship.startAttack();
     }
   }
-  handleNewData(data) {
+  handleNewData(data) { //wtf
     data = trimData(data);
     data.forEach((newData) => {
       newData = newData.split(";");
@@ -104,7 +82,7 @@ class Hero {
       );
     });
   }
-  processDestMinimap({ x, y }) {
+  processDestMinimap({ x, y }) { //movement
     let destX = Math.round(x);
     let destY = Math.round(y);
     let time = Math.round(
@@ -115,7 +93,7 @@ class Hero {
   }
   processDest() {
     if (!EVENT_MANAGER.isMouseDown) return;
-    MINIMAP.minimapNavigating = false;
+    UI_MAIN.UI.spacemap.navigateByMinimap = false;
     let dest = convertToMapCoords(EVENT_MANAGER.mouse);
     let destX = Math.round(dest.x);
     let destY = Math.round(dest.y);

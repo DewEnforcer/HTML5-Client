@@ -1,11 +1,6 @@
 class Settings {
   constructor() {
     this.STORAGE_KEY = "SETTINGS_VAL_KEY";
-    this.hoverShips = false;
-    this.minimapBG = true;
-    this.displayDrones = false;
-    this.bgQuality = 4;
-    this.explosionQuality = 4;
     this.UI_GEN = false;
     this.settingsArr = [];
     this.qualityToNum = {

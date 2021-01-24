@@ -34,11 +34,8 @@ class Preloader {
     if (modelType == "ships") DEFAULT_SHIP_SPRITE_OFFSET++;
   }
   preloadSprite(allocatedArr, spriteIndex, modelData, isInit = false) {
-    if (spriteIndex > modelData[1]) {
-      progress++;
-      manageLoadingBar();
-      return;
-    }
+    if (spriteIndex > modelData[1]) return LOADER.dataLoaded(modelData[0]);
+    
     let buffSprite = new Image();
     buffSprite.src = `./spacemap/${modelData[0]}/${spriteIndex}.png`;
     if (isInit && spriteIndex > 0) {

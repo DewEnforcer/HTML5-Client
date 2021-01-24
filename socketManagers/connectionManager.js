@@ -1,8 +1,6 @@
-class Socket {
+class Socket extends SocketObject {
   constructor(target) {
-    this.CONNECT_TARGET = target;
-    this.socket = null;
-    this.connected = false;
+    super(target);
   }
   PingPong = () => {
     if (!this.connected) return;
@@ -13,27 +11,16 @@ class Socket {
   }
   initiateConnection() {
     this.initSocket();
-    MAIN.generateConn();
-    MAIN.populateConnBox(true);
     this.initiateSocketListeners();
+
+    CONNECTION.setConnectionInfo(1);
   }
   initSocket() {
     this.socket = new WebSocket(this.CONNECT_TARGET);
   }
-  handleConnBtn(ev) {
-    ev.preventDefault();
-    const data = ev.currentTarget.id.split("_");
-    if (data[1] == 1) {
-      terminateGame();
-    } else {
-      this.initiateConnection();
-      //try connection again;
-    }
-  }
   handleDisconnected = () => {
     this.connected = false;
-    MAIN.generateConn();
-    MAIN.populateConnBox(false);
+    CONNECTION.setConnectionInfo(0);
   }
   sendPacket(data) {
     this.socket.send(this.packetCompiler(data));
@@ -45,10 +32,10 @@ class Socket {
     data = data.split("|");
     switch (data[1]) {
       case HERO_INIT:
-        MAIN.heroInit(data);
+        handleHeroLoaded(data);
         break;
       case LOGOUT_RESULT:
-        handleLogoutResult(data[2]);
+        UI_MAIN.UI.logout.handleLogoutResult(data[2]);
         break;
       case SHIP_SPAWN:
         ShipManager.createShip(data);
@@ -85,13 +72,13 @@ class Socket {
         ShipManager.setAttackState(data);
         break;
       case PORTAL_REQUEST_ACTIVATE:
-        handlePortalJump(data);
+        //handlePortalJump(data);
         break;
       case PORTAL_REQUEST_FAIL:
-        handlePortalRange();
+        //handlePortalRange();
         break;
       case CHANGE_MAP:
-        HERO.changeMap(data[2]);
+        MAP_MANAGER.updateMap(data[2]);
         break;
       case CONFIG_CHANGE_SERVER:
         HERO.changeConfig(data[2]);
@@ -100,48 +87,48 @@ class Socket {
         //HERO.handleNewData(data);
         break;
       case LOG_MESSAGE:
-        MAIN.writeToLog(data[2], true);
+        UI_MAIN.UI.log.addLogMessage(data[2], true);
         break;
       case REPAIR_BOT_STATUS:
         HERO.setRepairBot(data[2]);
         break;
       case SET_ACTIONBAR_ITEMS:
-        //MAIN.actionBar.setActionbarItems(data);
+        //UI_MAIN.actionBar.setActionbarItems(data);
         break;
       case SET_CLOAK_STATE:
         ShipManager.cloakShip(data);
         break;
       case SET_COOLDOWN:
-        //MAIN.actionBar.selectItemsToCooldown(data);
+        //UI_MAIN.actionBar.selectItemsToCooldown(data);
         break;
       case DMZ_STATE:
         if (data[2] == 1) {
-          MESSAGE_LAYER.push(new MapMessage(TEXT_TRANSLATIONS.dmz, 4, false));
+          MAP_MANAGER.MESSAGE_LAYER.push(new MapMessage(TEXT_TRANSLATIONS.dmz, 4, false));
         } else {
-          MESSAGE_LAYER.forEach((msg) => {
+          MAP_MANAGER.MESSAGE_LAYER.forEach((msg) => {
             if (msg.type == 4) msg.changeFadeActive();
           });
         }
         break;
       case RADIATION_STATE:
         if (data[2] == 1) {
-          MESSAGE_LAYER.push(
+          MAP_MANAGER.MESSAGE_LAYER.push(
             new MapMessage(TEXT_TRANSLATIONS.rad_warn, 5, false)
           );
         } else {
-          MESSAGE_LAYER.forEach((msg) => {
+          MAP_MANAGER.MESSAGE_LAYER.forEach((msg) => {
             if (msg.type == 5) msg.changeFadeActive();
           });
         }
         break;
       case SET_ITEM_AMOUNTS:
-        //MAIN.actionBar.setItemAmount(data);
+        //UI_MAIN.actionBar.setItemAmount(data);
         break;
       case ADVANCED_JUMP_REQUEST_STATUS:
-        SPACEMAP.handleJumpInit(data);
+        //SPACEMAP.handleJumpInit(data);
         break;
       case ADVANCED_JUMP_COST:
-        SPACEMAP.handlePriceChange(data[2]);
+        //SPACEMAP.handlePriceChange(data[2]);
         break;
       case CREATE_PORTAL: 
         
@@ -151,16 +138,9 @@ class Socket {
         break;    
     }
   }
-  packetCompiler(data) {
-    let packetString = "0|";
-    for (let i = 0; i < data.length; i++) {
-      if (i > 0) packetString += "|";
-      packetString += data[i];
-    }
-    return packetString;
-  }
   initiateSocketListeners() {
     this.socket.addEventListener("open", () => {
+      if (!this.socket.readyState) return;
       this.sendPacket([CONNECTION_DATA, userID, sessionID, GAME_HASH]);
       this.connected = true;
       //this.PingPong();

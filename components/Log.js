@@ -1,17 +1,17 @@
-class Log extends Window {
+class Log {
     constructor(data) {
-        super(data);
+        this.window = new Window(data);
     }
 
     focusLast() {
-        this.body.node.lastChild.scrollIntoView();
+        this.window.getBodyNode().lastChild.scrollIntoView();
     }
     
-    addLogMessage(msg, isTranslate = false) {
+    addLogMessage = (msg, isTranslate = false) => {
         let msgBox = document.createElement("span");
         msgBox.innerText = isTranslate ? TEXT_TRANSLATIONS[msg] : msg;
 
-        this.body.node.appendChild(msgBox);
+        this.window.getBodyNode().appendChild(msgBox);
 
         this.focusLast();
     }

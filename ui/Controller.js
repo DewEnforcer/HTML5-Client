@@ -17,11 +17,9 @@ class Controller {
         const icon = `<img src="./spacemap/ui/uiIcon/${this.data.icon}_normal.png">`;
 
         this.node = ElUtils.createButton("btn_controller_mini", null, icon);
-        this.node.addEventListener("click", ev => this.data.onPress(ev));
+        this.node.addEventListener("click", ev => this.data.onPress(this.setOpenStateVisual));
     }
     repositionNode() {
-        const {x,y} = this.data.controller;
-
         if (this.data.controller.useDefPosition) {
             this.data.controller.x += this.BASE_X;
             this.data.controller.y += this.BASE_Y;
@@ -29,7 +27,7 @@ class Controller {
         this.node.style.left = `${this.data.controller.x}px`;
         this.node.style.top = `${this.data.controller.y}px`;
     }
-    setOpenStateVisual(isOpen) {
+    setOpenStateVisual = (isOpen) => {
         if (isOpen) return this.node.classList.add(this.ACTIVE_CLASS_NAME);
         this.node.classList.remove(this.ACTIVE_CLASS_NAME);
     }

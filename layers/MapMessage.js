@@ -37,25 +37,25 @@ class MapMessage {
   }
   setAlpha() {
     if (this.fadeOutTime > this.fadeAlphaTime) return;
-    this.alpha -= this.fadeAlpha * DELTA_TIME;
+    this.alpha -= this.fadeAlpha * GAME_MAP.getDeltaTime();
     if (this.alpha < 0) this.alpha = 0;
   }
   draw() {
-    ctx.fillStyle = "white";
-    ctx.font = this.font;
-    ctx.shadowColor = this.shadowColor;
-    ctx.shadowBlur = this.shadowBlur;
+    GAME_MAP.ctx.fillStyle = "white";
+    GAME_MAP.ctx.font = this.font;
+    GAME_MAP.ctx.shadowColor = this.shadowColor;
+    GAME_MAP.ctx.shadowBlur = this.shadowBlur;
     this.setAlpha();
-    ctx.globalAlpha = this.alpha;
-    ctx.fillText(this.text, this.x, this.y);
-    ctx.fillStyle = "black";
-    ctx.shadowBlur = 0;
-    ctx.globalAlpha = 1;
+    GAME_MAP.ctx.globalAlpha = this.alpha;
+    GAME_MAP.ctx.fillText(this.text, this.x, this.y);
+    GAME_MAP.ctx.fillStyle = "black";
+    GAME_MAP.ctx.shadowBlur = 0;
+    GAME_MAP.ctx.globalAlpha = 1;
   }
   terminate() {
-    MESSAGE_LAYER.some((msg, i) => {
+    MAP_MANAGER.MESSAGE_LAYER.some((msg, i) => {
       if (msg.ID == this.ID) {
-        MESSAGE_LAYER.splice(i, 1);
+        MAP_MANAGER.MESSAGE_LAYER.splice(i, 1);
         return true;
       }
     });
@@ -65,7 +65,7 @@ class MapMessage {
     if (this.end) return;
     this.draw();
     if (!this.fadeOutOn) return;
-    if (!isNaN(DELTA_TIME)) this.fadeOutTime -= DELTA_TIME;
+    if (!isNaN(GAME_MAP.getDeltaTime())) this.fadeOutTime -= GAME_MAP.getDeltaTime();
     if (this.fadeOutTime <= 0) this.terminate();
   }
 }

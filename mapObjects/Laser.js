@@ -69,20 +69,20 @@ class Laser {
     }
   }
   drawPoint() {
-    ctx.fillStyle = "red";
-    ctx.fillRect(this.startCoords.x, this.startCoords.y, 10, 10);
+    GAME_MAP.ctx.fillStyle = "red";
+    GAME_MAP.ctx.fillRect(this.startCoords.x, this.startCoords.y, 10, 10);
   }
   changePos() {
-    this.x += this.speed.x / DELTA_TIME;
-    this.y += this.speed.y / DELTA_TIME;
-    this.timeTo -= DELTA_TIME;
+    this.x += this.speed.x / GAME_MAP.getDeltaTime();
+    this.y += this.speed.y / GAME_MAP.getDeltaTime();
+    this.timeTo -= GAME_MAP.getDeltaTime();
     let relativeAngle = calcAngle(this.x, this.y, this.dest.x, this.dest.y);
     if (this.timeTo <= 0) this.terminate();
     //if (relativeAngle > this.plusAngle || this.relativeAngle < this.minusAngle)
     //this.terminate();
     /*let distanceFromTarget =
       getDistance(this.x, this.y, this.dest.x, this.dest.y) -
-      this.maxSpeedPerFrame / DELTA_TIME;
+      this.maxSpeedPerFrame / GAME_MAP.getDeltaTime();
     if (
       (distanceFromTarget > 0 && distanceFromTarget < this.targetOff.x) ||
       (distanceFromTarget < 0 && distanceFromTarget > this.targetOff.x)
@@ -97,11 +97,11 @@ class Laser {
       this.y + this.pointOffsets.y - CAMERA.followY + halfScreenHeight;
   }
   draw() {
-    ctx.translate(this.renderX, this.renderY);
-    ctx.rotate(-this.angle);
-    ctx.drawImage(this.sprite, -this.offsetX, -this.offsetY);
-    ctx.rotate(this.angle);
-    ctx.translate(-this.renderX, -this.renderY);
+    GAME_MAP.ctx.translate(this.renderX, this.renderY);
+    GAME_MAP.ctx.rotate(-this.angle);
+    GAME_MAP.ctx.drawImage(this.sprite, -this.offsetX, -this.offsetY);
+    GAME_MAP.ctx.rotate(this.angle);
+    GAME_MAP.ctx.translate(-this.renderX, -this.renderY);
   }
   update() {
     if (this.end) return;

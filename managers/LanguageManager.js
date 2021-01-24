@@ -29,7 +29,7 @@ class LanguageManager {
 
             el.innerText = TEXT_TRANSLATIONS[key];
 
-            if (!isInit) SETTINGS.manageLoadingState(false);
+            //if (!isInit) SETTINGS.manageLoadingState(false);
         })
     }
 }

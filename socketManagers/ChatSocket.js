@@ -1,10 +1,6 @@
-class ChatSocket {
+class ChatSocket extends SocketObject {
   constructor(target) {
-    this.CONNECT_TARGET = target;
-    this.socket = null;
-    this.connected = false;
-    this.initiateConnection();
-    CHAT_UI = new Chat([]); //seperation of concerns please
+    super(target);
   }
   initiateConnection() {
     this.initSocket();

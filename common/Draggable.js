@@ -19,7 +19,7 @@ class Draggable {
         this.manageSlotDragging(slotObjData, targetSlotData);
       }
       //ui els
-      enableDrag(elmnt, target) {
+      enableDrag(elmnt, target, callBack = null) {
         let pos1 = 0,
           pos2 = 0,
           pos3 = 0,
@@ -40,8 +40,14 @@ class Draggable {
           pos2 = pos4 - e.clientY;
           pos3 = e.clientX;
           pos4 = e.clientY;
-          target.style.top = target.offsetTop - pos2 + "px";
-          target.style.left = target.offsetLeft - pos1 + "px";
+
+          let realPosY = target.offsetTop - pos2;
+          let realPosX = target.offsetLeft - pos1;
+
+          target.style.top = realPosY + "px";
+          target.style.left = realPosX + "px";
+
+          if (callBack) callBack({x: realPosX, y: realPosY})
         }
     
         function closeDragElement() {

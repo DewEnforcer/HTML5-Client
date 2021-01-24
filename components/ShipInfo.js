@@ -34,6 +34,13 @@ class ShipInfo {
         this.shipData = {...this.shipData, [key]: value};
     }
 
+    updateAllShipData() {
+        this.updateData("HP", HERO.ship.HP, HERO.ship.maxHP);
+        this.updateData("SHD", HERO.ship.SHD, HERO.ship.maxSHD);
+        this.updateData("CFG", HERO.config);
+        this.updateData("SPEED", HERO.speed);
+    }
+
     updateData(name, newValue, maxValue = 0) {
         if (typeof this.shipData[name] === "undefined") return; //use typeof, default value is 0 = always falsy
         this.shipData[name] = newValue;

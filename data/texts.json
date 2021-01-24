@@ -57,6 +57,7 @@
     "sector_switch_0": "Show higher maps",
     "sector_switch_1": "Show lower maps",
     "advanced_jump_init": "Jump sequence has been initiated, stand-by!",
+    "advanced_jump_unavailable": "Jump sequence is currently unavailable!",
     "advanced_jump_cancel": "ERROR: Jump sequence has been stopped!",
     "advanced_jump_finished": "Jump sequence successfully complete!",
     "chat_label": "Chat",

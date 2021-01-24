@@ -21,7 +21,6 @@ class UserInfo {
     addData(key, value) {
         this.userData = {...this.userData, [key]: value};
     }
-
     updateData(name, newValue, maxValue = 0) {
         if (typeof this.userData[name] === "undefined") return; //use typeof, default value is 0 = always falsy
         this.userData[name] = newValue;

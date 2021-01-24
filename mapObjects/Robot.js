@@ -75,22 +75,22 @@ class Robot {
     }
   }
   drawArm() {
-    ctx.translate(this.renderX, this.renderY);
-    ctx.rotate(-(this.angleTowardsShip + this.armAngle));
-    ctx.drawImage(
+    GAME_MAP.ctx.translate(this.renderX, this.renderY);
+    GAME_MAP.ctx.rotate(-(this.angleTowardsShip + this.armAngle));
+    GAME_MAP.ctx.drawImage(
       this.armSprite,
       -this.offsetX,
       -this.offsetY + this.armOffset
     );
-    ctx.rotate(this.angleTowardsShip + this.armAngle);
-    ctx.translate(-this.renderX, -this.renderY);
+    GAME_MAP.ctx.rotate(this.angleTowardsShip + this.armAngle);
+    GAME_MAP.ctx.translate(-this.renderX, -this.renderY);
   }
   drawBody() {
-    ctx.translate(this.renderX, this.renderY);
-    ctx.rotate(-this.angleTowardsShip);
-    ctx.drawImage(this.bodySprite, -this.offsetX, -this.offsetY);
-    ctx.rotate(this.angleTowardsShip);
-    ctx.translate(-this.renderX, -this.renderY);
+    GAME_MAP.ctx.translate(this.renderX, this.renderY);
+    GAME_MAP.ctx.rotate(-this.angleTowardsShip);
+    GAME_MAP.ctx.drawImage(this.bodySprite, -this.offsetX, -this.offsetY);
+    GAME_MAP.ctx.rotate(this.angleTowardsShip);
+    GAME_MAP.ctx.translate(-this.renderX, -this.renderY);
   }
   update() {
     this.isActive();

@@ -30,6 +30,7 @@ function speedVelocity(shipSpeed, vectorAngle) {
   return velocity;
 }
 function getOffset(shipID) {
+  console.log(OFFSET_DATA.SHIP_OFFSETS);
   return OFFSET_DATA.SHIP_OFFSETS[shipID];
 }
 function getPortalOffset() {

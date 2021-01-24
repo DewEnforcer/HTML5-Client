@@ -106,7 +106,7 @@ class Chat {
     msgText.innerText = text;
     msgNode.classList.add("msg_box");
     msgNode.appendChild(msgText);
-    msgNode.setAttribute("from", from); //used to retrieve nickname for whispers
+    msgNode.setAttribute("from", from); //used to retrieve nickname for whispers, edit from the future = bruh
     msgNode.onclick = (ev) => this.handleMsgClick(ev);
     let scHeight, top, clHeight;
     scHeight = this.messageListEl.scrollHeight;

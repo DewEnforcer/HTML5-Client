@@ -43,15 +43,15 @@ class Engine {
     this.engineSprite = PRELOADER.modelsBuffer.engines[this.engineType][this.seq];
   }
   draw() {
-    ctx.translate(this.renderX, this.renderY);
-    ctx.rotate(-this.angle);
-    ctx.drawImage(
+    GAME_MAP.ctx.translate(this.renderX, this.renderY);
+    GAME_MAP.ctx.rotate(-this.angle);
+    GAME_MAP.ctx.drawImage(
       this.engineSprite,
       -this.spriteOffset.x,
       -this.spriteOffset.y
     );
-    ctx.rotate(this.angle);
-    ctx.translate(-this.renderX, -this.renderY);
+    GAME_MAP.ctx.rotate(this.angle);
+    GAME_MAP.ctx.translate(-this.renderX, -this.renderY);
   }
   setEngineSeq() {
     if (this.enginePoint.isFly) {
